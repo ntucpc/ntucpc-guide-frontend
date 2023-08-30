@@ -13,6 +13,8 @@ $ npm run dev
 
 搭配 Typescript。
 
+Trying to render MathJax from [jsdelivr](https://www.jsdelivr.com/).
+
 ## Convetions
 ### Commit
 沒符合 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 的話會被 [commitlint](https://commitlint.js.org) 擋掉。

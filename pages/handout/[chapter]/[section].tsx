@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import path from 'path';
 
 import type {
@@ -6,50 +6,66 @@ import type {
     GetStaticPaths,
     GetStaticProps,
 } from 'next';
+import Link from 'next/link';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
+/* Plugins to render MDX */
+import remarkComment from 'remark-comment';
+import remarkMath from 'remark-math';
+import myRehypeMathJax from 'rehype-mathjax/chtml';
+import remarkBreaks from 'remark-breaks';
+
+import { getArticles } from 'lib/contents_handler'
+import getEnvironmentVariable from 'lib/environment';
+
 
 type Article = {
+    chapter: string,
     title: string,
     content: MDXRemoteSerializeResult,
 };
-type NameStructure = {
-    params: {
-        chapter: string,
-        section: string,
-    }
+type ArticleStructure = {
+    chapter: string,
+    section: string,
 };
 
-const ARTICLE_PATH = path.join(process.cwd(), "contents/content");
+const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const articles: NameStructure[] = [];
-    try {
-        const chapters = await readdir(ARTICLE_PATH);
-        for (const chapter of chapters) {
-            const sections = await readdir(path.join(ARTICLE_PATH, chapter));
-            for (const section of sections)
-                articles.push({ params: { chapter, section }});
-        }
-    } catch (err) {
-        console.error(err);
-    }
+    const articles = await getArticles();
+
+    const entries: ArticleStructure[] = [];
+    for (const chapter in articles)
+        for (const section of articles[chapter])
+            entries.push({ chapter, section });
+
+    const paths = entries.map(entry => ({ params: entry }));
 
     return {
-        paths: articles,
+        paths,
         fallback: false,
     };
 }
 
-export const getStaticProps: GetStaticProps<{article: Article}> = async (context) => {
-    const {chapter, section} = (context as NameStructure).params;
+export const getStaticProps: GetStaticProps<{article: Article}> = async ({ params }) => {
+    const {chapter, section} = (params as ArticleStructure);
 
     const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
-    const content = await serialize(raw);
+    const content = await serialize(
+        raw,
+        {
+            mdxOptions: {
+                remarkPlugins: [remarkComment, remarkMath, remarkBreaks],
+                rehypePlugins: [[myRehypeMathJax, { chtml: { fontURL: getEnvironmentVariable('MATHJAX_FONTURL') }}] ],
+                format: 'mdx',
+            }
+        }
+    );
     const article: Article = {
+        chapter,
         title: section,
-        content
+        content,
     };
     return { props: { article }};
 }
@@ -58,5 +74,6 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
     return (<>
         <h1>{article.title}</h1>
         <MDXRemote {...article.content} />
+        <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4>
     </>);
 }
