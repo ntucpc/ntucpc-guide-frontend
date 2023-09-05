@@ -13,7 +13,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 /* Plugins to render MDX */
 import remarkComment from 'remark-comment';
 import remarkMath from 'remark-math';
-import myRehypeMathJax from 'rehype-mathjax/chtml';
+import myRehypeMathJax from 'rehype-mathjax/svg';
 import remarkBreaks from 'remark-breaks';
 
 import { getArticles } from 'lib/contents_handler'
