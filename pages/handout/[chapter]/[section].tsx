@@ -9,14 +9,17 @@ import type {
 import Link from 'next/link';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { Root, RootContent } from 'hast';
 
 /* Plugins to render MDX */
 import remarkComment from 'remark-comment';
 import remarkMath from 'remark-math';
 import myRehypeMathJax from 'rehype-mathjax/svg';
 import remarkBreaks from 'remark-breaks';
+import rehypeRewrite from 'rehype-rewrite';
+import handlerBuilder from 'components/article';
 
-import { getArticles } from 'lib/contents_handler'
+import { getArticles } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
 
 
@@ -25,6 +28,7 @@ type Article = {
     title: string,
     content: MDXRemoteSerializeResult,
 };
+type Components = ReturnType<typeof handlerBuilder>
 type ArticleStructure = {
     chapter: string,
     section: string,
@@ -48,7 +52,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 }
 
-export const getStaticProps: GetStaticProps<{article: Article}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
     const {chapter, section} = (params as ArticleStructure);
 
     const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
@@ -57,7 +61,19 @@ export const getStaticProps: GetStaticProps<{article: Article}> = async ({ param
         {
             mdxOptions: {
                 remarkPlugins: [remarkComment, remarkMath, remarkBreaks],
-                rehypePlugins: [[myRehypeMathJax, { chtml: { fontURL: getEnvironmentVariable('MATHJAX_FONTURL') }}] ],
+                rehypePlugins: [
+                    [myRehypeMathJax, { chtml: { fontURL: getEnvironmentVariable('MATHJAX_FONTURL') }}],
+                    [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
+                        rewrite: (node: any) => {
+                            if (node.type == 'mdxJsxFlowElement') {
+                                if (['figure', 'problem', 'refcode', 'reference'].includes(node.name)) {
+                                    const first = node.name[0].toUpperCase();
+                                    node.name = first + node.name.slice(1);
+                                }
+                            }
+                        }
+                    }],
+                ],
                 format: 'mdx',
             }
         }
@@ -71,9 +87,10 @@ export const getStaticProps: GetStaticProps<{article: Article}> = async ({ param
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
+    const components = handlerBuilder(article.chapter, article.title);
     return (<>
         <h1>{article.title}</h1>
-        <MDXRemote {...article.content} />
+        <MDXRemote {...article.content} components={components} />
         <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4>
     </>);
 }
