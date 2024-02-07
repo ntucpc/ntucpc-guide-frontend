@@ -4,6 +4,8 @@
 
 ```bash
 $ npm install
+$ git submodule update --init --recursive
+$ cp .env.example .env
 $ npm run dev
 ```
 
@@ -14,6 +16,10 @@ $ npm run dev
 搭配 Typescript。
 
 Trying to render MathJax from [jsdelivr](https://www.jsdelivr.com/).
+
+### Usefule Links:
++ [Plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)
++ [remark-directive](https://github.com/remarkjs/remark-directive)
 
 ## Convetions
 ### Commit
