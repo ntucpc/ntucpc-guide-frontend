@@ -14,10 +14,11 @@ import { Root, RootContent } from 'hast';
 /* Plugins to render MDX */
 import remarkComment from 'remark-comment';
 import remarkMath from 'remark-math';
-import myRehypeMathJax from 'rehype-mathjax/svg';
+import rehypeMathjax from 'rehype-mathjax/browser';
 import remarkBreaks from 'remark-breaks';
 import rehypeRewrite from 'rehype-rewrite';
 import handlerBuilder from 'components/article';
+import MathJaxJS from 'components/mathjax';
 
 import { getArticles } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
@@ -53,7 +54,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
-    const {chapter, section} = (params as ArticleStructure);
+    const { chapter, section } = (params as ArticleStructure);
 
     const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
     const content = await serialize(
@@ -62,7 +63,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
             mdxOptions: {
                 remarkPlugins: [remarkComment, remarkMath, remarkBreaks],
                 rehypePlugins: [
-                    [myRehypeMathJax, { chtml: { fontURL: getEnvironmentVariable('MATHJAX_FONTURL') }}],
+                    [rehypeMathjax, {}],
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
                         rewrite: (node: any) => {
                             if (node.type == 'mdxJsxFlowElement') {
@@ -83,12 +84,13 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         title: section,
         content,
     };
-    return { props: { article }};
+    return { props: { article } };
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const components = handlerBuilder(article.chapter, article.title);
     return (<>
+        <MathJaxJS />
         <h1>{article.title}</h1>
         <MDXRemote {...article.content} components={components} />
         <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4>
