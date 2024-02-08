@@ -1,5 +1,7 @@
 /* Implement custom componenets in articles */
+import path from 'path';
 import Image from 'next/image';
+
 type FigureType = {
     src: string,
     width: string
@@ -25,7 +27,8 @@ class Handler {
     }
     Figure() {
         return ({ src, width }: FigureType) => {
-            return <h1>Figure here with {this.chapter} and {this.section} and {src} and {width}</h1>
+            // Although Image has better performance over img, the dimension cannot be automatically grabbed.
+            return <img src={path.join("/guide/content", this.chapter, this.section, 'figure', src).replaceAll(/\\/g, '/')} width={+width} alt={""}/>
         };
     }
     Problem() {
