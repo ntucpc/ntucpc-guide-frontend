@@ -69,8 +69,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
                         rewrite: (node: any) => {
                             if (node.type == 'mdxJsxFlowElement') {
-                                if (['figure', 'problem', 'refcode', 'reference',
-                                     'success', 'info', 'warning', 'danger', 'spoiler', 'lemma', 'theorem', 'definition'].includes(node.name)) {
+                                if (['figure', 'problem', 'refcode', 'reference'].includes(node.name)) {
                                     const first = node.name[0].toUpperCase();
                                     node.name = first + node.name.slice(1);
                                 }
