@@ -15,7 +15,7 @@ $ npm run dev
 
 搭配 Typescript。
 
-Trying to render MathJax from [jsdelivr](https://www.jsdelivr.com/).
+Done rendering MathJax from [jsdelivr](https://cdnjs.com/).
 
 ### Usefule Links:
 + [Plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)

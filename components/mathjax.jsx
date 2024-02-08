@@ -1,6 +1,6 @@
 /* Includes MathJax 2 JS */
 
-import Head from "next/head";
+import Script from 'next/script'
 import { useState, useEffect } from 'react'
 
 export default function MathJaxJS() {
@@ -28,13 +28,10 @@ export default function MathJaxJS() {
     });
     `;
 
-    return <Head>
-        {isClient ?
-            <>
-                <script type="text/x-mathjax-config">{mathJaxConfig}</script>
-                <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
-            </>
-            : <></>
-        }
-    </Head>
+    return isClient ?
+        <>
+            <Script type="text/x-mathjax-config">{mathJaxConfig}</Script>
+            <Script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML" />
+        </>
+        : <></>
 };
