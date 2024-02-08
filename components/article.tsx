@@ -9,6 +9,12 @@ type ProblemType = {
     solution: string,
     is_sample: boolean
 };
+
+type Directive = {
+    type: string,
+    id?: string
+}
+
 class Handler {
     chapter: string;
     section: string;
@@ -17,7 +23,7 @@ class Handler {
         this.section = section;
     }
     Figure() {
-        return ({src, width}: FigureType) => {
+        return ({ src, width }: FigureType) => {
             return <h1>Figure here with {this.chapter} and {this.section} and {src} and {width}</h1>
         };
     }
@@ -36,12 +42,30 @@ class Handler {
             return <h1>Reference here</h1>
         };
     }
+    Info() {
+        return ({ type, id }: Directive) => {
+            return <h2>Info Directive: type = {type} and id = {id}</h2>
+        };
+    }
+    Theorem() {
+        return ({ type, id }: Directive) => {
+            return <h2>Theorem Directive: type = {type} and id = {id}</h2>
+        };
+    }
+    Spoiler() {
+        return ({ type, id }: Directive) => {
+            return <h2>Spoiler Directive: type = {type} and id = {id}</h2>
+        };
+    }
     build() {
         return {
             Figure: this.Figure(),
             Refcode: this.Refcode(),
             Problem: this.Problem(),
             Reference: this.Reference(),
+            Info: this.Info(),
+            Theorem: this.Theorem(),
+            Spoiler: this.Spoiler(),
         };
     }
 };

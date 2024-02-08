@@ -14,8 +14,10 @@ import { Root, RootContent } from 'hast';
 /* Plugins to render MDX */
 import remarkComment from 'remark-comment';
 import remarkMath from 'remark-math';
-import rehypeMathjax from 'rehype-mathjax/browser';
 import remarkBreaks from 'remark-breaks';
+import remarkDirective from 'remark-directive'
+import myRemarkDirective from 'lib/directive_customize';
+import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
 import handlerBuilder from 'components/article';
 import MathJaxJS from 'components/mathjax';
@@ -61,13 +63,14 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         raw,
         {
             mdxOptions: {
-                remarkPlugins: [remarkComment, remarkMath, remarkBreaks],
+                remarkPlugins: [remarkComment, remarkMath, remarkDirective, myRemarkDirective, remarkBreaks],
                 rehypePlugins: [
                     [rehypeMathjax, {}],
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
                         rewrite: (node: any) => {
                             if (node.type == 'mdxJsxFlowElement') {
-                                if (['figure', 'problem', 'refcode', 'reference'].includes(node.name)) {
+                                if (['figure', 'problem', 'refcode', 'reference',
+                                     'success', 'info', 'warning', 'danger', 'spoiler', 'lemma', 'theorem', 'definition'].includes(node.name)) {
                                     const first = node.name[0].toUpperCase();
                                     node.name = first + node.name.slice(1);
                                 }
