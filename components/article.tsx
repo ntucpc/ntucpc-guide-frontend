@@ -12,7 +12,8 @@ type ProblemType = {
 
 type Directive = {
     type: string,
-    id?: string
+    id?: string,
+    children: React.ReactNode
 }
 
 class Handler {
@@ -43,18 +44,18 @@ class Handler {
         };
     }
     Info() {
-        return ({ type, id }: Directive) => {
-            return <h2>Info Directive: type = {type} and id = {id}</h2>
+        return ({ type, id, children }: Directive) => {
+            return <><h2>Info Directive: type = {type} and id = {id}</h2><div className={"info-dir " + type}>{children}</div></>
         };
     }
     Theorem() {
-        return ({ type, id }: Directive) => {
-            return <h2>Theorem Directive: type = {type} and id = {id}</h2>
+        return ({ type, id, children}: Directive) => {
+            return <><h2>Theorem Directive: type = {type} and id = {id}</h2><div className={"theorem-dir " + type}>{children}</div></>
         };
     }
     Spoiler() {
-        return ({ type, id }: Directive) => {
-            return <h2>Spoiler Directive: type = {type} and id = {id}</h2>
+        return ({ type, id, children }: Directive) => {
+            return <><h2>Spoiler Directive: type = {type} and id = {id}</h2><div className={"spoiler"}>{children}</div></>
         };
     }
     build() {
