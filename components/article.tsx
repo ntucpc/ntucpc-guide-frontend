@@ -3,6 +3,7 @@ import path from 'path';
 import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Paper, Typography } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Image from 'next/image';
 
 type FigureType = {
     src: string,
@@ -42,7 +43,7 @@ class Handler {
     Figure() {
         return ({ src, width }: FigureType) => {
             // Although Image has better performance over img, the dimension cannot be automatically grabbed.
-            return <img src={src} width={+width} alt={""} />
+            return <img src={path.join("/guide/content", this.chapter, this.section, 'figure', src).replaceAll(/\\/g, '/')} width={+width} alt={""}/>
         };
     }
     Problem() {
