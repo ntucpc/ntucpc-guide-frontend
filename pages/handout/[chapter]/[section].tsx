@@ -12,7 +12,6 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { Root, RootContent } from 'hast';
 
 /* Plugins to render MDX */
-import remarkComment from 'remark-comment';
 import remarkMath from 'remark-math';
 import remarkBreaks from 'remark-breaks';
 import remarkDirective from 'remark-directive'
@@ -59,11 +58,17 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
     const { chapter, section } = (params as ArticleStructure);
 
     const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
+
+    // remove HTML comment prior to mdx process since mdx happens to not support it
+    // https://github.com/stevemao/html-comment-regex
+    const HTMLCommentRegex = /<!--([\s\S]*?)-->/g;
+    const crude = raw.replaceAll(HTMLCommentRegex, "");
+
     const content = await serialize(
-        raw,
+        crude,
         {
             mdxOptions: {
-                remarkPlugins: [remarkComment, remarkMath, remarkDirective, myRemarkDirective, remarkBreaks],
+                remarkPlugins: [remarkMath, remarkDirective, myRemarkDirective, remarkBreaks],
                 rehypePlugins: [
                     [rehypeMathjax, {}],
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
