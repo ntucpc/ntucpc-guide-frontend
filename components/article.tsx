@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Paper, Typography } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-/* Implement custom componenets in articles */
 type FigureType = {
     src: string,
     width: string
