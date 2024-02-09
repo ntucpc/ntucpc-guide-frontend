@@ -22,7 +22,7 @@ import myRemarkProblem from 'lib/parser/problem';
 import myRemarkFigure from 'lib/parser/figure';
 import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
-import handlerBuilder from 'components/article';
+import handlerBuilder from 'components/markdown/custom';
 import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
