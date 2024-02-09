@@ -1,5 +1,5 @@
 export * from "./navbar"
 export * from "./page-footer"
-export * from "./markdown/custom"
+export * from "./article"
 export * from "./article-toc"
 export * from "./chapters-list"
