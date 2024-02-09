@@ -1,8 +1,8 @@
 /* Implement custom componenets in articles */
 import path from 'path';
 import Link from 'next/link';
-
-import { Alert, Box, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Paper, Typography } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 /* Implement custom componenets in articles */
 type FigureType = {
@@ -89,13 +89,39 @@ class Handler {
         };
     }
     Theorem() {
-        return ({ type, id, children }: Directive) => {
-            return <><h2 id={id ? this.encodeID(id) : undefined}>Theorem Directive: type = {type} and id = {id}</h2><div className={"theorem-dir " + type}>{children}</div></>
+        // TODO: same as info blocks
+        return ({ type, id, children}: Directive) => {
+            const cap_type = type.charAt(0).toUpperCase() + type.slice(1);
+            return (
+                <Box padding={2}>
+                    <Paper variant="outlined">
+                        <Box padding={2}>
+                            <Typography variant="h6">{cap_type}. {id}</Typography>
+                            {children}
+                        </Box>
+                    </Paper>
+                </Box>
+            );
         };
     }
     Spoiler() {
         return ({ type, id, children }: Directive) => {
-            return <><h2 id={id ? this.encodeID(id) : undefined}>Spoiler Directive: type = {type} and id = {id}</h2><div className={"spoiler"}>{children}</div></>
+            return (
+                <Box padding={2}>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1-content"
+                            id={`accordion-heading-${id}`}
+                        >
+                            Spoiler
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            {children}
+                        </AccordionDetails>
+                    </Accordion>
+                </Box>
+            )
         };
     }
     build() {
