@@ -15,7 +15,7 @@ function myRemarkFigure(directory: string) {
                 
                 for (var attr of node.attributes)
                     if (attr.name === 'src')
-                        attr.value = path.join(finalDirectory, 'figure', attr.value);
+                        attr.value = path.join(finalDirectory, 'figure', attr.value).replaceAll(/\\/g, '/').replace(/^public/g, '');
             }
         })
     }

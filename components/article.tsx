@@ -40,7 +40,7 @@ class Handler {
     Figure() {
         return ({ src, width }: FigureType) => {
             // Although Image has better performance over img, the dimension cannot be automatically grabbed.
-            return <img src={src.replaceAll(/\\/g, '/').replace('public', '')} width={+width} alt={""} />
+            return <img src={src.replaceAll(/\\/g, '/').replace(/^public/g, '')} width={+width} alt={""} />
         };
     }
     Problem() {
