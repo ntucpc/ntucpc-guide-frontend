@@ -17,7 +17,7 @@ $ npm run dev
 
 Done rendering MathJax from [jsdelivr](https://cdnjs.com/).
 
-### Usefule Links:
+### Useful Links:
 + [Plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)
 + [remark-directive](https://github.com/remarkjs/remark-directive)
 

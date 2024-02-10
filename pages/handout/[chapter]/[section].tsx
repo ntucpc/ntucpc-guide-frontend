@@ -10,14 +10,16 @@ import Link from 'next/link';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { Root, RootContent } from 'hast';
+import { Code } from 'mdast';
 
 /* Plugins to render MDX */
 import remarkMath from 'remark-math';
 import remarkBreaks from 'remark-breaks';
 import remarkDirective from 'remark-directive'
-import myRemarkDirective from 'lib/directive_customize';
+import myRemarkDirective from 'lib/parser/directive';
 import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
+import myRemarkRefcode from 'lib/parser/refcode'
 import handlerBuilder from 'components/article';
 import MathJaxJS from 'components/mathjax';
 
@@ -54,6 +56,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 }
 
+
 export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
     const { chapter, section } = (params as ArticleStructure);
 
@@ -68,7 +71,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         crude,
         {
             mdxOptions: {
-                remarkPlugins: [remarkMath, remarkDirective, myRemarkDirective, remarkBreaks],
+                remarkPlugins: [remarkMath, remarkDirective, myRemarkDirective, [myRemarkRefcode, chapter, section], remarkBreaks],
                 rehypePlugins: [
                     [rehypeMathjax, {}],
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
@@ -79,6 +82,9 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
                                     node.name = first + node.name.slice(1);
                                 }
                             }
+                            // TODO: include 
+                            //      problem info (description.mdx, config.json) into the element
+                            //      reference code source
                         }
                     }],
                 ],

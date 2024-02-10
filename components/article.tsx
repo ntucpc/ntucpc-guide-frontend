@@ -11,6 +11,9 @@ type ProblemType = {
     solution: string,
     is_sample: boolean
 };
+type RefcodeType = {
+    children: React.ReactNode
+}
 
 type Directive = {
     type: string,
@@ -28,7 +31,7 @@ class Handler {
     Figure() {
         return ({ src, width }: FigureType) => {
             // Although Image has better performance over img, the dimension cannot be automatically grabbed.
-            return <img src={path.join("/guide/content", this.chapter, this.section, 'figure', src).replaceAll(/\\/g, '/')} width={+width} alt={""}/>
+            return <img src={path.join("/guide/content", this.chapter, this.section, 'figure', src).replaceAll(/\\/g, '/')} width={+width} alt={""} />
         };
     }
     Problem() {
@@ -37,8 +40,8 @@ class Handler {
         };
     }
     Refcode() {
-        return () => {
-            return <h1>Problem here with {this.chapter} and {this.section}</h1>
+        return ( {children} : RefcodeType) => {
+            return <>{children}</>
         };
     }
     Reference() {
@@ -52,7 +55,7 @@ class Handler {
         };
     }
     Theorem() {
-        return ({ type, id, children}: Directive) => {
+        return ({ type, id, children }: Directive) => {
             return <><h2>Theorem Directive: type = {type} and id = {id}</h2><div className={"theorem-dir " + type}>{children}</div></>
         };
     }
