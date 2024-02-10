@@ -50,13 +50,12 @@ class Handler {
     }
     Refcode() {
         return ({ code }: RefcodeType) => {
-            return <code>{code}</code>
+            // Temporary workaround for debugging display, should be replaced by css or anything.
+            return <code style={{whiteSpace: "pre-wrap"}}>{code}</code>
         };
     }
     Reference() {
         return ({ type, id }: ReferenceType) => {
-            console.log(id);
-            console.log(this.encodeID(id));
             return <Link href={'#' + this.encodeID(id)}>Reference here</Link>
         };
     }
