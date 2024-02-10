@@ -15,7 +15,7 @@ type ProblemType = {
     children: React.ReactNode
 };
 type RefcodeType = {
-    children: React.ReactNode
+    code: string
 }
 
 type Directive = {
@@ -43,8 +43,8 @@ class Handler {
         };
     }
     Refcode() {
-        return ({ children }: RefcodeType) => {
-            return <>{children}</>
+        return ({ code }: RefcodeType) => {
+            return <code>{code}</code>
         };
     }
     Reference() {

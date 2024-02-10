@@ -3,7 +3,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
 import { fromMarkdown } from 'mdast-util-from-markdown'
-
+import { getValueByName, pushAttribute } from 'lib/parser/common';
 
 // const PROBLEMS_PATH = path.join(process.cwd(), getEnvironmentVariable('PROBLEMS_RELATIVE_PATH'));
 const PROBLEMS_PATH = path.join(process.cwd(), 'public/guide/problems');
@@ -16,10 +16,7 @@ function myRemarkProblem() {
                 if (node.attributes === undefined)
                     throw new Error(`Error parsing problem: no source`);
 
-                const getValueByName = (arr: Array<any>, prop: string): string => {
-                    let ele = arr.find((element: any) => element.name === prop);
-                    return ele === undefined ? undefined : ele.value;
-                };
+
 
                 let directory = getValueByName(node.attributes, 'src'),
                     difficulty = getValueByName(node.attributes, 'difficulty'),
@@ -34,17 +31,10 @@ function myRemarkProblem() {
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
                 node.data._mdxExplicitJsx = false;
-                const pushAttribute = (name: string, value: string) => {
-                    attribute.push({
-                        type: 'mdxJsxAttribute',
-                        name: `${name}`,
-                        value: `${value}`
-                    })
-                };
-                pushAttribute('url', metadata.url);
-                pushAttribute('src', metadata.source);
-                pushAttribute('name', metadata.name);
-                pushAttribute('difficulty', difficulty);
+                pushAttribute(attribute, 'url', metadata.url);
+                pushAttribute(attribute, 'src', metadata.source);
+                pushAttribute(attribute, 'name', metadata.name);
+                pushAttribute(attribute, 'difficulty', difficulty);
             }
         })
     }
