@@ -58,6 +58,8 @@ class Handler {
     }
     Reference() {
         return ({ type, id }: ReferenceType) => {
+            console.log(id);
+            console.log(this.encodeID(id));
             return <Link href={'#' + this.encodeID(id)}>Reference here</Link>
         };
     }
