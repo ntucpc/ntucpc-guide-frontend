@@ -11,20 +11,15 @@ export default function MathJaxJS() {
         setIsClient(true)
     }, [])
 
-    const mathJaxConfig = "";
-    // I am not sure why empty config works?
-    // maybe because this config below, from the official MathJax2 (https://docs.mathjax.org/en/v2.7-latest/configuration.html) 
-    // has something not wanted. Anyways.
+    // Temporary workaround
+    const mathJaxConfig = 
     `
     MathJax.Hub.Config({
-        extensions: ["tex2jax.js"],
-        jax: ["input/TeX", "output/HTML-CSS"],
         tex2jax: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-        processEscapes: true
-    },
-    "HTML-CSS": {fonts: ["TeX"] }
+            inlineMath: [ ['$','$'], ["\\\\(","\\\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\\\[","\\\\]"] ],
+            processEscapes: false
+        },
     });
     `;
 

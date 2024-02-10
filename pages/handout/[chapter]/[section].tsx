@@ -17,11 +17,14 @@ import remarkMath from 'remark-math';
 import remarkBreaks from 'remark-breaks';
 import remarkDirective from 'remark-directive'
 import myRemarkDirective from 'lib/parser/directive';
+import myRemarkRefcode from 'lib/parser/refcode'
+import myRemarkProblem from 'lib/parser/problem';
 import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
-import myRemarkRefcode from 'lib/parser/refcode'
 import handlerBuilder from 'components/article';
 import MathJaxJS from 'components/mathjax';
+
+import remarkParse from 'remark-parse';
 
 import { getArticles } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
@@ -71,7 +74,14 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         crude,
         {
             mdxOptions: {
-                remarkPlugins: [remarkMath, remarkDirective, myRemarkDirective, [myRemarkRefcode, chapter, section], remarkBreaks],
+                remarkPlugins: [
+                    remarkDirective,
+                    myRemarkDirective,
+                    myRemarkProblem,
+                    remarkBreaks,
+                    remarkMath,
+                    [myRemarkRefcode, chapter, section],
+                ],
                 rehypePlugins: [
                     [rehypeMathjax, {}],
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
@@ -92,6 +102,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
             }
         }
     );
+
     const article: Article = {
         chapter,
         title: section,

@@ -1,6 +1,6 @@
 /* Implement custom componenets in articles */
 import path from 'path';
-import Image from 'next/image';
+import Link from 'next/link';
 
 type FigureType = {
     src: string,
@@ -8,8 +8,11 @@ type FigureType = {
 };
 type ProblemType = {
     src: string,
+    name: string,
+    url: string,
     solution: string,
-    is_sample: boolean
+    difficulty: string,
+    children: React.ReactNode
 };
 type RefcodeType = {
     children: React.ReactNode
@@ -35,12 +38,12 @@ class Handler {
         };
     }
     Problem() {
-        return ({ src, solution, is_sample }: ProblemType) => {
-            return <h1>Problem here with {this.chapter} and {this.section}, Is sample? {is_sample}</h1>
+        return ({ src, name, url, solution, difficulty, children }: ProblemType) => {
+            return <><Link href={url}>[{src}] {name} ({difficulty})</Link><div>{children}</div></>
         };
     }
     Refcode() {
-        return ( {children} : RefcodeType) => {
+        return ({ children }: RefcodeType) => {
             return <>{children}</>
         };
     }
