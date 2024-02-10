@@ -17,7 +17,10 @@ type ProblemType = {
 type RefcodeType = {
     code: string
 }
-
+type ReferenceType = {
+    type: string,
+    id: string
+}
 type Directive = {
     type: string,
     id?: string,
@@ -30,6 +33,9 @@ class Handler {
     constructor(chapter: string, section: string) {
         this.chapter = chapter;
         this.section = section;
+    }
+    encodeID(id: string) {
+        return "ref-" + id;
     }
     Figure() {
         return ({ src, width }: FigureType) => {
@@ -48,23 +54,25 @@ class Handler {
         };
     }
     Reference() {
-        return (props: any) => {
-            return <h1>Reference here</h1>
+        return ({ type, id }: ReferenceType) => {
+            console.log(id);
+            console.log(this.encodeID(id));
+            return <Link href={'#' + this.encodeID(id)}>Reference here</Link>
         };
     }
     Info() {
         return ({ type, id, children }: Directive) => {
-            return <><h2>Info Directive: type = {type} and id = {id}</h2><div className={"info-dir " + type}>{children}</div></>
+            return <><h2 id={id ? this.encodeID(id) : undefined}>Info Directive: type = {type} and id = {id}</h2><div className={"info-dir " + type}>{children}</div></>
         };
     }
     Theorem() {
         return ({ type, id, children }: Directive) => {
-            return <><h2>Theorem Directive: type = {type} and id = {id}</h2><div className={"theorem-dir " + type}>{children}</div></>
+            return <><h2 id={id ? this.encodeID(id) : undefined}>Theorem Directive: type = {type} and id = {id}</h2><div className={"theorem-dir " + type}>{children}</div></>
         };
     }
     Spoiler() {
         return ({ type, id, children }: Directive) => {
-            return <><h2>Spoiler Directive: type = {type} and id = {id}</h2><div className={"spoiler"}>{children}</div></>
+            return <><h2 id={id ? this.encodeID(id) : undefined}>Spoiler Directive: type = {type} and id = {id}</h2><div className={"spoiler"}>{children}</div></>
         };
     }
     build() {
