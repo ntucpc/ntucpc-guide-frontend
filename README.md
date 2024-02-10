@@ -27,3 +27,6 @@ Done rendering MathJax from [jsdelivr](https://cdnjs.com/).
 
 ### Coding style
 部份參考 [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
+
+## Known Issue
+ - Nested directive - problem - directive - problem is not supported.

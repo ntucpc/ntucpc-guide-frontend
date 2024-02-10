@@ -19,6 +19,7 @@ import remarkDirective from 'remark-directive'
 import myRemarkDirective from 'lib/parser/directive';
 import myRemarkRefcode from 'lib/parser/refcode'
 import myRemarkProblem from 'lib/parser/problem';
+import myRemarkFigure from 'lib/parser/figure';
 import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
 import handlerBuilder from 'components/article';
@@ -41,7 +42,7 @@ type ArticleStructure = {
     section: string,
 };
 
-const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
+const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const articles = await getArticles();
@@ -75,12 +76,13 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         {
             mdxOptions: {
                 remarkPlugins: [
-                    remarkDirective,
+                    myRemarkProblem,    // Parse problems' data into the tree. Should be execute first because of external mdx
+                    remarkDirective,    
                     myRemarkDirective,
-                    myRemarkProblem,
                     remarkBreaks,
-                    remarkMath,
-                    [myRemarkRefcode, chapter, section],
+                    remarkMath,         
+                    [myRemarkFigure, path.join(ARTICLE_PATH, chapter, section)],
+                    [myRemarkRefcode, path.join(ARTICLE_PATH, chapter, section)],
                 ],
                 rehypePlugins: [
                     [rehypeMathjax, {}],
