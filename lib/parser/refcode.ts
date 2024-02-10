@@ -1,4 +1,4 @@
-/* Parse 'Refcode' processed markdown directives to ReactJS element */
+/* Include 'Refcode' referenced local file */
 import path from 'path';
 import { readFileSync } from 'fs';
 import getEnvironmentVariable from 'lib/environment';
