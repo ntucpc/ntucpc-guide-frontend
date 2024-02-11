@@ -22,7 +22,7 @@ import myRemarkProblem from 'lib/parser/problem';
 import myRemarkFigure from 'lib/parser/figure';
 import rehypeMathjax from 'rehype-mathjax/browser';
 import rehypeRewrite from 'rehype-rewrite';
-import handlerBuilder from 'components/article';
+import makeMarkdownComponents from 'components/markdown';
 import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
@@ -36,7 +36,6 @@ type Article = {
     title: string,
     content: MDXRemoteSerializeResult,
 };
-type Components = ReturnType<typeof handlerBuilder>
 type ArticleStructure = {
     chapter: string,
     section: string,
@@ -114,7 +113,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    const components = handlerBuilder(article.chapter, article.title);
+    const components = makeMarkdownComponents({...article});
     return (<>
         <MathJaxJS />
         <h1>{article.title}</h1>
