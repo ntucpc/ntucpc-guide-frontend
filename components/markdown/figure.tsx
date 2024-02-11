@@ -14,6 +14,5 @@ export function Figure(context: MarkdownContextType) {
                 />
             </Box>
         );
-        // return <img src={src} width={+width} alt={""} />;
     };
 }
