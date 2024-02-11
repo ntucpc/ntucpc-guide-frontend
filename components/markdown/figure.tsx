@@ -1,8 +1,19 @@
+import { Box } from "@mui/material";
 import { MarkdownContextType, FigureType } from "./types";
 
 export function Figure(context: MarkdownContextType) {
     return ({ src, width }: FigureType) => {
         // Although Image has better performance over img, the dimension cannot be automatically grabbed.
-        return <img src={src} width={+width} alt={""} />;
+        return (
+            <Box padding={2} textAlign="center">
+                <img
+                    src={src}
+                    width={+width}
+                    alt={""}
+                    style={{ maxWidth: "80%" }}
+                />
+            </Box>
+        );
+        // return <img src={src} width={+width} alt={""} />;
     };
 }
