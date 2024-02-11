@@ -7,12 +7,16 @@ function encodeID({ type, id }: ReferenceType) {
 
 export function ReferenceAnchor(ref: ReferenceType) {
     return (
-        <div id={encodeID(ref)} className="references"></div>
-    )
+        <div
+            id={encodeID(ref)}
+            className="references"
+            style={{ position: "relative", top: "-100px" }}
+        ></div>
+    );
 }
 
 export function Reference(context: MarkdownContextType) {
     return ({ type, id }: ReferenceType) => {
-        return <Link href={`#${encodeID({type, id})}`}>Reference here</Link>;
+        return <Link href={`#${encodeID({ type, id })}`}>Reference here</Link>;
     };
 }
