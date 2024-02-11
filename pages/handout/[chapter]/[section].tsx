@@ -113,7 +113,10 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    const components = makeMarkdownComponents({...article});
+    const components = makeMarkdownComponents({
+        chapter: article.chapter,
+        title: article.title,
+    });
     return (<>
         <MathJaxJS />
         <h1>{article.title}</h1>
