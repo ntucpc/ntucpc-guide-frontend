@@ -1,7 +1,7 @@
 import path from 'path';
 
 import getEnvironmentVariable from 'lib/environment';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 
 const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
@@ -13,6 +13,11 @@ export type ChapterType = {
 export type SectionType = {
     chapter: string;
     section: string;
+    title: string;
+    authors: string[];
+    contributors: string[];
+    description: string;
+    prerequisites: string[];
 };
 
 const chapters: ChapterType[] = (function () {
@@ -28,6 +33,7 @@ const chapters: ChapterType[] = (function () {
                 .map((dir) => ({
                     chapter: chapter_name,
                     section: dir.name,
+                    ...JSON.parse(readFileSync(path.join(dir.path, dir.name, "config.json"), { encoding: "utf-8" })),
                 })),
         });
     }
@@ -43,6 +49,13 @@ export function getSections(chapter_name?: string) {
         .filter(chapter => (chapter_name === undefined || chapter_name === chapter.name))
         .map(chapter => chapter.sections)
         .reduce((acc, cur) => acc.concat(cur), []);
+}
+
+export function getSectionByName(chapter_name: string, section_name: string): SectionType {
+    const matched = getSections().filter(section => (
+        chapter_name === section.chapter && section_name === section.section
+    ));
+    return matched[0];
 }
 
 export function getAdjacentSections(target: SectionType): {prev_url?: string, next_url?: string} {
@@ -66,9 +79,9 @@ export function getAdjacentSections(target: SectionType): {prev_url?: string, ne
 export function getPageUrl(chapter_name?: string, section_name?: string): string {
     let url = `/handout`;
     if(chapter_name) {
-        url = `${url}/${chapter_name}`;
+        url = path.join(url, chapter_name);
         if(section_name) {
-            url = `${url}/${section_name}`;
+            url = path.join(url, section_name);
         }
     }
     return url;
