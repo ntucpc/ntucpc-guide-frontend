@@ -29,6 +29,7 @@ import remarkParse from 'remark-parse';
 
 import { getArticles } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
+import ArticleFooter from 'components/article-footer';
 
 
 type Article = {
@@ -121,6 +122,10 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
         <MathJaxJS />
         <h1>{article.title}</h1>
         <MDXRemote {...article.content} components={components} />
-        <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4>
+        {/* <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4> */}
+        <ArticleFooter
+            chapter={article.chapter}
+            section={article.title}
+        />
     </>);
 }
