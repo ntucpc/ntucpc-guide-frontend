@@ -13,7 +13,7 @@ export type ChapterType = {
 export type SectionType = {
     chapter: string;
     section: string;
-}
+};
 
 const chapters: ChapterType[] = (function () {
     let ret: ChapterType[] = [];
@@ -53,12 +53,39 @@ export function getAdjacentSections(target: SectionType): {prev_url?: string, ne
     const prev_url = (function() {
         if(idx <= 0) return undefined;
         const prev = sections[idx - 1];
-        return `/handout/${prev.chapter}/${prev.section}`;
+        return getSectionUrl(prev);
     })();
     const next_url = (function() {
         if(idx >= sections.length - 1) return undefined;
         const next = sections[idx + 1];
-        return `/handout/${next.chapter}/${next.section}`;
+        return getSectionUrl(next);
     })();
     return {prev_url, next_url};
 }
+
+export function getPageUrl(chapter_name?: string, section_name?: string): string {
+    let url = `/handout`;
+    if(chapter_name) {
+        url = `${url}/${chapter_name}`;
+        if(section_name) {
+            url = `${url}/${section_name}`;
+        }
+    }
+    return url;
+}
+
+export function getChapterUrl(chapter: ChapterType): string;
+export function getChapterUrl(chapter: SectionType): string;
+export function getChapterUrl(arg: ChapterType | SectionType): string {
+    if((arg as ChapterType).name !== undefined) {
+        arg = arg as ChapterType;
+        return getPageUrl(arg.name);
+    } else {
+        arg = arg as SectionType;
+        return getPageUrl(arg.chapter);
+    }
+};
+
+export function getSectionUrl(arg: SectionType): string {
+    return getPageUrl(arg.chapter, arg.section);
+};
