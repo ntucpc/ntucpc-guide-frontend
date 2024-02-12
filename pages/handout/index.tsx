@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps<{articles: ChapterType[]}> = async (
 export default function Pages({ articles }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
     for (const chapter of articles) {
-        const chapter_name = chapter.name;
+        const chapter_name = chapter.chapter;
 
         list.push(<h2 key={`${chapter_name}-title`}>
             <Link href={`handout/${chapter_name}`}>{chapter_name}</Link>

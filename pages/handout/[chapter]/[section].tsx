@@ -30,6 +30,7 @@ import remarkParse from 'remark-parse';
 import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
+import ArticleHeader from 'components/article-header';
 
 
 type Article = {
@@ -109,17 +110,17 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    const section = article.section;
     const components = makeMarkdownComponents({
-        chapter: section.chapter,
-        title: section.section,
+        chapter: article.section.chapter,
+        title: article.section.section,
     });
     return (<>
         <MathJaxJS />
-        <h1>{section.section}</h1>
+        {/* <h1>{article.section.section}</h1> */}
+        <ArticleHeader section={article.section}/>
         <MDXRemote {...article.content} components={components} />
         <ArticleFooter
-            {...section}
+            {...article.section}
             {...article.adjacent_sections}
         />
     </>);
