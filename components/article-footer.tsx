@@ -1,15 +1,15 @@
 import { Box, Button, Divider, Grid } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { SectionType } from "lib/contents_handler";
 
-type ArticleContextType = {
-    chapter: string;
-    section: string;
-    prev_url?: string;
-    next_url?: string;
+type ArticleFooterPropsType = {
+    section: SectionType;
+    prev?: SectionType;
+    next?: SectionType;
 };
 
-export default function ArticleFooter(context: ArticleContextType) {
+export default function ArticleFooter({section, prev, next}: ArticleFooterPropsType) {
     return (
         <>
             <Box height={32}></Box>
@@ -17,27 +17,27 @@ export default function ArticleFooter(context: ArticleContextType) {
             <Grid container alignItems="center" sx={{ minHeight: "64px" }}>
                 <Grid item xs={2} md={5} sx={{ textAlign: "left" }}>
                     <Button
-                        href={context.prev_url}
-                        disabled={context.prev_url === undefined}
+                        href={prev === undefined ? "" : prev.section_url}
+                        disabled={prev === undefined}
                     >
                         <ArrowBackIosNewIcon />
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            Prev {context.prev_url}
+                            前一章：{prev === undefined ? "" : prev.title}
                         </Box>
                     </Button>
                 </Grid>
                 <Grid item xs={8} md={2} sx={{ textAlign: "center" }}>
-                    <Button href={`../${context.chapter}`}>
-                        Back to Chapter
+                    <Button href={section.chapter_url}>
+                        回到章節目錄
                     </Button>
                 </Grid>
                 <Grid item xs={2} md={5} sx={{ textAlign: "right" }}>
                     <Button
-                        href={context.next_url}
-                        disabled={context.next_url === undefined}
+                        href={next === undefined ? "" : next.section_url}
+                        disabled={next === undefined}
                     >
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            {context.next_url} Next
+                            下一章：{next === undefined ? "" : next.title}
                         </Box>
                         <ArrowForwardIosIcon />
                     </Button>

@@ -66,22 +66,15 @@ export function getSectionByName(chapter_name: string, section_name: string): Se
     return matched[0];
 }
 
-export function getAdjacentSections(target: SectionType): {prev_url?: string, next_url?: string} {
+export function getAdjacentSections(target: SectionType): {prev?: SectionType, next?: SectionType} {
     const sections = getSections();
     const idx = sections.findIndex(
         section => (section.chapter == target.chapter && section.section == target.section)
     );
-    const prev_url = (function() {
-        if(idx <= 0) return undefined;
-        const prev = sections[idx - 1];
-        return getSectionUrl(prev);
-    })();
-    const next_url = (function() {
-        if(idx >= sections.length - 1) return undefined;
-        const next = sections[idx + 1];
-        return getSectionUrl(next);
-    })();
-    return {prev_url, next_url};
+    return {
+        prev: sections[idx - 1],
+        next: sections[idx + 1],
+    };
 }
 
 export function getPageUrl(chapter_name?: string, section_name?: string): string {

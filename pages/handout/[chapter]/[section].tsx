@@ -36,7 +36,7 @@ import ArticleHeader from 'components/article-header';
 type Article = {
     section: SectionType;
     content: MDXRemoteSerializeResult;
-    adjacent_sections: {prev_url?: string, next_url?: string};
+    adjacent_sections: {prev?: SectionType, next?: SectionType};
 };
 type ArticleStructure = {
     chapter: string;
@@ -116,11 +116,10 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
     });
     return (<>
         <MathJaxJS />
-        {/* <h1>{article.section.section}</h1> */}
         <ArticleHeader section={article.section}/>
         <MDXRemote {...article.content} components={components} />
         <ArticleFooter
-            {...article.section}
+            section={article.section}
             {...article.adjacent_sections}
         />
     </>);
