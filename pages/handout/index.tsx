@@ -12,7 +12,7 @@ export default function Pages({ articles }: InferGetStaticPropsType<typeof getSt
     for (const chapter of articles) {
         const chapter_name = chapter.name;
 
-        list.push(<h2>
+        list.push(<h2 key={`${chapter_name}-title`}>
             <Link href={`handout/${chapter_name}`}>{chapter_name}</Link>
         </h2>);
 
@@ -26,7 +26,7 @@ export default function Pages({ articles }: InferGetStaticPropsType<typeof getSt
             );
         }
 
-        list.push(<ul>
+        list.push(<ul key={`${chapter_name}-sections`}>
             { section_elems }
         </ul>);
     }

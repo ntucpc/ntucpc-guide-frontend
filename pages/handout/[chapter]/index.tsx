@@ -18,8 +18,6 @@ export const getStaticProps: GetStaticProps<{chapter: string, articles: string[]
     return { props: { chapter, articles } };
 }
 export default function Pages({ chapter, articles }: InferGetStaticPropsType<typeof getStaticProps>) {
-    const list: React.JSX.Element[] = [];
-
     const sections: React.JSX.Element[] = [];
     for (const section of articles) {
         sections.push(
@@ -29,12 +27,11 @@ export default function Pages({ chapter, articles }: InferGetStaticPropsType<typ
         );
     }
 
-    list.push(<ul>
-        {sections}
-    </ul>);
     return (<>
         <h1>{chapter}</h1>
-        { list }
+        <ul>
+            {sections}
+        </ul>
         <h4><Link href="/handout">回到大綱</Link></h4>
         <h4><Link href="/">回到首頁</Link></h4>
     </>);
