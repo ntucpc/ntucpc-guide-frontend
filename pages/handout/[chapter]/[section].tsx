@@ -27,7 +27,7 @@ import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
 
-import { getSectionNames } from 'lib/contents_handler';
+import { getSections, getAdjacentSections } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 
@@ -36,6 +36,7 @@ type Article = {
     chapter: string,
     title: string,
     content: MDXRemoteSerializeResult,
+    adjacent_sections: {prev_url?: string, next_url?: string};
 };
 type ArticleStructure = {
     chapter: string,
@@ -45,7 +46,7 @@ type ArticleStructure = {
 const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getSectionNames().map(section => ({params: section}));
+    const paths = getSections().map(section => ({params: section}));
 
     return {
         paths,
@@ -102,6 +103,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         chapter,
         title: section,
         content,
+        adjacent_sections: getAdjacentSections({chapter, section})
     };
     return { props: { article } };
 }
@@ -118,6 +120,7 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
         <ArticleFooter
             chapter={article.chapter}
             section={article.title}
+            {...article.adjacent_sections}
         />
     </>);
 }

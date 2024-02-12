@@ -38,13 +38,27 @@ export function getChapters() {
     return chapters;
 }
 
-export function getChapterNames() {
-    return chapters.map(chapter => chapter.name);
-}
-
-export function getSectionNames(chapter_name?: string) {
+export function getSections(chapter_name?: string) {
     return chapters
         .filter(chapter => (chapter_name === undefined || chapter_name === chapter.name))
         .map(chapter => chapter.sections)
         .reduce((acc, cur) => acc.concat(cur), []);
+}
+
+export function getAdjacentSections(target: SectionType): {prev_url?: string, next_url?: string} {
+    const sections = getSections();
+    const idx = sections.findIndex(
+        section => (section.chapter == target.chapter && section.section == target.section)
+    );
+    const prev_url = (function() {
+        if(idx <= 0) return undefined;
+        const prev = sections[idx - 1];
+        return `/handout/${prev.chapter}/${prev.section}`;
+    })();
+    const next_url = (function() {
+        if(idx >= sections.length - 1) return undefined;
+        const next = sections[idx + 1];
+        return `/handout/${next.chapter}/${next.section}`;
+    })();
+    return {prev_url, next_url};
 }

@@ -1,21 +1,20 @@
 import { Box, Button, Divider, Grid, Link, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { SectionType } from "lib/contents_handler";
 
 type ArticleContextType = {
     chapter: string;
     section: string;
-    prev_section?: string;
-    next_section?: string;
+    prev_url?: string;
+    next_url?: string;
 };
 
-export default function ArticleFooter({
-    chapter,
-    section,
-    prev_section,
-    next_section,
-}: ArticleContextType) {
-    prev_section = "/handout/Example/subexample";
+export default function ArticleFooter(context: ArticleContextType) {
+    // const {prev_url, next_url} = getAdjacentSections(context as SectionType);
+    // console.log("??????????????");
+    // const prev_url = undefined;
+    // const next_url = undefined;
     return (
         <>
             <Box height={32}></Box>
@@ -23,22 +22,22 @@ export default function ArticleFooter({
             <Grid container alignItems="center" height={64}>
                 <Grid item xs={5} sx={{ textAlign: "left" }}>
                     <Button
-                        href={prev_section}
-                        disabled={prev_section === undefined}
+                        href={context.prev_url}
+                        disabled={context.prev_url === undefined}
                     >
                         <ArrowBackIosNewIcon />
-                        Prev {prev_section}
+                        Prev {context.prev_url}
                     </Button>
                 </Grid>
                 <Grid item xs={2} sx={{ textAlign: "center" }}>
-                    <Button href={`../${chapter}`}>Back to Chapter</Button>
+                    <Button href={`../${context.chapter}`}>Back to Chapter</Button>
                 </Grid>
                 <Grid item xs={5} sx={{ textAlign: "right" }}>
                     <Button
-                        href={next_section}
-                        disabled={next_section === undefined}
+                        href={context.next_url}
+                        disabled={context.next_url === undefined}
                     >
-                        {next_section} Next
+                        {context.next_url} Next
                         <ArrowForwardIosIcon />
                     </Button>
                 </Grid>
