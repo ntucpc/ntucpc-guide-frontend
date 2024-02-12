@@ -27,7 +27,7 @@ import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
 
-import { getArticles } from 'lib/contents_handler';
+import { getSectionNames } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 
@@ -45,14 +45,7 @@ type ArticleStructure = {
 const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const articles = await getArticles();
-
-    const entries: ArticleStructure[] = [];
-    for (const chapter in articles)
-        for (const section of articles[chapter])
-            entries.push({ chapter, section });
-
-    const paths = entries.map(entry => ({ params: entry }));
+    const paths = getSectionNames().map(section => ({params: section}));
 
     return {
         paths,
@@ -122,7 +115,6 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
         <MathJaxJS />
         <h1>{article.title}</h1>
         <MDXRemote {...article.content} components={components} />
-        {/* <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4> */}
         <ArticleFooter
             chapter={article.chapter}
             section={article.title}

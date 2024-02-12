@@ -1,13 +1,10 @@
 import Link from 'next/link';
 
-import { getArticles } from 'lib/contents_handler';
+import { getChapterNames, getSectionNames } from 'lib/contents_handler';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const articles = await getArticles();
-
-    // Only process chapters here
-    const paths = Object.keys(articles).map(entry => ({ params: { chapter: entry } }));
+    const paths = getChapterNames().map(chapter => ({params: {chapter}}));
     return {
         paths,
         fallback: false,
@@ -17,7 +14,7 @@ export const getStaticProps: GetStaticProps<{chapter: string, articles: string[]
     if (!params)
         throw Error('param not exist in [chapter]');
     const chapter = params.chapter as string;
-    const articles = await getArticles(chapter);
+    const articles = getSectionNames(chapter).map(section => section.section);
     return { props: { chapter, articles } };
 }
 export default function Pages({ chapter, articles }: InferGetStaticPropsType<typeof getStaticProps>) {
