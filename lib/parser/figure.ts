@@ -1,8 +1,12 @@
-/* Include 'Refcode' referenced local file */
+/**
+ * @fileoverview Parse actual image path.
+ * If node.data.overrideDirectory exists, the path is altered.
+ */
+
 import path from 'path';
 import { visit } from 'unist-util-visit';
 
-function myRemarkFigure(directory: string) {
+export function myRemarkFigure(directory: string) {
     return function (tree: any) {
         visit(tree, function (node) {
             if (node.name === 'figure') {
@@ -10,15 +14,13 @@ function myRemarkFigure(directory: string) {
                 if (node.attributes === undefined)
                     throw new Error(`Error parsing figure: no source`);
 
-                let finalDirectory = (node.data !== undefined && node.data.overrideDirectory) ?
+                const finalDirectory = (node.data !== undefined && node.data.overrideDirectory) ?
                                     node.data.overrideDirectory : directory;
                 
-                for (var attr of node.attributes)
+                for (let attr of node.attributes)
                     if (attr.name === 'src')
                         attr.value = path.join(finalDirectory, 'figure', attr.value).replaceAll(/\\/g, '/').replace(/^public/g, '');
             }
         })
     }
 }
-
-export default myRemarkFigure;

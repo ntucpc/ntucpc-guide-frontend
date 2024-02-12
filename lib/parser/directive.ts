@@ -1,5 +1,7 @@
-/* Parse 'remark-directive' processed markdown directives to ReactJS element */
-import { h } from 'hastscript'
+/**
+ * @fileoverview Parse 'remark-directive' processed markdown directives.
+ */
+
 import { visit } from 'unist-util-visit'
 
 /**
@@ -21,18 +23,18 @@ function parseDirectiveLabel(node: any)
 }
 
 
-function myRemarkDirective() {
+export function myRemarkDirective() {
     /**
      * @param {import('mdast').Root} tree
      *   Tree.
      * @returns {undefined}
      *   Nothing.
      */
-    return function (tree: any) {
+    return function (tree: any): undefined {
         visit(tree, function (node) {
             if (node.type === 'containerDirective') {
                 // direvtive label will be parsed as paragraph, so extract it
-                let directiveLabel = parseDirectiveLabel(node);
+                const directiveLabel = parseDirectiveLabel(node);
 
                 // change directive into react js element
                 const data = node.data || (node.data = {});
@@ -47,5 +49,3 @@ function myRemarkDirective() {
         })
     }
 }
-
-export default myRemarkDirective;
