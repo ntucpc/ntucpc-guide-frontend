@@ -9,14 +9,14 @@ import { readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { mdxJsxFromMarkdown } from 'mdast-util-mdx-jsx'
-import acorn from 'acorn';
+import * as acorn from 'acorn';
 import { mdxJsx } from 'micromark-extension-mdx-jsx'
 import { getValueByName, pushAttribute } from 'lib/parser/common';
 
 // const PROBLEMS_PATH = path.join(process.cwd(), getEnvironmentVariable('PROBLEMS_RELATIVE_PATH'));
 const PROBLEMS_PATH = path.join('public/guide/problems');
 
-export function myRemarkProblem() {
+export default function myRemarkProblem() {
     return async function (tree: any) {
         visit(tree, function (node) {
             if (node.name === 'problem') {

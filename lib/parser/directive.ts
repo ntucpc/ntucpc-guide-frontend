@@ -23,7 +23,7 @@ function parseDirectiveLabel(node: any)
 }
 
 
-export function myRemarkDirective() {
+export default function myRemarkDirective() {
     /**
      * @param {import('mdast').Root} tree
      *   Tree.

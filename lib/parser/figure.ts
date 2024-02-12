@@ -6,7 +6,7 @@
 import path from 'path';
 import { visit } from 'unist-util-visit';
 
-export function myRemarkFigure(directory: string) {
+export default function myRemarkFigure(directory: string) {
     return function (tree: any) {
         visit(tree, function (node) {
             if (node.name === 'figure') {

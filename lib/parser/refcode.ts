@@ -8,7 +8,7 @@ import { readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
 import { getValueByName, pushAttribute } from 'lib/parser/common';
 
-export function myRemarkRefcode(directory: string) {
+export default function myRemarkRefcode(directory: string) {
     return function (tree: any) {
         visit(tree, function (node) {
             if (node.name === 'refcode') {

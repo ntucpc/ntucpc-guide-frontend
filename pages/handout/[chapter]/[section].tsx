@@ -75,7 +75,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
         {
             mdxOptions: {
                 remarkPlugins: [
-                    myRemarkProblem,    // Parse problems' data into the tree. Should be execute first because of external mdx
+                    myRemarkProblem,
                     remarkDirective,    
                     myRemarkDirective,
                     remarkBreaks,
@@ -93,9 +93,6 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
                                     node.name = first + node.name.slice(1);
                                 }
                             }
-                            // TODO: include 
-                            //      problem info (description.mdx, config.json) into the element
-                            //      reference code source
                         }
                     }],
                 ],
