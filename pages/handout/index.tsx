@@ -1,31 +1,33 @@
 import Link from 'next/link';
 
-import { getArticles } from 'lib/contents_handler';
-import { ArticleDirectory } from 'lib/contents_handler';
+import { getChapters, ChapterType } from 'lib/contents_handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-export const getStaticProps: GetStaticProps<{articles: ArticleDirectory}> = async () => {
-    const articles = await getArticles();
+export const getStaticProps: GetStaticProps<{articles: ChapterType[]}> = async () => {
+    const articles = getChapters();
     return { props: { articles }};
 }
 export default function Pages({ articles }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
-    for (const chapter in articles) {
-        list.push(<h2>
-            <Link href={`handout/${chapter}`}>{chapter}</Link>
+    for (const chapter of articles) {
+        const chapter_name = chapter.chapter;
+
+        list.push(<h2 key={`${chapter_name}-title`}>
+            <Link href={`handout/${chapter_name}`}>{chapter_name}</Link>
         </h2>);
 
-        const sections: React.JSX.Element[] = [];
-        for (const section of articles[chapter]) {
-            sections.push(
-                <li key={`${chapter}-${section}`}>
-                    <Link href={`handout/${chapter}/${section}`}>{section}</Link>
+        const section_elems: React.JSX.Element[] = [];
+        for (const section of chapter.sections) {
+            const section_name = section.section;
+            section_elems.push(
+                <li key={`${chapter_name}-${section_name}`}>
+                    <Link href={`handout/${chapter_name}/${section_name}`}>{section_name}</Link>
                 </li>
             );
         }
 
-        list.push(<ul>
-            { sections }
+        list.push(<ul key={`${chapter_name}-sections`}>
+            { section_elems }
         </ul>);
     }
     return (<>

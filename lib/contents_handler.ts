@@ -1,42 +1,105 @@
 import path from 'path';
-import { readdir } from 'fs/promises'
 
 import getEnvironmentVariable from 'lib/environment';
-
-/* Remember to use for in then for of */
-export interface ArticleDirectory {
-    [chapter: string]: string[];
-};
+import { readdirSync, readFileSync } from 'fs';
 
 const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
-/*
- * Return the entries of articles in ./contents
- * 'chapter' is an optional argument specifying sections under it.
- */
-export async function getArticles(): Promise<ArticleDirectory>;
-export async function getArticles(chapter: string): Promise<string[]>;
-export async function getArticles(chapter?: string): Promise<ArticleDirectory | string[]> {
-    if (typeof chapter === 'undefined') {
-        const ret: ArticleDirectory = {};
-        try {
-            const chapters = await readdir(ARTICLE_PATH);
-            // Recursively invoke getArticles
-            for (const chapter of chapters)
-                ret[chapter] = await getArticles(chapter);
-        } catch (err) {
-            console.error(err);
-        }
-        return ret;
+
+export type ChapterType = {
+    chapter: string;
+    chapter_url: string;
+    sections: SectionType[];
+};
+export type SectionType = {
+    chapter: string;
+    section: string;
+    handout_url: string;
+    chapter_url: string;
+    section_url: string;
+    title: string;
+    authors: string[];
+    contributors: string[];
+    description: string;
+    prerequisites: string[];
+};
+
+const chapters: ChapterType[] = (function () {
+    let ret: ChapterType[] = [];
+    const chapter_names = readdirSync(ARTICLE_PATH, { withFileTypes: true })
+        .filter((dir) => dir.isDirectory());
+    for (const chapter_dir of chapter_names) {
+        const chapter_name = chapter_dir.name;
+        ret.push({
+            chapter: chapter_name,
+            chapter_url: getPageUrl(chapter_name),
+            sections: readdirSync(path.join(ARTICLE_PATH, chapter_name), { withFileTypes: true })
+                .filter((dir) => dir.isDirectory())
+                .map((dir) => ({
+                    chapter: chapter_name,
+                    section: dir.name,
+                    handout_url: getPageUrl(),
+                    chapter_url: getPageUrl(chapter_name),
+                    section_url: getPageUrl(chapter_name, dir.name),
+                    ...JSON.parse(readFileSync(path.join(dir.path, dir.name, "config.json"), { encoding: "utf-8" })),
+                })),
+        });
     }
-    else {
-        try {
-            const sections = await readdir(path.join(ARTICLE_PATH, chapter), { withFileTypes: true });
-            // Only returns directory (filters out config.json and other files)
-            return sections.filter(dir => dir.isDirectory()).map(dir => dir.name);
-        } catch (err) {
-            console.error(err);
-            return [];
-        }
-    }
+    return ret;
+})();
+
+export function getChapters() {
+    return chapters;
 }
+
+export function getSections(chapter_name?: string) {
+    return chapters
+        .filter(chapter => (chapter_name === undefined || chapter_name === chapter.chapter))
+        .map(chapter => chapter.sections)
+        .reduce((acc, cur) => acc.concat(cur), []);
+}
+
+export function getSectionByName(chapter_name: string, section_name: string): SectionType {
+    const matched = getSections().filter(section => (
+        chapter_name === section.chapter && section_name === section.section
+    ));
+    return matched[0];
+}
+
+export function getAdjacentSections(target: SectionType): {prev?: SectionType, next?: SectionType} {
+    const sections = getSections();
+    const idx = sections.findIndex(
+        section => (section.chapter == target.chapter && section.section == target.section)
+    );
+    return {
+        prev: sections[idx - 1],
+        next: sections[idx + 1],
+    };
+}
+
+export function getPageUrl(chapter_name?: string, section_name?: string): string {
+    let url = `/handout`;
+    if(chapter_name) {
+        url = path.join(url, chapter_name);
+        if(section_name) {
+            url = path.join(url, section_name);
+        }
+    }
+    return url;
+}
+
+export function getChapterUrl(chapter: ChapterType): string;
+export function getChapterUrl(chapter: SectionType): string;
+export function getChapterUrl(arg: ChapterType | SectionType): string {
+    if((arg as ChapterType).chapter !== undefined) {
+        arg = arg as ChapterType;
+        return getPageUrl(arg.chapter);
+    } else {
+        arg = arg as SectionType;
+        return getPageUrl(arg.chapter);
+    }
+};
+
+export function getSectionUrl(arg: SectionType): string {
+    return getPageUrl(arg.chapter, arg.section);
+};

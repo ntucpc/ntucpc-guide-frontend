@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import Link from "@mui/material/Link";
 
 export const NAVBAR_HEIGHT = 10;
@@ -8,9 +8,17 @@ export function NavBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                        NTUCPC Guide!
-                    </Typography>
+                    <Button color="inherit">
+                        <Link
+                            href="/"
+                            underline="none"
+                            color="inherit"
+                            variant="h6"
+                        >
+                            NTUCPC Guide!
+                        </Link>
+                    </Button>
+                    <Box sx={{flexGrow: 1}}></Box>
                     <Button color="inherit">
                         <Link
                             href="https://oj.ntucpc.org/"

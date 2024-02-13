@@ -27,31 +27,26 @@ import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
 
-import { getArticles } from 'lib/contents_handler';
+import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents_handler';
 import getEnvironmentVariable from 'lib/environment';
+import ArticleFooter from 'components/article-footer';
+import ArticleHeader from 'components/article-header';
 
 
 type Article = {
-    chapter: string,
-    title: string,
-    content: MDXRemoteSerializeResult,
+    section: SectionType;
+    content: MDXRemoteSerializeResult;
+    adjacent_sections: {prev?: SectionType, next?: SectionType};
 };
 type ArticleStructure = {
-    chapter: string,
-    section: string,
+    chapter: string;
+    section: string;
 };
 
 const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const articles = await getArticles();
-
-    const entries: ArticleStructure[] = [];
-    for (const chapter in articles)
-        for (const section of articles[chapter])
-            entries.push({ chapter, section });
-
-    const paths = entries.map(entry => ({ params: entry }));
+    const paths = getSections().map(section => ({params: section}));
 
     return {
         paths,
@@ -61,7 +56,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 
 export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
-    const { chapter, section } = (params as ArticleStructure);
+    const {chapter, section} = params as ArticleStructure;
+    // const { chapter, section } = (params as ArticleStructure);
+    const sectionObj = getSectionByName(chapter, section);
 
     const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
 
@@ -102,22 +99,25 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
     );
 
     const article: Article = {
-        chapter,
-        title: section,
+        section: sectionObj,
         content,
+        adjacent_sections: getAdjacentSections(sectionObj)
     };
     return { props: { article } };
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const components = makeMarkdownComponents({
-        chapter: article.chapter,
-        title: article.title,
+        chapter: article.section.chapter,
+        title: article.section.section,
     });
     return (<>
         <MathJaxJS />
-        <h1>{article.title}</h1>
+        <ArticleHeader section={article.section}/>
         <MDXRemote {...article.content} components={components} />
-        <h4><Link href={`../${article.chapter}`}>回到章節</Link></h4>
+        <ArticleFooter
+            section={article.section}
+            {...article.adjacent_sections}
+        />
     </>);
 }

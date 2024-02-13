@@ -9,11 +9,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     return (
         <>
             <NavBar />
-            <Box sx={{ marginTop: NAVBAR_HEIGHT }}>
-                <Container>
-                    <Component {...pageProps} />
-                </Container>
-            </Box>
+            <Container sx={{marginTop: NAVBAR_HEIGHT}}>
+                <Component {...pageProps} />
+            </Container>
             <Divider />
             <PageFooter />
         </>

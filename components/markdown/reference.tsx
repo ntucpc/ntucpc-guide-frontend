@@ -1,12 +1,22 @@
 import { MarkdownContextType, ReferenceType } from "./types";
-import Link from "next/link";
+import { Link } from "@mui/material";
 
-function encodeID(id: string) {
-    return "ref-" + id;
+function encodeID({ type, id }: ReferenceType) {
+    return `ref-${type}-${id}`;
+}
+
+export function ReferenceAnchor(ref: ReferenceType) {
+    return (
+        <div
+            id={encodeID(ref)}
+            className="references"
+            style={{ position: "relative", top: "-100px" }}
+        ></div>
+    );
 }
 
 export function Reference(context: MarkdownContextType) {
     return ({ type, id }: ReferenceType) => {
-        return <Link href={"#" + encodeID(id)}>Reference here</Link>;
+        return <Link href={`#${encodeID({ type, id })}`}>Reference here</Link>;
     };
 }
