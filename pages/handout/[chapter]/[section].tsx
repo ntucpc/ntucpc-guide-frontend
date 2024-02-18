@@ -110,16 +110,17 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 }
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
+    const section = article.section;
     const components = makeMarkdownComponents({
-        chapter: article.section.chapter,
-        title: article.section.section,
+        chapter: section.chapter,
+        title: section.section,
     });
     return (<>
         <MathJaxJS />
-        <ArticleHeader section={article.section}/>
+        <ArticleHeader section={section}/>
         <MDXRemote {...article.content} components={components} />
         <ArticleFooter
-            section={article.section}
+            section={section}
             {...article.adjacent_sections}
         />
     </>);
