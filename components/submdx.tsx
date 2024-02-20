@@ -1,5 +1,5 @@
 import makeMarkdownComponents from "./markdown";
-import { MarkdownContextType, SubmdxType } from "./markdown/types";
+import { SubmdxType } from "./markdown/types";
 import { MDXRemote } from "next-mdx-remote";
 import { Alert, Typography } from "@mui/material";
 

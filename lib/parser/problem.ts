@@ -2,10 +2,6 @@
 import path from 'path';
 import { readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
-import { fromMarkdown } from 'mdast-util-from-markdown'
-import { mdxJsxFromMarkdown } from 'mdast-util-mdx-jsx'
-import * as acorn from 'acorn'
-import { mdxJsx } from 'micromark-extension-mdx-jsx'
 import { getValueByName, pushAttribute } from 'lib/parser/common';
 import { MdxPathType } from 'lib/mdx-reader';
 

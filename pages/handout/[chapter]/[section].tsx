@@ -1,4 +1,3 @@
-import { readFile } from 'fs/promises';
 import path from 'path';
 
 import type {
@@ -6,33 +5,16 @@ import type {
     GetStaticPaths,
     GetStaticProps,
 } from 'next';
-import Link from 'next/link';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { Root, RootContent } from 'hast';
-import { Code } from 'mdast';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 /* Plugins to render MDX */
-import remarkMath from 'remark-math';
-import remarkBreaks from 'remark-breaks';
-import remarkDirective from 'remark-directive'
-import myRemarkDirective from 'lib/parser/directive';
-import myRemarkRefcode from 'lib/parser/refcode'
-import myRemarkProblem from 'lib/parser/problem';
-import myRemarkFigure from 'lib/parser/figure';
-import rehypeMathjax from 'rehype-mathjax/browser';
-import rehypeRewrite from 'rehype-rewrite';
-import makeMarkdownComponents from 'components/markdown';
 import MathJaxJS from 'components/mathjax';
-
-import remarkParse from 'remark-parse';
 
 import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents-handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 import ArticleHeader from 'components/article-header';
 import collectMdx from 'lib/mdx-reader';
-import { Alert, Typography } from '@mui/material';
 import { MarkdownContextType } from 'components/markdown/types';
 import Submdx from 'components/submdx';
 

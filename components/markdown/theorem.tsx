@@ -1,5 +1,5 @@
 import { MarkdownContextType, DirectiveType } from "./types";
-import { Typography, Box, Paper } from "@mui/material";
+import { Typography, Paper } from "@mui/material";
 import { ReferenceAnchor } from "./reference";
 
 export function Theorem(context: MarkdownContextType) {

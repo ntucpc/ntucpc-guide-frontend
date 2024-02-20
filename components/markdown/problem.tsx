@@ -1,7 +1,5 @@
-import { Paper, Link, Alert, Typography } from "@mui/material";
+import { Paper, Link } from "@mui/material";
 import { MarkdownContextType, ProblemType } from "./types";
-import { MDXRemote } from "next-mdx-remote";
-import makeMarkdownComponents from ".";
 import Submdx from "components/submdx";
 
 export function Problem(context: MarkdownContextType) {
