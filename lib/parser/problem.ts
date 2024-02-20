@@ -11,8 +11,9 @@ import { MdxPathType } from 'lib/mdx-reader';
 
 // const PROBLEMS_PATH = path.join(process.cwd(), getEnvironmentVariable('PROBLEMS_RELATIVE_PATH'));
 const PROBLEMS_PATH = path.join('public/guide/problems');
+const MAX_RECURSE_DEPTH = 2;
 
-function myRemarkProblem(submdx_paths: MdxPathType[]) {
+function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
     return async function (tree: any) {
         visit(tree, function (node) {
             if (node.name === 'problem') {
@@ -26,10 +27,16 @@ function myRemarkProblem(submdx_paths: MdxPathType[]) {
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
 
-                submdx_paths.push({
-                    dir: path.join(PROBLEMS_PATH, directory),
-                    file: 'description.mdx',
-                });
+                if(recurse_depth < MAX_RECURSE_DEPTH) {
+                    submdx_paths.push({
+                        dir: path.join(PROBLEMS_PATH, directory),
+                        file: 'description.mdx',
+                    });
+                } else {
+                    // too many nested layers
+                    // TODO: add a link to problem page
+                    return;
+                }
 
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());

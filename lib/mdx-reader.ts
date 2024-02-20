@@ -21,7 +21,8 @@ export type MdxPathType = {
 };
 
 export default async function collectMdx(
-    mdx_path: MdxPathType
+    mdx_path: MdxPathType,
+    recurse_depth: number = 1
 ): Promise<Map<string, MDXRemoteSerializeResult>> {
     const mdx_fullpath = path.join(mdx_path.dir, mdx_path.file);
     const mdx_raw = await readFile(mdx_fullpath, { encoding: "utf-8" });
@@ -37,7 +38,7 @@ export default async function collectMdx(
         {
             mdxOptions: {
                 remarkPlugins: [
-                    [myRemarkProblem, submdx_paths],
+                    [myRemarkProblem, submdx_paths, recurse_depth],
                     remarkDirective,    
                     myRemarkDirective,
                     remarkBreaks,
@@ -64,7 +65,7 @@ export default async function collectMdx(
     );
     let contents_mapping: Map<string, MDXRemoteSerializeResult> = new Map();
     contents_mapping.set(mdx_fullpath, mdx_content);
-    const submdx_contents = await Promise.all(submdx_paths.map(mdx_path => collectMdx(mdx_path)));
+    const submdx_contents = await Promise.all(submdx_paths.map(mdx_path => collectMdx(mdx_path, recurse_depth + 1)));
     for(const submdx_content of submdx_contents) {
         submdx_content.forEach((value, key, map) => {
             contents_mapping.set(key, value);
