@@ -31,8 +31,10 @@ import { getSections, getAdjacentSections, SectionType, getSectionByName } from 
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 import ArticleHeader from 'components/article-header';
-import compileMdx from 'lib/mdx-reader';
+import collectMdx from 'lib/mdx-reader';
 import { Alert, Typography } from '@mui/material';
+import { MarkdownContextType } from 'components/markdown/types';
+import Submdx from 'components/submdx';
 
 
 type Article = {
@@ -63,7 +65,7 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
     
     const sectionObj = getSectionByName(chapter, section);
 
-    const content = await compileMdx({
+    const content = await collectMdx({
         dir: path.join(ARTICLE_PATH, chapter, section),
         file: `${section}.mdx`,
     });
@@ -80,23 +82,15 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const section = article.section;
     const contents_mapping = new Map(article.contents_mapping);
-    const components = makeMarkdownComponents({
+    const markdown_context: MarkdownContextType = {
         chapter: section.chapter,
         title: section.section,
         contents_mapping,
-    });
-    const mdx_content = contents_mapping.get(article.mdx_path);
-    const mdx_body = mdx_content ? (
-        <MDXRemote {...mdx_content} components={components} />
-    ) : (
-        <Alert severity='error'>
-            <Typography variant='h3'>MDX Contents Not Found!</Typography>
-        </Alert>
-    )
+    };
     return (<>
         <MathJaxJS />
         <ArticleHeader section={section}/>
-        {mdx_body}
+        <Submdx mdx_path={article.mdx_path} context={markdown_context} />
         <ArticleFooter
             section={section}
             {...article.adjacent_sections}

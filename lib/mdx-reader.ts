@@ -20,7 +20,7 @@ export type MdxPathType = {
     file: string;
 };
 
-export default async function compileMdx(
+export default async function collectMdx(
     mdx_path: MdxPathType
 ): Promise<Map<string, MDXRemoteSerializeResult>> {
     const mdx_fullpath = path.join(mdx_path.dir, mdx_path.file);
@@ -64,7 +64,7 @@ export default async function compileMdx(
     );
     let contents_mapping: Map<string, MDXRemoteSerializeResult> = new Map();
     contents_mapping.set(mdx_fullpath, mdx_content);
-    const submdx_contents = await Promise.all(submdx_paths.map(mdx_path => compileMdx(mdx_path)));
+    const submdx_contents = await Promise.all(submdx_paths.map(mdx_path => collectMdx(mdx_path)));
     for(const submdx_content of submdx_contents) {
         submdx_content.forEach((value, key, map) => {
             contents_mapping.set(key, value);

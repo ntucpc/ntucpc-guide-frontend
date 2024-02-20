@@ -2,6 +2,7 @@ import { Paper, Link, Alert, Typography } from "@mui/material";
 import { MarkdownContextType, ProblemType } from "./types";
 import { MDXRemote } from "next-mdx-remote";
 import makeMarkdownComponents from ".";
+import Submdx from "components/submdx";
 
 export function Problem(context: MarkdownContextType) {
     return ({
@@ -13,21 +14,12 @@ export function Problem(context: MarkdownContextType) {
         difficulty,
         children,
     }: ProblemType) => {
-        const components = makeMarkdownComponents(context);
-        const mdx_contents = context.contents_mapping.get(mdx_path);
-        const problem_body = mdx_contents ? (
-            <MDXRemote {...mdx_contents} components={components} />
-        ) : (
-            <Alert severity='error'>
-                <Typography variant='h3'>MDX Content Not Found!</Typography>
-            </Alert>
-        );
         return (
             <Paper variant="outlined" sx={{ padding: 2, margin: 2 }}>
                 <Link href={url}>
                     [{src}] {name} ({difficulty})
                 </Link>
-                {problem_body}
+                <Submdx mdx_path={mdx_path} context={context} />
             </Paper>
         );
     };

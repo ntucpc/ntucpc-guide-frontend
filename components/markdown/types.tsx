@@ -30,3 +30,7 @@ export type DirectiveType = {
     id?: string;
     children: React.ReactNode;
 };
+export type SubmdxType = {
+    mdx_path: string;
+    context: MarkdownContextType;
+}

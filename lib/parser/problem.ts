@@ -26,17 +26,10 @@ function myRemarkProblem(submdx_paths: MdxPathType[]) {
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
 
-                // TODO: fully support MDX
-                // submdx_paths.push(path.join(PROBLEMS_PATH, directory, 'description.mdx'));
                 submdx_paths.push({
                     dir: path.join(PROBLEMS_PATH, directory),
                     file: 'description.mdx',
                 });
-                // const statement = readFileSync(path.join(PROBLEMS_PATH, directory, 'description.mdx'), { encoding: "utf-8" });
-                // let subtree = fromMarkdown(statement, {
-                //     extensions: [mdxJsx({ acorn, addResult: true })],
-                //     mdastExtensions: [mdxJsxFromMarkdown()]
-                // });
 
                 // visit(subtree, function (subnode) {
                 //     if (subnode.data === undefined)
