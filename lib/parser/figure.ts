@@ -9,13 +9,10 @@ function myRemarkFigure(directory: string) {
 
                 if (node.attributes === undefined)
                     throw new Error(`Error parsing figure: no source`);
-
-                let finalDirectory = (node.data !== undefined && node.data.overrideDirectory) ?
-                                    node.data.overrideDirectory : directory;
                 
                 for (var attr of node.attributes)
                     if (attr.name === 'src')
-                        attr.value = path.join(finalDirectory, 'figure', attr.value).replaceAll(/\\/g, '/').replace(/^public/g, '');
+                        attr.value = path.join(directory, 'figure', attr.value).replaceAll(/\\/g, '/').replace(/^public/g, '');
             }
         })
     }

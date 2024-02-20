@@ -1,8 +1,7 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 export type MarkdownContextType = {
-    chapter: string;
-    title: string;
+    mdx_path: string;
     contents_mapping: Map<string, MDXRemoteSerializeResult>;
 };
 export type FigureType = {
@@ -31,6 +30,5 @@ export type DirectiveType = {
     children: React.ReactNode;
 };
 export type SubmdxType = {
-    mdx_path: string;
     context: MarkdownContextType;
 }

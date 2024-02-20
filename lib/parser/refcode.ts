@@ -12,11 +12,8 @@ function myRemarkRefcode(directory: string) {
                 if (node.attributes === undefined)
                     throw new Error(`Error parsing reference code: no source`);
 
-                let finalDirectory = (node.data !== undefined && node.data.overrideDirectory) ?
-                                    node.data.overrideDirectory : directory;
-                
                 let source = getValueByName(node.attributes, 'src');
-                const lines = readFileSync(path.join(finalDirectory, 'refcode', source), { encoding: "utf-8" }).split("\n");
+                const lines = readFileSync(path.join(directory, 'refcode', source), { encoding: "utf-8" }).split("\n");
 
                 // TODO: fix undefined - 1 = NaN
                 let start = +getValueByName(node.attributes, 'start'),

@@ -83,14 +83,13 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
     const section = article.section;
     const contents_mapping = new Map(article.contents_mapping);
     const markdown_context: MarkdownContextType = {
-        chapter: section.chapter,
-        title: section.section,
+        mdx_path: article.mdx_path,
         contents_mapping,
     };
     return (<>
         <MathJaxJS />
         <ArticleHeader section={section}/>
-        <Submdx mdx_path={article.mdx_path} context={markdown_context} />
+        <Submdx context={markdown_context} />
         <ArticleFooter
             section={section}
             {...article.adjacent_sections}

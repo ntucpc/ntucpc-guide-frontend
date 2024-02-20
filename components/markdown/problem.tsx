@@ -14,12 +14,16 @@ export function Problem(context: MarkdownContextType) {
         difficulty,
         children,
     }: ProblemType) => {
+        const subcontext: MarkdownContextType = {
+            ...context,
+            mdx_path: mdx_path,
+        }
         return (
             <Paper variant="outlined" sx={{ padding: 2, margin: 2 }}>
                 <Link href={url}>
                     [{src}] {name} ({difficulty})
                 </Link>
-                <Submdx mdx_path={mdx_path} context={context} />
+                <Submdx context={subcontext} />
             </Paper>
         );
     };

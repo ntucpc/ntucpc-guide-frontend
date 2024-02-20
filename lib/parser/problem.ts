@@ -31,13 +31,6 @@ function myRemarkProblem(submdx_paths: MdxPathType[]) {
                     file: 'description.mdx',
                 });
 
-                // visit(subtree, function (subnode) {
-                //     if (subnode.data === undefined)
-                //         subnode.data = {};
-                //     subnode.data.overrideDirectory = path.join(PROBLEMS_PATH, directory);
-                // })
-                // node.children = subtree.children;
-
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
                 pushAttribute(attribute, 'url', metadata.url);
