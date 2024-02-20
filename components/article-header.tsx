@@ -1,5 +1,5 @@
 import { Box, Typography, Breadcrumbs, Link, Stack, Divider } from "@mui/material";
-import { SectionType } from "lib/contents_handler";
+import { SectionType } from "lib/contents-handler";
 import EditNoteTwoToneIcon from '@mui/icons-material/EditNoteTwoTone';
 import VolunteerActivismTwoToneIcon from '@mui/icons-material/VolunteerActivismTwoTone';
 import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone';

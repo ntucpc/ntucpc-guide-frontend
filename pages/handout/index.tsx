@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getChapters, ChapterType } from 'lib/contents_handler';
+import { getChapters, ChapterType } from 'lib/contents-handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticProps: GetStaticProps<{articles: ChapterType[]}> = async () => {

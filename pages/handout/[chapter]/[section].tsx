@@ -27,15 +27,18 @@ import MathJaxJS from 'components/mathjax';
 
 import remarkParse from 'remark-parse';
 
-import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents_handler';
+import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents-handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 import ArticleHeader from 'components/article-header';
+import compileMdx from 'lib/mdx-reader';
+import { Alert, Typography } from '@mui/material';
 
 
 type Article = {
+    mdx_path: string;
     section: SectionType;
-    content: MDXRemoteSerializeResult;
+    contents_mapping: [string, MDXRemoteSerializeResult][];
     adjacent_sections: {prev?: SectionType, next?: SectionType};
 };
 type ArticleStructure = {
@@ -57,53 +60,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
     const {chapter, section} = params as ArticleStructure;
-    // const { chapter, section } = (params as ArticleStructure);
+    
     const sectionObj = getSectionByName(chapter, section);
 
-    const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
-
-    // remove HTML comment prior to mdx process since mdx happens to not support it
-    // https://github.com/stevemao/html-comment-regex
-    const HTMLCommentRegex = /<!--([\s\S]*?)-->/g;
-    const crude = raw.replaceAll(HTMLCommentRegex, "");
-
-    const content = await serialize(
-        crude,
-        {
-            mdxOptions: {
-                remarkPlugins: [
-                    myRemarkProblem,    // Parse problems' data into the tree. Should be execute first because of external mdx
-                    remarkDirective,    
-                    myRemarkDirective,
-                    remarkBreaks,
-                    remarkMath,         
-                    [myRemarkFigure, path.join(ARTICLE_PATH, chapter, section)],
-                    [myRemarkRefcode, path.join(ARTICLE_PATH, chapter, section)],
-                ],
-                rehypePlugins: [
-                    [rehypeMathjax, {}],
-                    [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
-                        rewrite: (node: any) => {
-                            if (node.type == 'mdxJsxFlowElement') {
-                                if (['figure', 'problem', 'refcode', 'reference'].includes(node.name)) {
-                                    const first = node.name[0].toUpperCase();
-                                    node.name = first + node.name.slice(1);
-                                }
-                            }
-                            // TODO: include 
-                            //      problem info (description.mdx, config.json) into the element
-                            //      reference code source
-                        }
-                    }],
-                ],
-                format: 'mdx',
-            }
-        }
-    );
+    const content = await compileMdx({
+        dir: path.join(ARTICLE_PATH, chapter, section),
+        file: `${section}.mdx`,
+    });
 
     const article: Article = {
+        mdx_path: path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`),
         section: sectionObj,
-        content,
+        contents_mapping: Array.from(content.entries()),
         adjacent_sections: getAdjacentSections(sectionObj)
     };
     return { props: { article } };
@@ -111,14 +79,24 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const section = article.section;
+    const contents_mapping = new Map(article.contents_mapping);
     const components = makeMarkdownComponents({
         chapter: section.chapter,
         title: section.section,
+        contents_mapping,
     });
+    const mdx_content = contents_mapping.get(article.mdx_path);
+    const mdx_body = mdx_content ? (
+        <MDXRemote {...mdx_content} components={components} />
+    ) : (
+        <Alert severity='error'>
+            <Typography variant='h3'>MDX Contents Not Found!</Typography>
+        </Alert>
+    )
     return (<>
         <MathJaxJS />
         <ArticleHeader section={section}/>
-        <MDXRemote {...article.content} components={components} />
+        {mdx_body}
         <ArticleFooter
             section={section}
             {...article.adjacent_sections}

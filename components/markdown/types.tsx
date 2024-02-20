@@ -1,6 +1,9 @@
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+
 export type MarkdownContextType = {
     chapter: string;
     title: string;
+    contents_mapping: Map<string, MDXRemoteSerializeResult>;
 };
 export type FigureType = {
     src: string;
@@ -10,6 +13,7 @@ export type ProblemType = {
     src: string;
     name: string;
     url: string;
+    mdx_path: string;
     solution: string;
     difficulty: string;
     children: React.ReactNode;

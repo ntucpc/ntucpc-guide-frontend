@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getChapters, getSections } from 'lib/contents_handler';
+import { getChapters, getSections } from 'lib/contents-handler';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {

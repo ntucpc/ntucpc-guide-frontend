@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Grid } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { SectionType } from "lib/contents_handler";
+import { SectionType } from "lib/contents-handler";
 
 type ArticleFooterPropsType = {
     section: SectionType;
