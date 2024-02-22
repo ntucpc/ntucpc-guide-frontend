@@ -14,11 +14,10 @@ function myRemarkRefcode(directory: string) {
 
                 let source = getValueByName(node.attributes, 'src');
                 const lines = readFileSync(path.join(directory, 'refcode', source), { encoding: "utf-8" }).split("\n");
-
-                // TODO: fix undefined - 1 = NaN
-                let start = +getValueByName(node.attributes, 'start'),
-                    end = +getValueByName(node.attributes, 'end');
-                const result = lines.slice(start - 1, end).join('\n');
+                
+                let start = (+getValueByName(node.attributes, 'start') - 1) || undefined;
+                let end = (+getValueByName(node.attributes, 'end')) || undefined;
+                const result = lines.slice(start, end).join('\n');
 
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
