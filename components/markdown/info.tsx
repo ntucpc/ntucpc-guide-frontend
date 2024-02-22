@@ -1,8 +1,16 @@
 import { MarkdownContextType, DirectiveType } from "./types";
-import { Typography, Box, Alert } from "@mui/material";
+import { Typography, Box, Alert, styled, AlertProps } from "@mui/material";
+
+const AlertTrimmed = styled(Alert)<AlertProps>(({theme}) => ({
+    "& > .MuiAlert-message :first-child": {
+        marginTop: 0,
+    },
+    "& > .MuiAlert-message :last-child": {
+        marginBottom: 0,
+    }
+}));
 
 export function Info(context: MarkdownContextType) {
-    // TODO: contents are wrapped by an extra layer of <p></p>. have to play with MDX tree to remove it.
     type InfoTypes = "success" | "info" | "warning" | "error";
     return ({ type, id, children }: DirectiveType) => {
         if (type == "danger") type = "error";
@@ -22,9 +30,9 @@ export function Info(context: MarkdownContextType) {
         resolved_type = type as InfoTypes;
         return (
             <Box padding={2}>
-                <Alert severity={resolved_type} id={id}>
+                <AlertTrimmed severity={resolved_type} id={id}>
                     {children}
-                </Alert>
+                </AlertTrimmed>
             </Box>
         );
     };
