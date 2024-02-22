@@ -18,6 +18,8 @@ export type ProblemType = {
     children: React.ReactNode;
 };
 export type RefcodeType = {
+    lang: string;
+    lineno: boolean;
     code: string;
 };
 export type ReferenceType = {

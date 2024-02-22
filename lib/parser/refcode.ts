@@ -22,15 +22,26 @@ function myRemarkRefcode(directory: string) {
 
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
-                pushAttribute(attribute, 'code', result);
+                pushAttribute(attribute, "lang", "cpp");
+                pushAttribute(attribute, "lineno", true);
+                pushAttribute(attribute, "code", result);
             } else if(node.type === "code") {
+                let lang: string = node.lang ?? "cpp";
+                let lineno: boolean = false;
+                if(lang.endsWith("=")) {
+                    lang = lang.slice(0, lang.length - 1);
+                    lineno = true;
+                }
                 node.type = "mdxJsxFlowElement";
                 node.name = "refcode";
                 node.attributes = [
+                    { type: "mdxJsxAttribute", name: "lang", value: lang },
+                    { type: "mdxJsxAttribute", name: "lineno", value: lineno },
                     { type: "mdxJsxAttribute", name: "code", value: node.value },
                 ];
                 node.children = [];
                 node.data = { _mdxExplicitJsx: true };
+                console.log(node);
             }
         })
     }

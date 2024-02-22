@@ -4,7 +4,7 @@ function getValueByName(arr: Array<any>, prop: string): string {
 };
 
 
-function pushAttribute(attribute: Array<any>, name: string, value: string) {
+function pushAttribute(attribute: Array<any>, name: string, value: any) {
     attribute.push({
         type: 'mdxJsxAttribute',
         name: `${name}`,
