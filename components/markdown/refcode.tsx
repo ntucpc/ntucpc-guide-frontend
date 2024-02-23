@@ -1,16 +1,15 @@
 import { Paper, Typography } from "@mui/material";
 import { MarkdownContextType, RefcodeType } from "./types";
-import hljs from "highlight.js/lib/common";
 
 export function Refcode(context: MarkdownContextType) {
     return ({ lang, lineno, code }: RefcodeType) => {
-        const code_hl = hljs.highlight(code, { language: lang }).value;
-        // TODO: add line number
+        let class_names = "";
+        class_names += (lineno === "true" ? "" : "nohljsln");
+        class_names += ` language-${lang}`;
         return (
-            <Paper elevation={2} sx={{ padding: 2, margin: 2, overflow: "auto" }}>
-                <Typography>lang: {lang}, lineno: {lineno}</Typography>
-                <pre>
-                    <div dangerouslySetInnerHTML={{__html: code_hl}}></div>
+            <Paper elevation={2} sx={{ margin: 2, overflow: "auto" }}>
+                <pre style={{margin: 0}}>
+                    <code className={class_names}>{code}</code>
                 </pre>
             </Paper>
         );

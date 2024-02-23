@@ -23,14 +23,14 @@ function myRemarkRefcode(directory: string) {
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
                 pushAttribute(attribute, "lang", "cpp");
-                pushAttribute(attribute, "lineno", true);
+                pushAttribute(attribute, "lineno", "true");
                 pushAttribute(attribute, "code", result);
             } else if(node.type === "code") {
                 let lang: string = node.lang ?? "cpp";
-                let lineno: boolean = false;
+                let lineno: string = "false";
                 if(lang.endsWith("=")) {
                     lang = lang.slice(0, lang.length - 1);
-                    lineno = true;
+                    lineno = "true";
                 }
                 node.type = "mdxJsxFlowElement";
                 node.name = "refcode";

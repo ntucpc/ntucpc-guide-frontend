@@ -17,6 +17,7 @@ import ArticleHeader from 'components/article-header';
 import collectMdx from 'lib/mdx-reader';
 import { MarkdownContextType } from 'components/markdown/types';
 import Submdx from 'components/submdx';
+import HightlightJsScript from 'components/highlightjs';
 
 
 type Article = {
@@ -69,6 +70,7 @@ export default function Page({ article }: InferGetServerSidePropsType<typeof get
         contents_mapping,
     };
     return (<>
+        <HightlightJsScript />
         <MathJaxJS />
         <ArticleHeader section={section}/>
         <Submdx context={markdown_context} />

@@ -18,7 +18,7 @@ export type ProblemType = {
 };
 export type RefcodeType = {
     lang: string;
-    lineno: boolean;
+    lineno: string;
     code: string;
 };
 export type ReferenceType = {
