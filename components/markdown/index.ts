@@ -6,8 +6,9 @@ import { Reference } from "./reference";
 import { Info } from "./info";
 import { Theorem } from "./theorem";
 import { Spoiler } from "./spoiler";
-import { WeightedTypography } from "./WeightedTypography";
+import { MyMdxTypography } from "./MyMdxTypography";
 import { Hyperlink } from "./Hyperlink";
+import { Divider } from "@mui/material";
 
 export default function makeMarkdownComponents(
     context: MarkdownContextType
@@ -20,7 +21,14 @@ export default function makeMarkdownComponents(
         Info: Info(context),
         Theorem: Theorem(context),
         Spoiler: Spoiler(context),
-        p: WeightedTypography(context, "body1"),
         a: Hyperlink(context),
+        h1: MyMdxTypography(context, "h3"),
+        h2: MyMdxTypography(context, "h4"),
+        h3: MyMdxTypography(context, "h5", 1),
+        h4: MyMdxTypography(context, "h6", 2),
+        h5: MyMdxTypography(context, "h6", 2),
+        h6: MyMdxTypography(context, "h6", 2),
+        p: MyMdxTypography(context, "body1", 3),
+        hr: Divider,
     };
 }
