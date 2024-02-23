@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export function Spoiler(context: MarkdownContextType) {
     return ({ type, id, children }: DirectiveType) => {
+        id = id ?? "Spoiler";
         return (
             <Box margin={2}>
                 <Accordion>
@@ -12,7 +13,7 @@ export function Spoiler(context: MarkdownContextType) {
                         aria-controls="panel1-content"
                         id={`accordion-heading-${id}`}
                     >
-                        <Typography>Spoiler</Typography>
+                        <Typography>{id}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         {children}
