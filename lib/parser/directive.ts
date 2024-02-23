@@ -43,6 +43,7 @@ function myRemarkDirective() {
                 else if (['lemma', 'theorem', 'definition'].includes(node.name))
                     data.hName = "Theorem";
                 data.hProperties = { "type": node.name, "id": directiveLabel };
+                console.log(node);
             }
         })
     }

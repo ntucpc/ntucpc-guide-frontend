@@ -7,6 +7,11 @@ const AlertTrimmed = styled(Alert)<AlertProps>(({theme}) => ({
     },
     "& > .MuiAlert-message :last-child": {
         marginBottom: 0,
+    },
+    "& > .MuiAlert-message > p": {
+        padding: 0,
+        marginLeft: 0,
+        marginRight: 0,
     }
 }));
 
