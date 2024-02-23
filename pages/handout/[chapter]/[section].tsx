@@ -23,7 +23,7 @@ type Article = {
     mdx_path: string;
     section: SectionType;
     contents_mapping: [string, MDXRemoteSerializeResult][];
-    adjacent_sections: {prev?: SectionType, next?: SectionType};
+    adjacent_sections: {prev: SectionType | null, next: SectionType | null};
 };
 type ArticleStructure = {
     chapter: string;

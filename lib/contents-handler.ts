@@ -66,14 +66,14 @@ export function getSectionByName(chapter_name: string, section_name: string): Se
     return matched[0];
 }
 
-export function getAdjacentSections(target: SectionType): {prev?: SectionType, next?: SectionType} {
+export function getAdjacentSections(target: SectionType): {prev: SectionType | null, next: SectionType | null} {
     const sections = getSections();
     const idx = sections.findIndex(
         section => (section.chapter == target.chapter && section.section == target.section)
     );
     return {
-        prev: sections[idx - 1],
-        next: sections[idx + 1],
+        prev: sections[idx - 1] ?? null,
+        next: sections[idx + 1] ?? null,
     };
 }
 

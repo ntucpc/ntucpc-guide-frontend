@@ -5,8 +5,8 @@ import { SectionType } from "lib/contents-handler";
 
 type ArticleFooterPropsType = {
     section: SectionType;
-    prev?: SectionType;
-    next?: SectionType;
+    prev: SectionType | null;
+    next: SectionType | null;
 };
 
 export default function ArticleFooter({section, prev, next}: ArticleFooterPropsType) {
@@ -17,12 +17,12 @@ export default function ArticleFooter({section, prev, next}: ArticleFooterPropsT
             <Grid container alignItems="center" sx={{ minHeight: "64px" }}>
                 <Grid item xs={2} md={5} sx={{ textAlign: "left" }}>
                     <Button
-                        href={prev === undefined ? "" : prev.section_url}
-                        disabled={prev === undefined}
+                        href={prev === null ? "" : prev.section_url}
+                        disabled={prev === null}
                     >
                         <ArrowBackIosNewIcon />
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            前一章：{prev === undefined ? "" : prev.title}
+                            {prev === null ? "已經是第一章了 >\"<" : `前一章：${prev.title}`}
                         </Box>
                     </Button>
                 </Grid>
@@ -33,11 +33,11 @@ export default function ArticleFooter({section, prev, next}: ArticleFooterPropsT
                 </Grid>
                 <Grid item xs={2} md={5} sx={{ textAlign: "right" }}>
                     <Button
-                        href={next === undefined ? "" : next.section_url}
-                        disabled={next === undefined}
+                        href={next === null ? "" : next.section_url}
+                        disabled={next === null}
                     >
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            下一章：{next === undefined ? "" : next.title}
+                            {next === null ? "已經是最後一章了 >\"<" : `下一章：${next.title}`}
                         </Box>
                         <ArrowForwardIosIcon />
                     </Button>
