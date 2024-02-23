@@ -7,7 +7,6 @@ export function WeightedTypography(context: MarkdownContextType, weight: Typogra
     return (obj: any) => {
         return (
             <Typography variant={weight} padding={1}>
-                {/* {Object.keys(obj)}<br/> */}
                 {obj.children}
             </Typography>
         )
