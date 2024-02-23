@@ -21,11 +21,11 @@ export default function HightlightJsScript() {
                     elem.async = false;
 
                     elem.addEventListener("load", () => {
-                        console.log("script [" + url + "] loaded");
+                        // successfully loaded external script
                         resolve({ status: true });
                     });
                     elem.addEventListener("error", () => {
-                        console.log("script [" + url + "] failed");
+                        // failed to load external script
                         reject({
                             status: false,
                             message: "loading script [" + url + "] failed"
