@@ -7,7 +7,7 @@ import EmojiObjectsTwoToneIcon from '@mui/icons-material/EmojiObjectsTwoTone';
 export default function ArticleHeader({section}: {section: SectionType}) {
     return (
         <>
-            <Stack spacing={2} padding={2}>
+            <Stack spacing={2} margin={2}>
                 <Box>
                     <Breadcrumbs aria-label="breadcrumb">
                         <Link underline="hover" color="inherit" href="/">NTUCPC Guide</Link>

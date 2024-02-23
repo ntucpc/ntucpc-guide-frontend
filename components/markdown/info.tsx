@@ -29,11 +29,9 @@ export function Info(context: MarkdownContextType) {
         }
         resolved_type = type as InfoTypes;
         return (
-            <Box padding={2}>
-                <AlertTrimmed severity={resolved_type} id={id}>
-                    {children}
-                </AlertTrimmed>
-            </Box>
+            <AlertTrimmed severity={resolved_type} id={id} sx={{padding: 2, margin: 2}}>
+                {children}
+            </AlertTrimmed>
         );
     };
 }
