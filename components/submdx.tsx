@@ -1,7 +1,11 @@
 import makeMarkdownComponents from "./markdown";
-import { SubmdxType } from "./markdown/types";
+import { MarkdownContextType } from "./markdown/types";
 import { MDXRemote } from "next-mdx-remote";
 import { Alert, Typography } from "@mui/material";
+
+export type SubmdxType = {
+    context: MarkdownContextType;
+};
 
 export default function Submdx({context}: SubmdxType) {
     const components = makeMarkdownComponents(context);

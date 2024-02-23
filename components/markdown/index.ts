@@ -6,6 +6,8 @@ import { Reference } from "./reference";
 import { Info } from "./info";
 import { Theorem } from "./theorem";
 import { Spoiler } from "./spoiler";
+import { WeightedTypography } from "./WeightedTypography";
+import { Hyperlink } from "./Hyperlink";
 
 export default function makeMarkdownComponents(
     context: MarkdownContextType
@@ -18,5 +20,7 @@ export default function makeMarkdownComponents(
         Info: Info(context),
         Theorem: Theorem(context),
         Spoiler: Spoiler(context),
+        p: WeightedTypography(context, "body1"),
+        a: Hyperlink(context),
     };
 }

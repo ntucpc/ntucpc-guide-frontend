@@ -10,7 +10,6 @@ export function Problem(context: MarkdownContextType) {
         mdx_path,
         solution,
         difficulty,
-        children,
     }: ProblemType) => {
         const subcontext: MarkdownContextType = {
             ...context,

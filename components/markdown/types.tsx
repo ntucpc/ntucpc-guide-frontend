@@ -15,7 +15,6 @@ export type ProblemType = {
     mdx_path: string;
     solution: string;
     difficulty: string;
-    children: React.ReactNode;
 };
 export type RefcodeType = {
     lang: string;
@@ -31,6 +30,10 @@ export type DirectiveType = {
     id?: string;
     children: React.ReactNode;
 };
-export type SubmdxType = {
-    context: MarkdownContextType;
-}
+export type ParagraphType = {
+    children: React.ReactNode;
+};
+export type HyperlinkType = {
+    href: string;
+    children: React.ReactNode;
+};

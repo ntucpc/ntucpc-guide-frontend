@@ -41,7 +41,6 @@ function myRemarkRefcode(directory: string) {
                 ];
                 node.children = [];
                 node.data = { _mdxExplicitJsx: true };
-                console.log(node);
             }
         })
     }
