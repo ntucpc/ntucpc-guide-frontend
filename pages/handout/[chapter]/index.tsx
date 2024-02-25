@@ -4,7 +4,7 @@ import { ChapterType, getChapterByName, getChapters, getSectionsByChapter, Secti
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getChapters().map(chapter => ({params: {chapter: chapter.d_chapter.name}}));
+    const paths = getChapters().map(chapter => ({params: {chapter: chapter.d_chapter.id}}));
     return {
         paths,
         fallback: false,

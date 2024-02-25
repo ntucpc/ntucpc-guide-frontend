@@ -8,12 +8,12 @@ const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELAT
 
 // to use the DataType types in props, make sure they are JSON-serializable and do not contain circular references
 export type ChapterDataType = {
-    name: string;
+    id: string;
     url: string;
     title: string;
 };
 export type SectionDataType = {
-    name: string,
+    id: string,
     url: string,
     title: string,
     authors: string[];
@@ -22,7 +22,7 @@ export type SectionDataType = {
     prerequisites: string[];
 };
 export type LevelDataType = {
-    name: string,
+    id: string,
     url: string,
     title: string,
 };
@@ -53,7 +53,7 @@ function readSection(entry: Dirent): SectionType {
     const chapter_name = path.parse(entry.path).name;
     return {
         d_section: {
-            name: entry.name,
+            id: entry.name,
             url: getPageUrl(chapter_name, entry.name),
             ...JSON.parse(readFileSync(path.join(entry.path, entry.name, "config.json"), { encoding: "utf-8" })),
         } as SectionDataType,
@@ -68,7 +68,7 @@ function readLevel(entry: Dirent): LevelType {
     const sections_: SectionType[] = level_json["sections"].map((path: string) => getSectionByPath(path));
     const level = {
         d_level: {
-            name: level_name,
+            id: level_name,
             title: level_json["title"],
             url: getPageUrl(level_name),
         } as LevelDataType,
@@ -96,7 +96,7 @@ const {sections, chapters}: {sections: SectionType[], chapters: ChapterType[]} =
         const sections_ = section_dirs.map((dir) => readSection(dir));
         const chapter_json = readJson(path.join(chapter_dir.path, chapter_dir.name, "config.json"));
         const chapter_data = {
-            name: chapter_name,
+            id: chapter_name,
             url: getPageUrl(chapter_name),
             ...(chapter_json ?? {title: chapter_name}),
         } as ChapterDataType;
@@ -117,7 +117,7 @@ const levels = (() => {
         .map(entry => readLevel(entry));
     const level_others = {
         d_level: {
-            name: "others",
+            id: "others",
             title: "Others",
             url: getPageUrl("others"),
         } as LevelDataType,
@@ -144,16 +144,16 @@ export function getLevels() {
 }
 
 export function getChapterByName(chapter_name: string) {
-    return chapters.filter(chap => chap.d_chapter.name === chapter_name)[0];
+    return chapters.filter(chap => chap.d_chapter.id === chapter_name)[0];
 }
 
 export function getSectionsByChapter(chapter_name: string) {
-    return sections.filter(section => section.d_chapter?.name === chapter_name);
+    return sections.filter(section => section.d_chapter?.id === chapter_name);
 }
 
 export function getSectionByName(chapter_name: string, section_name: string): SectionType {
     const matched = getSections().filter(section => (
-        chapter_name === section.d_chapter?.name && section_name === section.d_section.name
+        chapter_name === section.d_chapter?.id && section_name === section.d_section.id
     ));
     return matched[0];
 }

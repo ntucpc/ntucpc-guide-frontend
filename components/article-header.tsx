@@ -12,7 +12,7 @@ export default function ArticleHeader({section}: {section: SectionType}) {
                     <Breadcrumbs aria-label="breadcrumb">
                         <Link underline="hover" color="inherit" href="/">NTUCPC Guide</Link>
                         {/* <Link underline="hover" color="inherit" href={section.handout_url}>Handout</Link> */}
-                        <Link underline="hover" color="inherit" href={section.d_chapter?.url}>{section.d_chapter?.name}</Link>
+                        <Link underline="hover" color="inherit" href={section.d_chapter?.url}>{section.d_chapter?.id}</Link>
                         <Typography color="text.primary">{section.d_section.title}</Typography>
                     </Breadcrumbs>
                 </Box>

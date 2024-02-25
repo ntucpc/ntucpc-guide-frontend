@@ -12,20 +12,20 @@ export default function Pages({ chapters }: InferGetStaticPropsType<typeof getSt
     for (const chapter of chapters) {
         const d_chapter = chapter.d_chapter;
 
-        list.push(<h2 key={`${d_chapter.name}-title`}>
+        list.push(<h2 key={`${d_chapter.id}-title`}>
             <Link href={d_chapter.url}>{d_chapter.title}</Link>
         </h2>);
 
         const section_elems: React.JSX.Element[] = [];
         for (const d_section of chapter.d_sections) {
             section_elems.push(
-                <li key={`${d_chapter.name}-${d_section.name}`}>
+                <li key={`${d_chapter.id}-${d_section.id}`}>
                     <Link href={d_section.url}>{d_section.title}</Link>
                 </li>
             );
         }
 
-        list.push(<ul key={`${d_chapter.name}-sections`}>
+        list.push(<ul key={`${d_chapter.id}-sections`}>
             { section_elems }
         </ul>);
     }
