@@ -1,9 +1,10 @@
 import path from 'path';
 
 import getEnvironmentVariable from 'lib/environment';
-import { readdirSync, readFileSync } from 'fs';
+import { Dirent, readdirSync, readFileSync } from 'fs';
 
 const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
+const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELATIVE_PATH'));
 
 
 export type ChapterType = {
@@ -23,6 +24,25 @@ export type SectionType = {
     description: string;
     prerequisites: string[];
 };
+export type LevelType = {
+    name: string;
+    title: string;
+    url: string;
+    sections: SectionType[];
+};
+
+// dir is a Dirent of a .json file describing the level
+function readLevel(entry: Dirent): LevelType {
+    const level_name = path.parse(entry.name).name;
+    const level_json = JSON.parse(readFileSync(path.join(entry.path, entry.name), { encoding: "utf-8" }));
+    const level = {
+        name: level_name,
+        title: level_json["title"],
+        url: getPageUrl(level_name),
+        sections: level_json["sections"].map((path: string) => getSectionByPath(path)),
+    } as LevelType;
+    return level;
+}
 
 const chapters: ChapterType[] = (function () {
     let ret: ChapterType[] = [];
@@ -48,8 +68,18 @@ const chapters: ChapterType[] = (function () {
     return ret;
 })();
 
+const levels = (() => {
+    const lvl = readdirSync(LEVEL_PATH, { withFileTypes: true })
+        .map(entry => readLevel(entry));
+    return lvl;
+})();
+
 export function getChapters() {
     return chapters;
+}
+
+export function getLevels() {
+    return levels;
 }
 
 export function getSections(chapter_name?: string) {
@@ -64,6 +94,12 @@ export function getSectionByName(chapter_name: string, section_name: string): Se
         chapter_name === section.chapter && section_name === section.section
     ));
     return matched[0];
+}
+
+export function getSectionByPath(section_path: string): SectionType {
+    const section_name = path.parse(section_path).name;
+    const chapter_name = path.parse(path.parse(section_path).dir).name;
+    return getSectionByName(chapter_name, section_name);
 }
 
 export function getAdjacentSections(target: SectionType): {prev: SectionType | null, next: SectionType | null} {
