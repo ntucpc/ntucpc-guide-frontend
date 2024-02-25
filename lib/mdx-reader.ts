@@ -79,6 +79,8 @@ function escapeMathMode(content: string) {
                 }
                 break;
 
+            case '<':
+            case '>':
             case '}':
             case '{':
             case '_':
