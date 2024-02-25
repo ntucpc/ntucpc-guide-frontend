@@ -1,20 +1,20 @@
 import Link from 'next/link';
 
-import { getChapters, getSections } from 'lib/contents-handler';
+import { getChapters, getSectionsByChapter, SectionType } from 'lib/contents-handler';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getChapters().map(chapter => ({params: {chapter: chapter.name}}));
+    const paths = getChapters().map(chapter => ({params: {chapter: chapter.d_chapter.name}}));
     return {
         paths,
         fallback: false,
     };
 }
-export const getStaticProps: GetStaticProps<{chapter: string, articles: string[]}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{chapter: string, articles: SectionType[]}> = async ({ params }) => {
     if (!params)
         throw Error('param not exist in [chapter]');
     const chapter = params.chapter as string;
-    const articles = getSections(chapter).map(section => section.section);
+    const articles = getSectionsByChapter(chapter);
     return { props: { chapter, articles } };
 }
 export default function Pages({ chapter, articles }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -22,7 +22,7 @@ export default function Pages({ chapter, articles }: InferGetStaticPropsType<typ
     for (const section of articles) {
         sections.push(
             <li key={`${chapter}-${section}`}>
-                <Link href={`${chapter}/${section}`}>{section}</Link>
+                <Link href={`${section.d_section.url}`}>{section.d_section.title}</Link>
             </li>
         );
     }

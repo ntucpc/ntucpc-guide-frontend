@@ -10,15 +10,15 @@ export const getStaticProps: GetStaticProps<{articles: ChapterType[]}> = async (
 export default function Pages({ articles }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
     for (const chapter of articles) {
-        const chapter_name = chapter.name;
+        const chapter_name = chapter.d_chapter.name;
 
         list.push(<h2 key={`${chapter_name}-title`}>
             <Link href={`handout/${chapter_name}`}>{chapter_name}</Link>
         </h2>);
 
         const section_elems: React.JSX.Element[] = [];
-        for (const section of chapter.sections) {
-            const section_name = section.section;
+        for (const section of chapter.d_sections) {
+            const section_name = section.name;
             section_elems.push(
                 <li key={`${chapter_name}-${section_name}`}>
                     <Link href={`handout/${chapter_name}/${section_name}`}>{section_name}</Link>

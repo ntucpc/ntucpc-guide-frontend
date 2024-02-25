@@ -34,7 +34,10 @@ type ArticleStructure = {
 const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getSections().map(section => ({params: section}));
+    const paths = getSections().map(section => ({params: {
+        chapter: section.d_chapter?.name,
+        section: section.d_section.name,
+    }}));
 
     return {
         paths,

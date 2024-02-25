@@ -10,6 +10,8 @@ type ArticleFooterPropsType = {
 };
 
 export default function ArticleFooter({section, prev, next}: ArticleFooterPropsType) {
+    const d_prev = prev?.d_section ?? null;
+    const d_next = next?.d_section ?? null;
     return (
         <>
             <Box height={32}></Box>
@@ -17,27 +19,27 @@ export default function ArticleFooter({section, prev, next}: ArticleFooterPropsT
             <Grid container alignItems="center" sx={{ minHeight: "64px" }}>
                 <Grid item xs={2} md={5} sx={{ textAlign: "left" }}>
                     <Button
-                        href={prev === null ? "" : prev.section_url}
-                        disabled={prev === null}
+                        href={d_prev === null ? "" : d_prev.url}
+                        disabled={d_prev === null}
                     >
                         <ArrowBackIosNewIcon />
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            {prev === null ? "已經是第一章了 >\"<" : `前一章：${prev.title}`}
+                            {d_prev === null ? "已經是第一章了 >\"<" : `前一章：${d_prev.title}`}
                         </Box>
                     </Button>
                 </Grid>
                 <Grid item xs={8} md={2} sx={{ textAlign: "center" }}>
-                    <Button href={section.chapter_url}>
+                    <Button href={section.d_chapter?.url}>
                         回到章節目錄
                     </Button>
                 </Grid>
                 <Grid item xs={2} md={5} sx={{ textAlign: "right" }}>
                     <Button
-                        href={next === null ? "" : next.section_url}
-                        disabled={next === null}
+                        href={d_next === null ? "" : d_next.url}
+                        disabled={d_next === null}
                     >
                         <Box sx={{ display: { xs: "none", md: "block" } }}>
-                            {next === null ? "已經是最後一章了 >\"<" : `下一章：${next.title}`}
+                            {d_next === null ? "已經是最後一章了 >\"<" : `下一章：${d_next.title}`}
                         </Box>
                         <ArrowForwardIosIcon />
                     </Button>
