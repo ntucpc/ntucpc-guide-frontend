@@ -1,7 +1,7 @@
 import path from 'path';
 
 import getEnvironmentVariable from 'lib/environment';
-import { Dirent, readdirSync, readFileSync } from 'fs';
+import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 
 const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
 const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELATIVE_PATH'));
@@ -10,6 +10,7 @@ const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELAT
 export type ChapterDataType = {
     name: string;
     url: string;
+    title: string;
 };
 export type SectionDataType = {
     name: string,
@@ -39,6 +40,13 @@ export type LevelType = {
     d_level: LevelDataType;
     d_sections: SectionDataType[];
 };
+
+function readJson(json_path: string): any {
+    if(existsSync(json_path)) {
+        return JSON.parse(readFileSync(json_path, {encoding: "utf-8"}));
+    }
+    return undefined;
+}
 
 // entry is a Dirent of a directory containing the section
 function readSection(entry: Dirent): SectionType {
@@ -83,12 +91,14 @@ const {sections, chapters}: {sections: SectionType[], chapters: ChapterType[]} =
         .filter((dir) => dir.isDirectory());
     for (const chapter_dir of chapter_dirs) {
         const chapter_name = chapter_dir.name;
-        const section_dirs = readdirSync(path.join(ARTICLE_PATH, chapter_name), { withFileTypes: true })
+        const section_dirs = readdirSync(path.join(chapter_dir.path, chapter_dir.name), { withFileTypes: true })
             .filter((dir) => dir.isDirectory());
         const sections_ = section_dirs.map((dir) => readSection(dir));
+        const chapter_json = readJson(path.join(chapter_dir.path, chapter_dir.name, "config.json"));
         const chapter_data = {
             name: chapter_name,
             url: getPageUrl(chapter_name),
+            ...(chapter_json ?? {title: chapter_name}),
         } as ChapterDataType;
         sections_.forEach(sec => {
             sec.d_chapter = chapter_data;
@@ -131,6 +141,10 @@ export function getChapters() {
 }
 export function getLevels() {
     return levels;
+}
+
+export function getChapterByName(chapter_name: string) {
+    return chapters.filter(chap => chap.d_chapter.name === chapter_name)[0];
 }
 
 export function getSectionsByChapter(chapter_name: string) {
