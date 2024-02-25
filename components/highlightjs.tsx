@@ -38,10 +38,8 @@ export default function HightlightJsScript() {
                 }
             });
         }
-        await Promise.all([
-            loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"),
-            loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"),
-        ]);
+        await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js");
+        await loadExternalScript("https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"),
         hljs.highlightAll();
         hljs.initLineNumbersOnLoad({ singleLine: true });
     })();
