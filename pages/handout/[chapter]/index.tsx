@@ -4,7 +4,7 @@ import { getChapters, getSections } from 'lib/contents-handler';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getChapters().map(chapter => ({params: {chapter: chapter.chapter}}));
+    const paths = getChapters().map(chapter => ({params: {chapter: chapter.name}}));
     return {
         paths,
         fallback: false,

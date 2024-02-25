@@ -8,8 +8,8 @@ const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELAT
 
 
 export type ChapterType = {
-    chapter: string;
-    chapter_url: string;
+    name: string;
+    url: string;
     sections: SectionType[];
 };
 export type SectionType = {
@@ -18,6 +18,7 @@ export type SectionType = {
     handout_url: string;
     chapter_url: string;
     section_url: string;
+    level_name: string;
     title: string;
     authors: string[];
     contributors: string[];
@@ -31,7 +32,21 @@ export type LevelType = {
     sections: SectionType[];
 };
 
-// dir is a Dirent of a .json file describing the level
+// entry is a Dirent of a directory containing the section
+function readSection(entry: Dirent): SectionType {
+    const chapter_name = path.parse(entry.path).name;
+    return {
+        chapter: chapter_name,
+        section: entry.name,
+        handout_url: getPageUrl(),
+        chapter_url: getPageUrl(chapter_name),
+        section_url: getPageUrl(chapter_name, entry.name),
+        ...JSON.parse(readFileSync(path.join(entry.path, entry.name, "config.json"), { encoding: "utf-8" })),
+    } as SectionType;
+    // TODO: sanitize config file
+}
+
+// entry is a Dirent of a .json file describing the level
 function readLevel(entry: Dirent): LevelType {
     const level_name = path.parse(entry.name).name;
     const level_json = JSON.parse(readFileSync(path.join(entry.path, entry.name), { encoding: "utf-8" }));
@@ -42,6 +57,7 @@ function readLevel(entry: Dirent): LevelType {
         sections: level_json["sections"].map((path: string) => getSectionByPath(path)),
     } as LevelType;
     return level;
+    // TODO: sanitize config file
 }
 
 const chapters: ChapterType[] = (function () {
@@ -51,27 +67,47 @@ const chapters: ChapterType[] = (function () {
     for (const chapter_dir of chapter_names) {
         const chapter_name = chapter_dir.name;
         ret.push({
-            chapter: chapter_name,
-            chapter_url: getPageUrl(chapter_name),
+            name: chapter_name,
+            url: getPageUrl(chapter_name),
             sections: readdirSync(path.join(ARTICLE_PATH, chapter_name), { withFileTypes: true })
                 .filter((dir) => dir.isDirectory())
-                .map((dir) => ({
-                    chapter: chapter_name,
-                    section: dir.name,
-                    handout_url: getPageUrl(),
-                    chapter_url: getPageUrl(chapter_name),
-                    section_url: getPageUrl(chapter_name, dir.name),
-                    ...JSON.parse(readFileSync(path.join(dir.path, dir.name, "config.json"), { encoding: "utf-8" })),
-                })),
+                .map((dir) => readSection(dir)),
         });
     }
     return ret;
 })();
 
+const sections: SectionType[] = (() => {
+    return chapters
+        .map(chapter => chapter.sections)
+        .reduce((acc, cur) => acc.concat(cur), []);
+})();
+
 const levels = (() => {
-    const lvl = readdirSync(LEVEL_PATH, { withFileTypes: true })
+    const levels = readdirSync(LEVEL_PATH, { withFileTypes: true })
         .map(entry => readLevel(entry));
-    return lvl;
+    for(const level of levels) {
+        for(const section of level.sections) {
+            if(section.level_name !== undefined) {
+                console.log(`Warning: section [${section.chapter}/${section.section}] is included in multiple levels!`);
+            }
+            section.level_name = level.name;
+        }
+    }
+    const level_others = {
+        name: "others",
+        title: "Others",
+        url: getPageUrl("others"),
+        sections: [],
+    } as LevelType;
+    levels.push(level_others);
+    for(const section of sections) {
+        if(section.level_name === undefined) {
+            section.level_name = level_others.name;
+            level_others.sections.push(section);
+        }
+    }
+    return levels;
 })();
 
 export function getChapters() {
@@ -84,7 +120,7 @@ export function getLevels() {
 
 export function getSections(chapter_name?: string) {
     return chapters
-        .filter(chapter => (chapter_name === undefined || chapter_name === chapter.chapter))
+        .filter(chapter => (chapter_name === undefined || chapter_name === chapter.name))
         .map(chapter => chapter.sections)
         .reduce((acc, cur) => acc.concat(cur), []);
 }
@@ -127,9 +163,9 @@ export function getPageUrl(chapter_name?: string, section_name?: string): string
 export function getChapterUrl(chapter: ChapterType): string;
 export function getChapterUrl(chapter: SectionType): string;
 export function getChapterUrl(arg: ChapterType | SectionType): string {
-    if((arg as ChapterType).chapter !== undefined) {
+    if((arg as ChapterType).name !== undefined) {
         arg = arg as ChapterType;
-        return getPageUrl(arg.chapter);
+        return getPageUrl(arg.name);
     } else {
         arg = arg as SectionType;
         return getPageUrl(arg.chapter);
