@@ -1,6 +1,6 @@
 /* Include metadata and description of 'Problem', add 'overrideDirectory' in data for figures */
 import path from 'path';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
 import { getValueByName, pushAttribute } from 'lib/parser/common';
 import { MdxPathType } from 'lib/mdx-reader';
@@ -22,25 +22,26 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                     // solution = getValueByName(node.attributes, 'solution');
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
-
-                if(recurse_depth < MAX_RECURSE_DEPTH) {
-                    submdx_paths.push({
-                        dir: path.join(PROBLEMS_PATH, directory),
-                        file: 'description.mdx',
-                    });
-                } else {
-                    // too many nested layers
-                    // TODO: add a link to problem page
-                    return;
-                }
-
+                
+                // too many nested layers
+                // TODO: add a link to problem page
+                if(recurse_depth > MAX_RECURSE_DEPTH) return;
+                
                 // TODO: fix this ugly syntax
                 const attribute = (node.attributes = Array<any>());
                 pushAttribute(attribute, 'url', metadata.url);
                 pushAttribute(attribute, 'src', metadata.source);
                 pushAttribute(attribute, 'name', metadata.name);
-                pushAttribute(attribute, 'mdx_path', path.join(PROBLEMS_PATH, directory, 'description.mdx'));
                 // pushAttribute(attribute, 'difficulty', difficulty);
+                
+                const mdx_path = path.join(PROBLEMS_PATH, directory, 'description.mdx');
+                if(existsSync(mdx_path)) {
+                    submdx_paths.push({
+                        dir: path.join(PROBLEMS_PATH, directory),
+                        file: 'description.mdx',
+                    });
+                    pushAttribute(attribute, 'mdx_path', mdx_path);
+                }
             }
         })
     }

@@ -11,16 +11,20 @@ export function Problem(context: MarkdownContextType) {
         solution,
         difficulty,
     }: ProblemType) => {
-        const subcontext: MarkdownContextType = {
-            ...context,
-            mdx_path: mdx_path,
-        }
+        let description_node: React.ReactNode = <></>;
+        // if(mdx_path) {
+        //     const subcontext: MarkdownContextType = {
+        //         ...context,
+        //         mdx_path,
+        //     }
+        //     description_node = <Submdx context={subcontext} />
+        // }
         return (
             <Paper variant="outlined" sx={{ padding: 2, margin: 2 }}>
                 <Link href={url}>
                     [{src}] {name} ({difficulty})
                 </Link>
-                <Submdx context={subcontext} />
+                {description_node}
             </Paper>
         );
     };
