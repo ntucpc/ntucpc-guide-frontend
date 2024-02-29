@@ -4,9 +4,9 @@ import { existsSync, readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
 import { getValueByName, pushAttribute } from 'lib/parser/common';
 import { MdxPathType } from 'lib/mdx-reader';
+import getEnvironmentVariable from 'lib/environment';
 
-// const PROBLEMS_PATH = path.join(process.cwd(), getEnvironmentVariable('PROBLEMS_RELATIVE_PATH'));
-const PROBLEMS_PATH = path.join('public/guide/problems');
+const PROBLEMS_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "problems");
 const MAX_RECURSE_DEPTH = 2;
 
 function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {

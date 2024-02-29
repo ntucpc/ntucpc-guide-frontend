@@ -3,8 +3,8 @@ import path from 'path';
 import getEnvironmentVariable from 'lib/environment';
 import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 
-const ARTICLE_PATH = path.join(process.cwd(), getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
-const LEVEL_PATH = path.join(process.cwd(), getEnvironmentVariable('LEVELS_RELATIVE_PATH'));
+const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
+const LEVEL_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "level");
 
 // to use the DataType types in props, make sure they are JSON-serializable and do not contain circular references
 export type ChapterDataType = {
