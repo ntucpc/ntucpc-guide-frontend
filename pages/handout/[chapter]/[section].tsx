@@ -1,4 +1,3 @@
-import { readFile } from 'fs/promises';
 import path from 'path';
 
 import type {
@@ -6,47 +5,39 @@ import type {
     GetStaticPaths,
     GetStaticProps,
 } from 'next';
-import Link from 'next/link';
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { Root, RootContent } from 'hast';
-import { Code } from 'mdast';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 /* Plugins to render MDX */
-import remarkMath from 'remark-math';
-import remarkBreaks from 'remark-breaks';
-import remarkDirective from 'remark-directive'
-import myRemarkDirective from 'lib/parser/directive';
-import myRemarkRefcode from 'lib/parser/refcode'
-import myRemarkProblem from 'lib/parser/problem';
-import myRemarkFigure from 'lib/parser/figure';
-import rehypeMathjax from 'rehype-mathjax/browser';
-import rehypeRewrite from 'rehype-rewrite';
-import makeMarkdownComponents from 'components/markdown';
 import MathJaxJS from 'components/mathjax';
 
-import remarkParse from 'remark-parse';
-
-import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents_handler';
+import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents-handler';
 import getEnvironmentVariable from 'lib/environment';
 import ArticleFooter from 'components/article-footer';
 import ArticleHeader from 'components/article-header';
+import collectMdx from 'lib/mdx-reader';
+import { MarkdownContextType } from 'components/markdown/types';
+import Submdx from 'components/submdx';
+import HightlightJsScript from 'components/highlightjs';
 
 
 type Article = {
+    mdx_path: string;
     section: SectionType;
-    content: MDXRemoteSerializeResult;
-    adjacent_sections: {prev?: SectionType, next?: SectionType};
+    contents_mapping: [string, MDXRemoteSerializeResult][];
+    adjacent_sections: {prev: SectionType | null, next: SectionType | null};
 };
 type ArticleStructure = {
     chapter: string;
     section: string;
 };
 
-const ARTICLE_PATH = path.join(getEnvironmentVariable('CONTENTS_RELATIVE_PATH'));
+const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getSections().map(section => ({params: section}));
+    const paths = getSections().map(section => ({params: {
+        chapter: section.d_chapter?.id,
+        section: section.d_section.id,
+    }}));
 
     return {
         paths,
@@ -57,50 +48,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
     const {chapter, section} = params as ArticleStructure;
-    // const { chapter, section } = (params as ArticleStructure);
+    
     const sectionObj = getSectionByName(chapter, section);
 
-    const raw = await readFile(path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`), { encoding: "utf-8" });
-
-    // remove HTML comment prior to mdx process since mdx happens to not support it
-    // https://github.com/stevemao/html-comment-regex
-    const HTMLCommentRegex = /<!--([\s\S]*?)-->/g;
-    const crude = raw.replaceAll(HTMLCommentRegex, "");
-
-    const content = await serialize(
-        crude,
-        {
-            mdxOptions: {
-                remarkPlugins: [
-                    myRemarkProblem,
-                    remarkDirective,    
-                    myRemarkDirective,
-                    remarkBreaks,
-                    remarkMath,         
-                    [myRemarkFigure, path.join(ARTICLE_PATH, chapter, section)],
-                    [myRemarkRefcode, path.join(ARTICLE_PATH, chapter, section)],
-                ],
-                rehypePlugins: [
-                    [rehypeMathjax, {}],
-                    [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
-                        rewrite: (node: any) => {
-                            if (node.type == 'mdxJsxFlowElement') {
-                                if (['figure', 'problem', 'refcode', 'reference'].includes(node.name)) {
-                                    const first = node.name[0].toUpperCase();
-                                    node.name = first + node.name.slice(1);
-                                }
-                            }
-                        }
-                    }],
-                ],
-                format: 'mdx',
-            }
-        }
-    );
+    const content = await collectMdx({
+        dir: path.join(ARTICLE_PATH, chapter, section),
+        file: `${section}.mdx`,
+    });
 
     const article: Article = {
+        mdx_path: path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`),
         section: sectionObj,
-        content,
+        contents_mapping: Array.from(content.entries()),
         adjacent_sections: getAdjacentSections(sectionObj)
     };
     return { props: { article } };
@@ -108,14 +67,16 @@ export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ par
 
 export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const section = article.section;
-    const components = makeMarkdownComponents({
-        chapter: section.chapter,
-        title: section.section,
-    });
+    const contents_mapping = new Map(article.contents_mapping);
+    const markdown_context: MarkdownContextType = {
+        mdx_path: article.mdx_path,
+        contents_mapping,
+    };
     return (<>
+        <HightlightJsScript />
         <MathJaxJS />
         <ArticleHeader section={section}/>
-        <MDXRemote {...article.content} components={components} />
+        <Submdx context={markdown_context} />
         <ArticleFooter
             section={section}
             {...article.adjacent_sections}

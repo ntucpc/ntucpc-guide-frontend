@@ -5,7 +5,7 @@ export function Figure(context: MarkdownContextType) {
     return ({ src, width }: FigureType) => {
         // Although Image has better performance over img, the dimension cannot be automatically grabbed.
         return (
-            <Box padding={2} textAlign="center">
+            <Box margin={2} textAlign="center">
                 <img
                     src={src}
                     width={+width}

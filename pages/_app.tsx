@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
-import { Box, Divider } from "@mui/material";
-import { NavBar, NAVBAR_HEIGHT, PageFooter } from "../components";
+import { Divider } from "@mui/material";
+import { NavBar, NAVBAR_HEIGHT } from "components/navbar";
+import { PageFooter } from "components/page-footer";
 import "../styles/global.css";
-import "highlight.js/styles/github.css";
+import "../styles/hljs-custom.css";
 import { Container } from "@mui/system";
 
 export default function MyApp({ Component, pageProps }: AppProps) {

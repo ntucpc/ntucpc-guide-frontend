@@ -1,19 +1,17 @@
 /* Includes MathJax 2 JS */
 
-import Script from 'next/script'
-import { useState, useEffect } from 'react'
+import Script from "next/script";
+import { useState, useEffect } from "react";
 
 export default function MathJaxJS() {
-
-    const [isClient, setIsClient] = useState(false)
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        setIsClient(true)
-    }, [])
+        setIsClient(true);
+    }, []);
 
     // Temporary workaround
-    const mathJaxConfig = 
-    `
+    const mathJaxConfig = `
     MathJax.Hub.Config({
         tex2jax: {
             inlineMath: [ ['$','$'], ["\\\\(","\\\\)"] ],
@@ -23,10 +21,15 @@ export default function MathJaxJS() {
     });
     `;
 
-    return isClient ?
+    return isClient ? (
         <>
             <Script type="text/x-mathjax-config">{mathJaxConfig}</Script>
-            <Script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML" />
+            <Script
+                async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"
+            />
         </>
-        : <></>
-};
+    ) : (
+        <></>
+    );
+}

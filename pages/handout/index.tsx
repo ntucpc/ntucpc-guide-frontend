@@ -1,32 +1,31 @@
 import Link from 'next/link';
 
-import { getChapters, ChapterType } from 'lib/contents_handler';
+import { getChapters, ChapterType } from 'lib/contents-handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-export const getStaticProps: GetStaticProps<{articles: ChapterType[]}> = async () => {
-    const articles = getChapters();
-    return { props: { articles }};
+export const getStaticProps: GetStaticProps<{chapters: ChapterType[]}> = async () => {
+    const chapters = getChapters();
+    return { props: { chapters }};
 }
-export default function Pages({ articles }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Pages({ chapters }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
-    for (const chapter of articles) {
-        const chapter_name = chapter.chapter;
+    for (const chapter of chapters) {
+        const d_chapter = chapter.d_chapter;
 
-        list.push(<h2 key={`${chapter_name}-title`}>
-            <Link href={`handout/${chapter_name}`}>{chapter_name}</Link>
+        list.push(<h2 key={`${d_chapter.id}-title`}>
+            <Link href={d_chapter.url}>{d_chapter.title}</Link>
         </h2>);
 
         const section_elems: React.JSX.Element[] = [];
-        for (const section of chapter.sections) {
-            const section_name = section.section;
+        for (const d_section of chapter.d_sections) {
             section_elems.push(
-                <li key={`${chapter_name}-${section_name}`}>
-                    <Link href={`handout/${chapter_name}/${section_name}`}>{section_name}</Link>
+                <li key={`${d_chapter.id}-${d_section.id}`}>
+                    <Link href={d_section.url}>{d_section.title}</Link>
                 </li>
             );
         }
 
-        list.push(<ul key={`${chapter_name}-sections`}>
+        list.push(<ul key={`${d_chapter.id}-sections`}>
             { section_elems }
         </ul>);
     }

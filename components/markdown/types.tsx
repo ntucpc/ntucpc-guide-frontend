@@ -1,6 +1,8 @@
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+
 export type MarkdownContextType = {
-    chapter: string;
-    title: string;
+    mdx_path: string;
+    contents_mapping: Map<string, MDXRemoteSerializeResult>;
 };
 export type FigureType = {
     src: string;
@@ -10,11 +12,13 @@ export type ProblemType = {
     src: string;
     name: string;
     url: string;
+    mdx_path?: string;
     solution: string;
     difficulty: string;
-    children: React.ReactNode;
 };
 export type RefcodeType = {
+    lang: string;
+    lineno: string;
     code: string;
 };
 export type ReferenceType = {
@@ -24,5 +28,12 @@ export type ReferenceType = {
 export type DirectiveType = {
     type: string;
     id?: string;
+    children: React.ReactNode;
+};
+export type ParagraphType = {
+    children: React.ReactNode;
+};
+export type HyperlinkType = {
+    href: string;
     children: React.ReactNode;
 };

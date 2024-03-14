@@ -1,0 +1,8 @@
+/* FUCK CSS */
+.hljs-ln div.hljs-ln-n {
+    text-align: right;
+    margin-right: 8px;
+    padding-right: 8px;
+    border-right: #ddd solid 2px;
+    color: #aaa;
+}
