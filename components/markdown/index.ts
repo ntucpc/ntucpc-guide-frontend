@@ -8,7 +8,8 @@ import { Theorem } from "./theorem";
 import { Spoiler } from "./spoiler";
 import { MyMdxTypography } from "./MyMdxTypography";
 import { Hyperlink } from "./Hyperlink";
-import { Divider } from "@mui/material";
+import { Divider, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { MdxTable } from "./Table";
 
 export default function makeMarkdownComponents(
     context: MarkdownContextType
@@ -30,5 +31,11 @@ export default function makeMarkdownComponents(
         h6: MyMdxTypography(context, "h6", 2),
         p: MyMdxTypography(context, "body1", 3),
         hr: Divider,
+        table: MdxTable(context),
+        thead: TableHead,
+        tbody: TableBody,
+        tr: TableRow,
+        th: TableCell,
+        td: TableCell
     };
 }

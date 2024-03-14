@@ -37,3 +37,6 @@ export type HyperlinkType = {
     href: string;
     children: React.ReactNode;
 };
+export type TableElementType = {
+    children: React.ReactNode;
+};
