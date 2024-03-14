@@ -1,6 +1,6 @@
-function getValueByName(arr: Array<any>, prop: string): string {
+function getValueByName(arr: Array<any>, prop: string): string | null {
     const ele = arr.find((element: any) => element.name === prop);
-    return ele === undefined ? undefined : ele.value;
+    return ele === undefined ? null : ele.value;
 };
 
 

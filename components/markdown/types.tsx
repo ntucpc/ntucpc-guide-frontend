@@ -12,7 +12,8 @@ export type ProblemType = {
     src: string;
     name: string;
     url: string;
-    mdx_path?: string;
+    mdx_path: string;
+    sol_path: string;
     solution: string;
     difficulty: string;
 };

@@ -18,8 +18,12 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                     throw new Error(`Error parsing problem: no source`);
 
                 let directory = getValueByName(node.attributes, 'src');
-                    // difficulty = getValueByName(node.attributes, 'difficulty'),
-                    // solution = getValueByName(node.attributes, 'solution');
+
+                if (!directory)
+                    throw new Error(`Error parsing problem: no source`);
+
+                // difficulty = getValueByName(node.attributes, 'difficulty'),
+                let solution = getValueByName(node.attributes, 'solution') ?? "";
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
                 
@@ -32,15 +36,25 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                 pushAttribute(attribute, 'url', metadata.url);
                 pushAttribute(attribute, 'src', metadata.source);
                 pushAttribute(attribute, 'name', metadata.name);
+                pushAttribute(attribute, 'solution', solution);
                 // pushAttribute(attribute, 'difficulty', difficulty);
                 
-                const mdx_path = path.join(PROBLEMS_PATH, directory, 'description.mdx');
+                const problem_dir = path.join(PROBLEMS_PATH, directory);
+                const mdx_path = path.join(problem_dir, 'description.mdx');
                 if(existsSync(mdx_path)) {
                     submdx_paths.push({
-                        dir: path.join(PROBLEMS_PATH, directory),
+                        dir: problem_dir,
                         file: 'description.mdx',
                     });
                     pushAttribute(attribute, 'mdx_path', mdx_path);
+                }
+                const sol_path = path.join(problem_dir, `${solution}.mdx`);
+                if(existsSync(sol_path)) {
+                    submdx_paths.push({
+                        dir: problem_dir,
+                        file: `${solution}.mdx`,
+                    });
+                    pushAttribute(attribute, 'sol_path', sol_path);
                 }
             }
         })
