@@ -12,6 +12,7 @@ import myRemarkRefcode from 'lib/parser/refcode';
 import myRemarkProblem from 'lib/parser/problem';
 import myRemarkFigure from 'lib/parser/figure';
 import rehypeRewrite from 'rehype-rewrite';
+import remarkGfm from 'remark-gfm';
 
 export type MdxPathType = {
     dir: string;
@@ -127,6 +128,7 @@ export default async function collectMdx(
                     remarkBreaks,
                     [myRemarkFigure, mdx_path.dir],
                     [myRemarkRefcode, mdx_path.dir],
+                    remarkGfm
                 ],
                 rehypePlugins: [
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
