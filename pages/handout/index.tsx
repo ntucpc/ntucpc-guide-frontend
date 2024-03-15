@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { getChapters, ChapterType } from 'lib/contents-handler';
+import { pickSubset } from 'lib/util';
+import { getChapters } from 'lib/contents-handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 type ChapterProps = {

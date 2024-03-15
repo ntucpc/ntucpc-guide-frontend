@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { getLevels, LevelType } from 'lib/contents-handler';
+import { pickSubset } from 'lib/util';
+import { getLevels } from 'lib/contents-handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { Typography } from '@mui/material';
 

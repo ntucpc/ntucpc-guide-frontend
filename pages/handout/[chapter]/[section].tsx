@@ -10,8 +10,9 @@ import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 /* Plugins to render MDX */
 import MathJaxJS from 'components/mathjax';
 
-import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents-handler';
+import { getSections, getAdjacentSections, getSectionByName } from 'lib/contents-handler';
 import getEnvironmentVariable from 'lib/environment';
+import { pickSubset } from 'lib/util';
 import ArticleFooter, { ArticleFooterPropsType } from 'components/article-footer';
 import ArticleHeader, { ArticleHeaderPropsType } from 'components/article-header';
 import collectMdx from 'lib/mdx-reader';
