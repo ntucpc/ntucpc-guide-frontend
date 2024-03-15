@@ -16,24 +16,13 @@ type SectionProps = {
 };
 
 export const getStaticProps: GetStaticProps<{chapters: ChapterProps[]}> = async () => {
-    const chapters = getChapters().map((chap) => {
-        const {id, url, title} = chap;
-        return {
-            id,
-            url,
-            title,
-            sections: chap.sections.map((sec) => {
-                const {id, url, title} = sec;
-                return {
-                    id,
-                    url,
-                    title,
-                }
-            }),
-        }
-    });
+    const chapters = getChapters().map((chap) => ({
+        ...pickSubset(chap, ["id", "url", "title"]),
+        sections: chap.sections.map(sec => pickSubset(sec, ["id", "url", "title"])),
+    }));
     return { props: { chapters }};
 }
+
 export default function Pages({ chapters }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
     for (const chapter of chapters) {

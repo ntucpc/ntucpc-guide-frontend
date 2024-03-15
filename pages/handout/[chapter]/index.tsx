@@ -20,19 +20,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
         fallback: false,
     };
 }
+
 export const getStaticProps: GetStaticProps<{chapter: ChapterProps}> = async ({ params }) => {
     if (!params)
         throw Error('param not exist in [chapter]');
     const chapter_obj = getChapterByName(params.chapter as string);
     const chapter = {
         title: chapter_obj.title,
-        sections: chapter_obj.sections.map((sec) => {
-            const {id, url, title} = sec;
-            return {id, url, title};
-        }),
+        sections: chapter_obj.sections.map(sec => pickSubset(sec, ["id", "url", "title"])),
     };
     return { props: { chapter } };
 }
+
 export default function Pages({ chapter }: InferGetStaticPropsType<typeof getStaticProps>) {
     const sections: React.JSX.Element[] = [];
     for (const section of chapter.sections) {

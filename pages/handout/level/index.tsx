@@ -18,21 +18,17 @@ type LevelProps = {
 
 export const getStaticProps: GetStaticProps<{levels: LevelProps[]}> = async () => {
     const levels = getLevels().map((lvl) => {
-        const sections = lvl.sections.map((sec) => {
-            const {id, url, title} = sec;
-            return {id, url, title};
-        })
-        const {id, url, title} = lvl;
-        return { id, url, title, sections, };
+        const sections = lvl.sections.map((sec) => pickSubset(sec, ["id", "url", "title"]));
+        return { ...pickSubset(lvl, ["id", "url", "title"]), sections, };
     });
     return { props: { levels }};
 }
+
 export default function Pages({ levels }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
     for (const level of levels) {
         list.push(<Typography variant='h4' key={`${level.id}-title`}>
             {level.title}
-            {/* <Link href={`handout/${chapter_name}`}>{chapter_name}</Link> */}
         </Typography>);
 
         const section_elems: React.JSX.Element[] = [];

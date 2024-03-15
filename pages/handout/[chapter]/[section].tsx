@@ -36,7 +36,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     return { paths, fallback: false, };
 }
 
-
 export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ params }) => {
     if (!params)
         throw Error('param not exist in [section]');
@@ -54,13 +53,9 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
         mdx_path: path.join(ARTICLE_PATH, chapter_id, section_id, `${section_id}.mdx`),
         contents_mapping: Array.from(content.entries()),
         header_props: {
-            chapter: (({id, url}) => ({id, url}))(section.chapter),
-            section: (({
-                title, authors, contributors, prerequisites
-            }) => ({
-                title, authors, contributors, prerequisites
-            }))(section),
-            level: (({title}) => ({title}))(section.level),
+            chapter: pickSubset(section.chapter, ["id", "url"]),
+            section: pickSubset(section, ["title", "authors", "contributors", "prerequisites"]),
+            level: pickSubset(section.level, ["title"]),
         },
         footer_props: {
             chapter_url: section.chapter.url,
