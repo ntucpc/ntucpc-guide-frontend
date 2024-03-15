@@ -7,38 +7,28 @@ const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "c
 const LEVEL_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "level");
 
 // to use the DataType types in props, make sure they are JSON-serializable and do not contain circular references
-export type ChapterDataType = {
+export type ChapterType = {
     id: string;
     url: string;
     title: string;
+    sections: SectionType[];
 };
-export type SectionDataType = {
-    id: string,
-    url: string,
-    title: string,
+export type SectionType = {
+    id: string;
+    url: string;
+    title: string;
     authors: string[];
     contributors: string[];
     description: string;
     prerequisites: string[];
-};
-export type LevelDataType = {
-    id: string,
-    url: string,
-    title: string,
-};
-
-export type ChapterType = {
-    d_chapter: ChapterDataType;
-    d_sections: SectionDataType[];
-};
-export type SectionType = {
-    d_section: SectionDataType;
-    d_chapter?: ChapterDataType;
-    d_level?: LevelDataType;
+    chapter: ChapterType;
+    level?: LevelType;
 };
 export type LevelType = {
-    d_level: LevelDataType;
-    d_sections: SectionDataType[];
+    id: string;
+    url: string;
+    title: string;
+    sections: SectionType[];
 };
 
 function readJson(json_path: string): any {
@@ -52,11 +42,9 @@ function readJson(json_path: string): any {
 function readSection(entry: Dirent): SectionType {
     const chapter_name = path.parse(entry.path).name;
     return {
-        d_section: {
-            id: entry.name,
-            url: getPageUrl(chapter_name, entry.name),
-            ...JSON.parse(readFileSync(path.join(entry.path, entry.name, "config.json"), { encoding: "utf-8" })),
-        } as SectionDataType,
+        id: entry.name,
+        url: getPageUrl(chapter_name, entry.name),
+        ...JSON.parse(readFileSync(path.join(entry.path, entry.name, "config.json"), { encoding: "utf-8" })),
     } as SectionType;
     // TODO: sanitize config file
 }
@@ -67,18 +55,16 @@ function readLevel(entry: Dirent): LevelType {
     const level_json = JSON.parse(readFileSync(path.join(entry.path, entry.name), { encoding: "utf-8" }));
     const sections_: SectionType[] = level_json["sections"].map((path: string) => getSectionByPath(path));
     const level = {
-        d_level: {
-            id: level_name,
-            title: level_json["title"],
-            url: getPageUrl(level_name),
-        } as LevelDataType,
-        d_sections: sections_.map(sec => sec.d_section),
+        id: level_name,
+        title: level_json["title"],
+        url: getPageUrl(level_name),
+        sections: sections_,
     } as LevelType;
     for(const section of sections_) {
-        if(section.d_level !== undefined) {
-            console.log(`Warning: section [${section.d_chapter}/${section.d_section}] is included in multiple levels!`);
+        if(section.level !== undefined) {
+            console.log(`Warning: section [${section.chapter.id}/${section.id}] is included in multiple levels!`);
         }
-        section.d_level = level.d_level;
+        section.level = level;
     }
     return level;
     // TODO: sanitize config file
@@ -93,21 +79,19 @@ const {sections, chapters}: {sections: SectionType[], chapters: ChapterType[]} =
         const chapter_name = chapter_dir.name;
         const section_dirs = readdirSync(path.join(chapter_dir.path, chapter_dir.name), { withFileTypes: true })
             .filter((dir) => dir.isDirectory());
-        const sections_ = section_dirs.map((dir) => readSection(dir));
+        const section = section_dirs.map((dir) => readSection(dir));
         const chapter_json = readJson(path.join(chapter_dir.path, chapter_dir.name, "config.json"));
-        const chapter_data = {
+        const chapter = {
             id: chapter_name,
             url: getPageUrl(chapter_name),
             ...(chapter_json ?? {title: chapter_name}),
-        } as ChapterDataType;
-        sections_.forEach(sec => {
-            sec.d_chapter = chapter_data;
+            sections: section,
+        } as ChapterType;
+        section.forEach(sec => {
+            sec.chapter = chapter;
         })
-        sections.push(...sections_);
-        chapters.push({
-            d_chapter: chapter_data,
-            d_sections: sections_.map(sec => sec.d_section),
-        });
+        sections.push(...section);
+        chapters.push(chapter);
     }
     return {sections, chapters};
 })();
@@ -116,18 +100,16 @@ const levels = (() => {
     const levels = readdirSync(LEVEL_PATH, { withFileTypes: true })
         .map(entry => readLevel(entry));
     const level_others = {
-        d_level: {
-            id: "others",
-            title: "Others",
-            url: getPageUrl("others"),
-        } as LevelDataType,
-        d_sections: [],
+        id: "others",
+        title: "Others",
+        url: getPageUrl("others"),
+        sections: [],
     } as LevelType;
     levels.push(level_others);
     for(const section of sections) {
-        if(section.d_level === undefined) {
-            section.d_level = level_others.d_level;
-            level_others.d_sections.push(section.d_section);
+        if(section.level === undefined) {
+            section.level = level_others;
+            level_others.sections.push(section);
         }
     }
     return levels;
@@ -144,16 +126,16 @@ export function getLevels() {
 }
 
 export function getChapterByName(chapter_name: string) {
-    return chapters.filter(chap => chap.d_chapter.id === chapter_name)[0];
+    return chapters.filter(chap => chap.id === chapter_name)[0];
 }
 
 export function getSectionsByChapter(chapter_name: string) {
-    return sections.filter(section => section.d_chapter?.id === chapter_name);
+    return sections.filter(section => section.chapter.id === chapter_name);
 }
 
 export function getSectionByName(chapter_name: string, section_name: string): SectionType {
     const matched = getSections().filter(section => (
-        chapter_name === section.d_chapter?.id && section_name === section.d_section.id
+        chapter_name === section.chapter.id && section_name === section.id
     ));
     return matched[0];
 }
@@ -167,7 +149,7 @@ export function getSectionByPath(section_path: string): SectionType {
 export function getAdjacentSections(target: SectionType): {prev: SectionType | null, next: SectionType | null} {
     const sections = getSections();
     const idx = sections.findIndex(
-        section => (section.d_chapter == target.d_chapter && section.d_section == target.d_section)
+        section => (section.chapter.id == target.chapter.id && section.id == target.id)
     );
     return {
         prev: sections[idx - 1] ?? null,

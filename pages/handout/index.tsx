@@ -3,29 +3,54 @@ import Link from 'next/link';
 import { getChapters, ChapterType } from 'lib/contents-handler';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-export const getStaticProps: GetStaticProps<{chapters: ChapterType[]}> = async () => {
-    const chapters = getChapters();
+type ChapterProps = {
+    id: string;
+    url: string;
+    title: string;
+    sections: SectionProps[];
+};
+type SectionProps = {
+    id: string;
+    url: string;
+    title: string;
+};
+
+export const getStaticProps: GetStaticProps<{chapters: ChapterProps[]}> = async () => {
+    const chapters = getChapters().map((chap) => {
+        const {id, url, title} = chap;
+        return {
+            id,
+            url,
+            title,
+            sections: chap.sections.map((sec) => {
+                const {id, url, title} = sec;
+                return {
+                    id,
+                    url,
+                    title,
+                }
+            }),
+        }
+    });
     return { props: { chapters }};
 }
 export default function Pages({ chapters }: InferGetStaticPropsType<typeof getStaticProps>) {
     const list: React.JSX.Element[] = [];
     for (const chapter of chapters) {
-        const d_chapter = chapter.d_chapter;
-
-        list.push(<h2 key={`${d_chapter.id}-title`}>
-            <Link href={d_chapter.url}>{d_chapter.title}</Link>
+        list.push(<h2 key={`${chapter.id}-title`}>
+            <Link href={chapter.url}>{chapter.title}</Link>
         </h2>);
 
         const section_elems: React.JSX.Element[] = [];
-        for (const d_section of chapter.d_sections) {
+        for (const section of chapter.sections) {
             section_elems.push(
-                <li key={`${d_chapter.id}-${d_section.id}`}>
-                    <Link href={d_section.url}>{d_section.title}</Link>
+                <li key={`${chapter.id}-${section.id}`}>
+                    <Link href={section.url}>{section.title}</Link>
                 </li>
             );
         }
 
-        list.push(<ul key={`${d_chapter.id}-sections`}>
+        list.push(<ul key={`${chapter.id}-sections`}>
             { section_elems }
         </ul>);
     }
