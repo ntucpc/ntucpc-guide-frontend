@@ -10,76 +10,75 @@ import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 /* Plugins to render MDX */
 import MathJaxJS from 'components/mathjax';
 
-import { getSections, getAdjacentSections, SectionType, getSectionByName } from 'lib/contents-handler';
+import { getSections, getAdjacentSections, getSectionByName } from 'lib/contents-handler';
 import getEnvironmentVariable from 'lib/environment';
-import ArticleFooter from 'components/article-footer';
-import ArticleHeader from 'components/article-header';
+import { pickSubset } from 'lib/util';
+import ArticleFooter, { ArticleFooterPropsType } from 'components/article-footer';
+import ArticleHeader, { ArticleHeaderPropsType } from 'components/article-header';
 import collectMdx from 'lib/mdx-reader';
 import { MarkdownContextType } from 'components/markdown/types';
 import Submdx from 'components/submdx';
 import HightlightJsScript from 'components/highlightjs';
 
-
-type Article = {
+type ArticleProps = {
     mdx_path: string;
-    section: SectionType;
     contents_mapping: [string, MDXRemoteSerializeResult][];
-    adjacent_sections: {prev: SectionType | null, next: SectionType | null};
-};
-type ArticleStructure = {
-    chapter: string;
-    section: string;
+    header_props: ArticleHeaderPropsType;
+    footer_props: ArticleFooterPropsType;
 };
 
 const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const paths = getSections().map(section => ({params: {
-        chapter: section.d_chapter?.id,
-        section: section.d_section.id,
+        chapter: section.chapter.id,
+        section: section.id,
     }}));
-
-    return {
-        paths,
-        fallback: false,
-    };
+    return { paths, fallback: false, };
 }
 
+export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ params }) => {
+    if (!params)
+        throw Error('param not exist in [section]');
 
-export const getStaticProps: GetStaticProps<{ article: Article }> = async ({ params }) => {
-    const {chapter, section} = params as ArticleStructure;
-    
-    const sectionObj = getSectionByName(chapter, section);
-
+    const chapter_id = params.chapter as string;
+    const section_id = params.section as string;
+    const section = getSectionByName(chapter_id, section_id);
     const content = await collectMdx({
-        dir: path.join(ARTICLE_PATH, chapter, section),
-        file: `${section}.mdx`,
+        dir: path.join(ARTICLE_PATH, chapter_id, section_id),
+        file: `${section_id}.mdx`,
     });
+    const adj_sections = getAdjacentSections(section);
 
-    const article: Article = {
-        mdx_path: path.join(ARTICLE_PATH, chapter, section, `${section}.mdx`),
-        section: sectionObj,
+    const props: ArticleProps = {
+        mdx_path: path.join(ARTICLE_PATH, chapter_id, section_id, `${section_id}.mdx`),
         contents_mapping: Array.from(content.entries()),
-        adjacent_sections: getAdjacentSections(sectionObj)
+        header_props: {
+            chapter: pickSubset(section.chapter, ["id", "url"]),
+            section: pickSubset(section, ["title", "authors", "contributors", "prerequisites"]),
+            level: pickSubset(section.level, ["title"]),
+        },
+        footer_props: {
+            chapter_url: section.chapter.url,
+            prev_url: adj_sections.prev?.url ?? null,
+            prev_title: adj_sections.prev?.title ?? null,
+            next_url: adj_sections.next?.url ?? null,
+            next_title: adj_sections.next?.title ?? null,
+        },
     };
-    return { props: { article } };
+    return { props: { props } };
 }
 
-export default function Page({ article }: InferGetServerSidePropsType<typeof getStaticProps>) {
-    const section = article.section;
-    const contents_mapping = new Map(article.contents_mapping);
+export default function Page({ props }: InferGetServerSidePropsType<typeof getStaticProps>) {
     const markdown_context: MarkdownContextType = {
-        mdx_path: article.mdx_path,
-        contents_mapping,
+        mdx_path: props.mdx_path,
+        contents_mapping: new Map(props.contents_mapping),
     };
     return (<>
         <HightlightJsScript />
         <MathJaxJS />
-        <ArticleHeader section={section}/>
+        <ArticleHeader {...props.header_props} />
         <Submdx context={markdown_context} />
-        <ArticleFooter
-            section={section}
-            {...article.adjacent_sections}
-        />
+        <ArticleFooter {...props.footer_props} />
     </>);
 }
