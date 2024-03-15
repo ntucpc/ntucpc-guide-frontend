@@ -22,7 +22,7 @@ export type SectionType = {
     description: string;
     prerequisites: string[];
     chapter: ChapterType;
-    level?: LevelType;
+    level: LevelType;
 };
 export type LevelType = {
     id: string;
