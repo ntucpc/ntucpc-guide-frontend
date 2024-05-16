@@ -2,7 +2,7 @@
 import path from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
-import { getValueByName, pushAttribute } from 'lib/parser/common';
+import { getValueByName, hasValue, pushAttribute } from 'lib/parser/common';
 import { MdxPathType } from 'lib/mdx-reader';
 import getEnvironmentVariable from 'lib/environment';
 
@@ -22,8 +22,9 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                 if (!directory)
                     throw new Error(`Error parsing problem: no source`);
 
-                // difficulty = getValueByName(node.attributes, 'difficulty'),
+                let difficulty = getValueByName(node.attributes, 'difficulty') ?? "?";
                 let solution = getValueByName(node.attributes, 'solution') ?? "";
+                let expanded = hasValue(node.attributes, 'expanded');
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
                 
@@ -37,7 +38,13 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                 pushAttribute(attribute, 'src', metadata.source);
                 pushAttribute(attribute, 'name', metadata.name);
                 pushAttribute(attribute, 'solution', solution);
-                // pushAttribute(attribute, 'difficulty', difficulty);
+                pushAttribute(attribute, 'expanded', String(expanded));
+
+                if(!/^([0-5]|\?)$/.test(difficulty)) {
+                    throw new Error(`Error parsing problem: illegal difficulty "${difficulty}"`);
+                } else {
+                    pushAttribute(attribute, 'difficulty', difficulty);
+                }
                 
                 const problem_dir = path.join(PROBLEMS_PATH, directory);
                 const mdx_path = path.join(problem_dir, 'description.mdx');
