@@ -16,7 +16,7 @@ export default function Document() {
                 />
                 <link
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
                 />
             </Head>
             <body>
