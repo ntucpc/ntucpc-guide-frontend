@@ -4,6 +4,12 @@ function getValueByName(arr: Array<any>, prop: string): string | null {
 };
 
 
+function hasValue(arr: Array<any>, prop: string): boolean {
+    const ele = arr.find((element: any) => element.name === prop);
+    return ele !== undefined;
+};
+
+
 function pushAttribute(attribute: Array<any>, name: string, value: string) {
     attribute.push({
         type: 'mdxJsxAttribute',
@@ -12,4 +18,4 @@ function pushAttribute(attribute: Array<any>, name: string, value: string) {
     })
 };
 
-export { getValueByName, pushAttribute };
+export { getValueByName, hasValue, pushAttribute };

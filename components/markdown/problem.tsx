@@ -19,8 +19,8 @@ export function Problem(context: MarkdownContextType) {
         url,
         mdx_path,
         sol_path,
-        solution,
         difficulty,
+        expanded
     }: ProblemType) => {
         let description_node: React.ReactNode = <></>;
         let solution_node: React.ReactNode = <></>;
@@ -72,7 +72,7 @@ export function Problem(context: MarkdownContextType) {
                         {/* <Box paddingTop={2} paddingBottom={2}> */}
                             <Divider />
                         {/* </Box> */}
-                        <Accordion disableGutters>
+                        <Accordion disableGutters defaultExpanded={expanded === "true"}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon/>}
                                 aria-controls="panel1-content"

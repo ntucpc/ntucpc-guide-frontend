@@ -2,7 +2,7 @@
 import path from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { visit } from 'unist-util-visit';
-import { getValueByName, pushAttribute } from 'lib/parser/common';
+import { getValueByName, hasValue, pushAttribute } from 'lib/parser/common';
 import { MdxPathType } from 'lib/mdx-reader';
 import getEnvironmentVariable from 'lib/environment';
 
@@ -24,6 +24,7 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
 
                 let difficulty = getValueByName(node.attributes, 'difficulty') ?? "?";
                 let solution = getValueByName(node.attributes, 'solution') ?? "";
+                let expanded = hasValue(node.attributes, 'expanded');
 
                 const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
                 
@@ -37,6 +38,7 @@ function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
                 pushAttribute(attribute, 'src', metadata.source);
                 pushAttribute(attribute, 'name', metadata.name);
                 pushAttribute(attribute, 'solution', solution);
+                pushAttribute(attribute, 'expanded', String(expanded));
 
                 if(!/^([0-5]|\?)$/.test(difficulty)) {
                     throw new Error(`Error parsing problem: illegal difficulty "${difficulty}"`);

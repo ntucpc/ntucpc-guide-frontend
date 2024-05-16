@@ -16,6 +16,7 @@ export type ProblemType = {
     sol_path: string;
     solution: string;
     difficulty: string;
+    expanded: "true" | "false";
 };
 export type RefcodeType = {
     lang: string;
