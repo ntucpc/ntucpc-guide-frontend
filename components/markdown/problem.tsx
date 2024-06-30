@@ -1,92 +1,112 @@
-import { Paper, Link, Divider, Typography, Box, Stack, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import { MarkdownContextType, ProblemType } from "./types";
+import { MarkdownContextType } from "./types";
 import Submdx from "components/submdx";
-import HelpIcon from '@mui/icons-material/Help';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { styled } from '@mui/material/styles';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare, faChevronDown, faChevronUp, faQuestionCircle, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
+import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic";
+import { useState } from "react";
 
-const DisabledTypography = styled(Typography)(({ theme }) => ({
-    color: theme.palette.text.disabled,
-}));
+/**
+ * Problem attributes:
+ * - url: url of online judge problem, defined in problem config (url)
+ * - src: name of source, defined in problem config (src)
+ * - name: problem name, defined in problem config (name)
+ * - difficulty: difficulty, defined in the problem tag
+ * - expanded: whether to expand the solution by default, true if the difficulty is 0
+ * - descriptionMdx: description mdx file path, undefined if the file doesn't exist
+ * - solution: solution name, defined in the problem tag
+ * - solutionMdx: solution mdx file path, undefined if no solutoin
+ * - importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
+ */
+type ProblemProps = {
+    url: string,
+    src: string,
+    name: string,
+    difficulty: string,
+    expanded: string,
+    descriptionMdx: string,
+    solution: string,
+    solutionMdx: string,
+    importMdx: string
+};
 
 export function Problem(context: MarkdownContextType) {
-    return ({
-        src,
-        name,
-        url,
-        mdx_path,
-        sol_path,
-        difficulty,
-        expanded
-    }: ProblemType) => {
-        let description_node: React.ReactNode = <></>;
-        let solution_node: React.ReactNode = <></>;
-        if (mdx_path) {
+    return (props: ProblemProps) => {
+        console.log("problem test", props)
+        let descriptionNode = <></>;
+        if (props.descriptionMdx) {
             const subcontext: MarkdownContextType = {
                 ...context,
-                mdx_path,
+                mdx_path: props.descriptionMdx
             };
-            description_node = <Submdx context={subcontext} />;
+            descriptionNode = <Submdx context={subcontext} />;
         }
-        if (sol_path) {
+        let solutionNode: React.ReactNode = <></>;
+        if (props.solutionMdx) {
             const subcontext: MarkdownContextType = {
                 ...context,
-                mdx_path: sol_path,
+                mdx_path: props.solutionMdx,
             };
-            solution_node = <Submdx context={subcontext} />;
+            solutionNode = <Submdx context={subcontext} />;
         }
         let stars = <></>;
-        if(difficulty === "?") {
-            stars = <HelpIcon />
-        } else if(difficulty !== "0") {
+        if(props.difficulty === "?") {
+            stars = <FontAwesomeIcon icon={faQuestionCircle} />
+        } else if(props.difficulty !== "0") {
             stars = <>{
                 Array.from({length: 5}, (_, index) => (
-                    (index < parseInt(difficulty)) ? <StarIcon key={index} /> : <StarBorderIcon key={index} />
+                    (index < parseInt(props.difficulty)) ? 
+                    <FontAwesomeIcon icon={faStar}/> :
+                    <FontAwesomeIcon icon={faEmptyStar} />
                 ))
             }</>
         }
+
+        const isSample = props.difficulty === "0";
+        const typeColor = isSample ? "bg-orange-400" : "bg-blue-400";
+        const titleColor = isSample ? "bg-orange-200 text-orange-800" : "bg-blue-200 text-blue-800";
+        const borderColor = isSample ? "border-orange-500" : "border-blue-500"
+
+        const [showSolution, setShowSolution] = useState(props.expanded === "true")
+
         return (
-            <Paper variant="outlined" sx={{ margin: 2 }}>
-                <Box sx={{ margin: 2 }}>
-                    <Stack direction="row" spacing={1}>
-                        <Typography variant="body1" sx={{fontWeight: "bold"}}>
-                            {difficulty === "0" ? "例題" : "習題"}
-                        </Typography>
-                        <Box>
-                            {stars}
-                        </Box>
-                        <Typography variant="body1">
-                            {name}
-                        </Typography>
-                    </Stack>
-                    <DisabledTypography variant="body2">
-                        Source: {src} {url && <Link href={url}><LaunchIcon fontSize="inherit" color="disabled"/></Link>}
-                    </DisabledTypography>
-                    {description_node}
-                </Box>
-                {sol_path && (
+            <div className="my-4">
+                <div className={`flex ${titleColor}`}>
+                    <div className={`py-2 px-5 font-bold ${typeColor} text-white flex`}>
+                        {isSample ? "例題" : "習題"}
+                        {isSample ? <></> : <div className="ml-2">{stars}</div>}
+                    </div>
+                    <div className="py-2 px-3"> {props.name} </div>
+                </div>
+                <div className={`px-6 py-2 border-l border-r border-b ${borderColor}`}>
+                    <div className="text-sm text-neutral-400">
+                        Source:
+                        <HyperRefBlank href={props.url} className="ml-2">{props.src}
+                            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs ml-2" />
+                        </HyperRefBlank>
+                    </div>
+                    <div>
+                        {descriptionNode}
+                    </div>
+
+                </div>
+                {props.solution &&
                     <>
-                        {/* <Box paddingTop={2} paddingBottom={2}> */}
-                            <Divider />
-                        {/* </Box> */}
-                        <Accordion disableGutters defaultExpanded={expanded === "true"}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon/>}
-                                aria-controls="panel1-content"
-                                // id={`accordion-heading-${id}`}
-                            >
-                                <Typography>Solution</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                {solution_node}
-                            </AccordionDetails>
-                        </Accordion>
+                        <div className="mt-2 py-2 px-5 font-bold text-white bg-green-600 flex justify-between cursor-pointer"
+                            onClick={() => { setShowSolution(!showSolution) }}>
+                            <div>
+                                題解
+                            </div>
+                            <div>
+                                <FontAwesomeIcon icon={showSolution ? faChevronUp : faChevronDown} />
+                            </div>
+                        </div>
+                        <div className="px-6 py-2 border-l border-r border-b border-green-800" hidden={!showSolution}>
+                            {solutionNode}
+                        </div>
                     </>
-                )}
-            </Paper>
-        );
+                }
+            </div>
+        )
     };
 }

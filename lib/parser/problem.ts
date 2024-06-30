@@ -1,71 +1,63 @@
-/* Include metadata and description of 'Problem', add 'overrideDirectory' in data for figures */
+import { visit } from 'unist-util-visit'
+import { getAttribute, parseDirectiveLabel, pushAttribute, removeDirectiveLabel, setAttribute } from '@/ntucpc-website-common-lib/mdx-parser/util';
+import getEnvironmentVariable from '@/lib/environment';
 import path from 'path';
-import { existsSync, readFileSync } from 'fs';
-import { visit } from 'unist-util-visit';
-import { getValueByName, hasValue, pushAttribute } from 'lib/parser/common';
-import { MdxPathType } from 'lib/mdx-reader';
-import getEnvironmentVariable from 'lib/environment';
+import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
+import { existsSync } from 'fs';
 
 const PROBLEMS_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "problems");
-const MAX_RECURSE_DEPTH = 2;
 
-function myRemarkProblem(submdx_paths: MdxPathType[], recurse_depth: number) {
-    return async function (tree: any) {
+/**
+ * Problem attributes:
+ * - url: url of online judge problem, defined in problem config (url)
+ * - src: name of source, defined in problem config (src)
+ * - name: problem name, defined in problem config (name)
+ * - difficulty: difficulty, defined in the problem tag
+ * - expanded: whether to expand the solution by default, true if the difficulty is 0
+ * - descriptionMdx: description mdx file path, undefined if the file doesn't exist
+ * - solution: solution name, defined in the problem tag
+ * - solutionMdx: solution mdx file path, undefined if no solutoin
+ * - importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
+ */
+export function remarkProblem() {
+    return function(tree: any) {
         visit(tree, function (node) {
-            if (node.name === 'problem') {
+            if (node.name !== "problem") return;
+            
+            const source = getAttribute(node, "src")!;
+            const directory = path.join(PROBLEMS_PATH, source);
+            const difficulty = getAttribute(node, "difficulty") ?? "?";
+            const solution = getAttribute(node, "solution");
 
-                if (node.attributes === undefined)
-                    throw new Error(`Error parsing problem: no source`);
-
-                let directory = getValueByName(node.attributes, 'src');
-
-                if (!directory)
-                    throw new Error(`Error parsing problem: no source`);
-
-                let difficulty = getValueByName(node.attributes, 'difficulty') ?? "?";
-                let solution = getValueByName(node.attributes, 'solution') ?? "";
-                let expanded = hasValue(node.attributes, 'expanded');
-
-                const metadata = JSON.parse(readFileSync(path.join(PROBLEMS_PATH, directory, 'config.json'), { encoding: "utf-8" }));
-                
-                // too many nested layers
-                // TODO: add a link to problem page
-                if(recurse_depth > MAX_RECURSE_DEPTH) return;
-                
-                // TODO: fix this ugly syntax
-                const attribute = (node.attributes = Array<any>());
-                pushAttribute(attribute, 'url', metadata.url);
-                pushAttribute(attribute, 'src', metadata.source);
-                pushAttribute(attribute, 'name', metadata.name);
-                pushAttribute(attribute, 'solution', solution);
-                pushAttribute(attribute, 'expanded', String(expanded));
-
-                if(!/^([0-5]|\?)$/.test(difficulty)) {
-                    throw new Error(`Error parsing problem: illegal difficulty "${difficulty}"`);
-                } else {
-                    pushAttribute(attribute, 'difficulty', difficulty);
-                }
-                
-                const problem_dir = path.join(PROBLEMS_PATH, directory);
-                const mdx_path = path.join(problem_dir, 'description.mdx');
-                if(existsSync(mdx_path)) {
-                    submdx_paths.push({
-                        dir: problem_dir,
-                        file: 'description.mdx',
-                    });
-                    pushAttribute(attribute, 'mdx_path', mdx_path);
-                }
-                const sol_path = path.join(problem_dir, `${solution}.mdx`);
-                if(existsSync(sol_path)) {
-                    submdx_paths.push({
-                        dir: problem_dir,
-                        file: `${solution}.mdx`,
-                    });
-                    pushAttribute(attribute, 'sol_path', sol_path);
-                }
+            const problemConfig = readConfig(directory);
+            
+            if(!/^([0-5]|\?)$/.test(difficulty)) {
+                throw new Error(`Error parsing problem: illegal difficulty "${difficulty}"`);
             }
-        })
+
+            const expanded = solution === undefined ? false : (difficulty === "0");
+            const importPath: string[] = [];
+            const descriptionPath = path.join(directory, "description.mdx");
+            const solutionPath = solution === undefined ? undefined : path.join(directory, `${solution}.mdx`);
+            const attributes: {[key: string]: string} = {
+                "url": problemConfig["url"],
+                "src": problemConfig["source"],
+                "name": problemConfig["name"],
+                "expanded": String(expanded),
+                "difficulty": difficulty,
+            };
+            if(existsSync(descriptionPath)){
+                importPath.push(descriptionPath);
+                attributes["descriptionMdx"] = descriptionPath;
+            }
+            if(solution !== undefined && existsSync(solutionPath!)){
+                importPath.push(solutionPath!);
+                attributes["solution"] = solution;
+                attributes["solutionMdx"] = solutionPath!;
+            }
+            setAttribute(node, attributes);
+            for (const path of importPath)
+                pushAttribute(node.attributes, "importMdx", path);
+        });
     }
 }
-
-export default myRemarkProblem;
