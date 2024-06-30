@@ -32,7 +32,7 @@ type ProblemProps = {
 
 export function Problem(context: MarkdownContextType) {
     return (props: ProblemProps) => {
-        console.log("problem test", props)
+        // console.log("problem test", props)
         let descriptionNode = <></>;
         if (props.descriptionMdx) {
             const subcontext: MarkdownContextType = {
