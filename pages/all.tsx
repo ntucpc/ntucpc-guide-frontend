@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout";
+import { ContentBody, Layout } from "@/components/layout";
 import { getArticles } from "@/lib/articles";
 import { getTopic } from "@/lib/topics";
 import { H1Title, HyperRef, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
@@ -27,16 +27,18 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (<Layout>
-        <H1Title>
-            全部東西
-        </H1Title>
+        <ContentBody>
+            <H1Title>
+                全部東西
+            </H1Title>
 
-        <UnorderedList>
-        {
-            props.articles.map((article, i) => {
-                return <li key={i}><HyperRef href={`/${article.code}`}>{article.title}</HyperRef></li>
-            })
-        }
-        </UnorderedList>
+            <UnorderedList>
+                {
+                    props.articles.map((article, i) => {
+                        return <li key={i}><HyperRef href={`/${article.code}`}>{article.title}</HyperRef></li>
+                    })
+                }
+            </UnorderedList>
+        </ContentBody>
     </Layout>);
 };

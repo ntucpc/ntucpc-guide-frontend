@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout";
+import { ContentBody, Layout } from "@/components/layout";
 import { getArticle, getArticles } from "@/lib/articles";
 import { getChapters } from "@/lib/chapters";
 import { getTopic, getTopics } from "@/lib/topics";
@@ -19,7 +19,7 @@ type Props = {
     chapters: ChapterProps[]
 };
 
-export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     // console.log(getChapters())
     // console.log(getArticles())
     // console.log(getTopics())
@@ -52,21 +52,23 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
 
     return (<Layout>
-        <H1Title>
-            章節目錄
-        </H1Title>
+        <ContentBody>
+            <H1Title>
+                章節目錄
+            </H1Title>
 
-        {props.chapters.map((obj, i) => {
-            return <div key={i}>
-                <H2Title>{obj.title}</H2Title>
-                <UnorderedList>
-                    {obj.contents.map((content, j) => {
-                        return <li key={j}>
-                            <HyperRef href={`/${content.code}`} target="_self">{`${content.topic} - ${content.title}`}</HyperRef>
-                        </li>
-                    })}
-                </UnorderedList>
-            </div>
-        })}
+            {props.chapters.map((obj, i) => {
+                return <div key={i}>
+                    <H2Title>{obj.title}</H2Title>
+                    <UnorderedList>
+                        {obj.contents.map((content, j) => {
+                            return <li key={j}>
+                                <HyperRef href={`/${content.code}`} target="_self">{`${content.topic} - ${content.title}`}</HyperRef>
+                            </li>
+                        })}
+                    </UnorderedList>
+                </div>
+            })}
+        </ContentBody>
     </Layout>);
 };

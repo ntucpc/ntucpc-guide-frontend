@@ -1,4 +1,4 @@
-import { Layout } from '@/components/layout';
+import { ContentBody, Layout } from '@/components/layout';
 import { getArticle } from '@/lib/articles';
 import { getTopic } from '@/lib/topics';
 import { HyperRef, Paragraph } from '@/ntucpc-website-common-lib/components/basic';
@@ -78,42 +78,44 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     }
 
     return (<Layout>
+        <ContentBody>
 
-        <div className="my-8">
-            <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
-        </div>
+            <div className="my-8">
+                <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
+            </div>
 
-        <div className="text-center my-8 text-3xl">
-            這是一個標語但我想不到要寫什麼！
-        </div>
+            <div className="text-center my-8 text-3xl">
+                這是一個標語但我想不到要寫什麼！
+            </div>
 
-        <div className="flex justify-evenly h-20 items-center">
-            <ButtonLink text="章節目錄" color="rose" url="/chapters" />
-            <ButtonLink text="主題目錄" color="lime" url="/topics" />
-        </div>
+            <div className="flex justify-evenly h-20 items-center">
+                <ButtonLink text="章節目錄" color="rose" url="/chapters" />
+                <ButtonLink text="主題目錄" color="lime" url="/topics" />
+            </div>
 
-        <div className="m-5 flex flex-wrap justify-evenly">
-            <Feature icon={faHandshake} title="新手友善" />
-            <Feature icon={faBookOpenReader} title="適合自學" />
-            <Feature icon={faStar} title="專業團隊" />
-            <Feature icon={faStairs} title="由淺入深" />
-        </div>
+            <div className="m-5 flex flex-wrap justify-evenly">
+                <Feature icon={faHandshake} title="新手友善" />
+                <Feature icon={faBookOpenReader} title="適合自學" />
+                <Feature icon={faStar} title="專業團隊" />
+                <Feature icon={faStairs} title="由淺入深" />
+            </div>
 
-        <SpecialTitle>網站簡介</SpecialTitle>
+            <SpecialTitle>網站簡介</SpecialTitle>
 
-        <div className="text-center">
-            不知道怎麼開始嗎？看看網站簡介吧！
-        </div>
+            <div className="text-center">
+                不知道怎麼開始嗎？看看網站簡介吧！
+            </div>
 
-        <div className="flex flex-wrap justify-center my-4">
-            {guideContents}
-        </div>
+            <div className="flex flex-wrap justify-center my-4">
+                {guideContents}
+            </div>
 
-        <SpecialTitle>團隊成員</SpecialTitle>
+            <SpecialTitle>團隊成員</SpecialTitle>
 
-        <Paragraph>
-            喔不，這裡還在施工，你是不是需要這個
-        </Paragraph>
-        <ButtonLink text="全部東西" color="orange" url="/all" />
+            <Paragraph>
+                喔不，這裡還在施工，你是不是需要這個
+            </Paragraph>
+            <ButtonLink text="全部東西" color="orange" url="/all" />
+        </ContentBody>
     </Layout>);
 };

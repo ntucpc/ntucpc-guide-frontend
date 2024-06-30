@@ -13,24 +13,31 @@ import HightlightJsScript from '@/ntucpc-website-common-lib/scripts/highlightjs'
 import MathJaxJS from '@/ntucpc-website-common-lib/scripts/mathjax';
 import { HyperRefBlank } from '@/ntucpc-website-common-lib/components/basic';
 import { remarkContentReference } from '@/lib/parser/content-reference';
-import { Layout } from '@/components/layout';
+import { ContentBody, Layout } from '@/components/layout';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBook, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { Sidebar } from '@/components/sidebar';
+import { Section, remarkSection } from '@/lib/parser/section';
+import { useRouter } from 'next/router';
 
 type Prereq = {
     text: string;
     code: string;
 };
 
-type Props = {
+export type ArticleProps = {
+    topicName: string,
     mdxPath: string,
     article: Article,
     topic: Topic | null,
     chapter: Chapter | null,
     content: [string, MDXRemoteSerializeResult][],
-    prereqs: Prereq[]
+    prereqs: Prereq[],
+    topicArticles: Article[],
+    chapterArticles: Article[],
+    sections: Section[]
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -45,7 +52,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
 
-export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{props: ArticleProps}> = async ({ params }) => {
     if (!params) {
         throw Error("param doesn't exist in [article]");
     }
@@ -54,7 +61,8 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
     const code = `${topic}/${article}`;
     const articleObj = getArticle(code)!;
     const mdxPath = path.join(ARTICLE_PATH, topic, article, `${article}.mdx`);
-    const content = await parseMdx(mdxPath, 1, [remarkProblem, remarkContentReference]);
+    const sections: Section[] = [];
+    const content = await parseMdx(mdxPath, 1, [remarkProblem, remarkContentReference, [remarkSection, sections]]);
     const prereqs: Prereq[] = []
     for (const prereq of articleObj.prerequisites) {
         const prereqArticle = getArticle(prereq);
@@ -65,13 +73,34 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
         const topicTitle = getTopic(prereqArticle.topic)?.title ?? prereqArticle.topic;
         prereqs.push({text: `${topicTitle}/${prereqArticle.title}`, code: prereq});
     }
+    const topicObject = getTopic(topic);
+    const topicArticles: Article[] = []
+    if (topicObject) {
+        for (const content of topicObject.contents) {
+            const temp = getArticle(`${topic}/${content}`);
+            if (temp) topicArticles.push(temp);
+        }
+    }
+    const chapterObject = findChapter(code);
+    const chapterArticles: Article[] = []
+    if (chapterObject) {
+        for (const content of chapterObject.contents) {
+            const temp = getArticle(content);
+            if (temp) chapterArticles.push(temp);
+        }
+    }
+
     const props = {
+        topicName: topic,
         mdxPath: mdxPath,
         article: articleObj,
-        topic: getTopic(articleObj.topic) ?? null,
-        chapter: findChapter(code) ?? null,
+        topic: topicObject ?? null,
+        chapter: chapterObject ?? null,
         content: Array.from(content.entries()),
-        prereqs: prereqs
+        prereqs: prereqs,
+        topicArticles: topicArticles,
+        chapterArticles: chapterArticles,
+        sections: sections
     }
     return { props: { props } };
 }
@@ -90,7 +119,7 @@ function InformationItem({name, children, icon}: InformatIonItemProps) {
     </div>;
 }
 
-function ArticleHeader(props: Props) {
+function ArticleHeader(props: ArticleProps) {
 
     const prereqs = [];
     let first = true;
@@ -126,9 +155,19 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         mdx_path: props.mdxPath,
         contents_mapping: new Map(props.content),
     };
+    const router = useRouter();
+    useEffect(() => {
+        router.events.on("routeChangeComplete", (url, {shallow}) => {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub])
+            // TODO: highlight.js
+        })
+    }, [router]);
     return (<Layout>
-        <ArticleHeader {...props} />
-        <Submdx context={markdown_context}/>
+        <Sidebar {...props} />
+        <ContentBody sidebar={true}>
+            <ArticleHeader {...props} />
+            <Submdx context={markdown_context} />
+        </ContentBody>
         <HightlightJsScript />
         <MathJaxJS />
     </Layout>);
