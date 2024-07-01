@@ -56,8 +56,8 @@ export function Problem(context: MarkdownContextType) {
             stars = <>{
                 Array.from({length: 5}, (_, index) => (
                     (index < parseInt(props.difficulty)) ? 
-                    <FontAwesomeIcon icon={faStar}/> :
-                    <FontAwesomeIcon icon={faEmptyStar} />
+                    <FontAwesomeIcon key={index} icon={faStar}/> :
+                    <FontAwesomeIcon key={index} icon={faEmptyStar} />
                 ))
             }</>
         }
