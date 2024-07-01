@@ -8,7 +8,8 @@ type ContentBodyProps = {
 }
 
 export function ContentBody({children, sidebar=false}: ContentBodyProps) {
-    return <div className={`px-3 my-3 max-w-4xl mx-auto pt-5 font-sans ${sidebar ? "lg:ml-64 2xl:mx-auto max-lg:mt-14" : ""}`}>
+    return <div className={`px-3 my-3 max-w-4xl mx-auto pt-5 font-sans 
+            ${sidebar ? "lg:ml-80 2xl:mx-auto max-lg:mt-14" : ""}`}>
         {children}
     </div>
 }

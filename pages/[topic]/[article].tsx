@@ -36,7 +36,7 @@ export type ArticleProps = {
     content: [string, MDXRemoteSerializeResult][],
     prereqs: Prereq[],
     topicArticles: Article[],
-    chapterArticles: Article[],
+    chapterArticles: [string, Article[]][],
     sections: Section[]
 };
 
@@ -82,11 +82,18 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
         }
     }
     const chapterObject = findChapter(code);
-    const chapterArticles: Article[] = []
+    const chapterArticles: [string, Article[]][] = []
     if (chapterObject) {
+        let lastTopic = "";
         for (const content of chapterObject.contents) {
             const temp = getArticle(content);
-            if (temp) chapterArticles.push(temp);
+            if (!temp) continue;
+            if(lastTopic != temp.topic){
+                const topicName = getTopic(temp.topic)?.title ?? temp.topic;
+                chapterArticles.push([topicName, []]);
+                lastTopic = temp.topic;
+            }
+            chapterArticles.at(-1)![1].push(temp);
         }
     }
 
