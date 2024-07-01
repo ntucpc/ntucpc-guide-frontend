@@ -1,13 +1,16 @@
 import { ContentBody, Layout } from '@/components/layout';
 import { getArticle } from '@/lib/articles';
+import { Contributor, getContributors } from '@/lib/contributors';
 import { getTopic } from '@/lib/topics';
-import { HyperRef, Paragraph } from '@/ntucpc-website-common-lib/components/basic';
+import { HyperRef, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBookOpenReader, faHandshake, faQuestionCircle, faStairs, faStar, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ReactNode } from 'react';
+import path from 'path';
+import getEnvironmentVariable from 'lib/environment';
 
 type ButtonLinkProps = {
     text: string;
@@ -46,12 +49,41 @@ function SpecialTitle({ children }: SpecialTitleProps) {
     return <div className="text-center font-semibold text-3xl mb-5 mt-7">{children}</div>;
 }
 
+type ContributorCardProps = {
+    contributor: Contributor,
+    publicRoot: string
+}
+function ContributorCard({contributor, publicRoot}: ContributorCardProps){
+    return <div className="w-full max-w-96 border m-3 p-4 sm:flex items-center">
+        <div className="sm:mr-3">
+            <img src={path.join(publicRoot.replace(new RegExp("^public"), ""), 
+                    "contributors", "photos", `${contributor.code}.png`)} 
+                    className="w-20 rounded-full max-sm:mx-auto max-sm:mb-2"/>
+        </div>
+        <div>
+            <div className="flex items-end flex-nowrap">
+                <div className="font-semibold text-lg text-nowrap">{contributor.name}</div>
+                <div className="ml-2 text-sm text-gray-500 text-nowrap">/ {contributor.handle}</div>
+            </div>
+            <div className="mt-2">
+                <UnorderedList>
+                    {contributor.experience.map((entry, index) => {
+                        return <li key={index}>{entry}</li>
+                    })}
+                </UnorderedList>
+            </div>
+        </div>
+    </div>
+}
+
 type ArticleProps = {
     text: string;
     code: string;
 }
 type Props = {
-    guideContents: ArticleProps[]
+    guideContents: ArticleProps[],
+    contributors: Contributor[],
+    publicRoot: string
 }
 export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     const guideTopic = getTopic("Guide");
@@ -64,7 +96,9 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
         }
     }
     const props = {
-        guideContents: articles
+        guideContents: articles,
+        contributors: getContributors(),
+        publicRoot: getEnvironmentVariable("GUIDE_RELATIVE_PATH")
     }
     return { props: { props } };
 }
@@ -111,6 +145,12 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             </div>
 
             <SpecialTitle>團隊成員</SpecialTitle>
+
+            <div className="flex flex-wrap justify-evenly">
+                {props.contributors.map((contributor, index) =>{
+                    return <ContributorCard key={index} contributor={contributor} publicRoot={props.publicRoot} />
+                })}
+            </div>
 
             <Paragraph>
                 喔不，這裡還在施工，你是不是需要這個
