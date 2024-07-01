@@ -213,23 +213,31 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         contents_mapping: new Map(props.content),
     };
     const router = useRouter();
+    const reload = () => {
+        console.log("reload MathJax and hljs");
+        eval(`
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        hljs.highlightAll();
+        hljs.initLineNumbersOnLoad({singleLine: true});
+        `)
+    }
     useEffect(() => {
-        router.events.on("routeChangeComplete", (url, { shallow }) => {
-            eval(`
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            hljs.highlightAll();
-            hljs.initLineNumbersOnLoad();
-            `)
-        })
+        router.events.on("routeChangeComplete", reload);
+        return () => {
+            router.events.off("routeChangeComplete", reload);
+        }
     }, [router]);
-    return (<Layout sidebar={true} title={props.article.title}>
-        <Sidebar {...props} />
-        <ContentBody sidebar={true}>
-            <ArticleHeader {...props} />
-            <Submdx context={markdown_context} />
-            <ArticleFooter {...props} />
-        </ContentBody>
+    return (<>
+        <Layout sidebar={true} title={props.article.title}>
+            <Sidebar {...props} />
+            <ContentBody sidebar={true}>
+                <ArticleHeader {...props} />
+                <Submdx context={markdown_context} />
+                <ArticleFooter {...props} />
+            </ContentBody>
+        </Layout>
         <HightlightJsScript />
         <MathJaxJS />
-    </Layout>);
+    </>
+    );
 };
