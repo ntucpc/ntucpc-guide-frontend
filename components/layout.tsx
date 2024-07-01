@@ -12,7 +12,7 @@ type Props = {
 const SIDEBAR_MARGIN = "lg:ml-80 2xl:mx-auto max-lg:mt-14";
 
 export function ContentBody({children, sidebar=false}: Props) {
-    return <div className={`px-3 my-3 max-w-4xl mx-auto pt-5 font-sans 
+    return <div className={`px-4 my-3 max-w-4xl mx-auto pt-5 font-sans 
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         {children}
     </div>
