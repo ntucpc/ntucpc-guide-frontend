@@ -23,7 +23,6 @@ const [topics, topicGroups] : [Topic[], TopicGroup[]] = (() => {
     const topics: Topic[] = [];
     const topicGroups: TopicGroup[] = [];
     for (const entry of config["topics"]) {
-        console.log("test", typeof(entry));
         let temp = []
         if (typeof(entry) === "string") {
             temp.push(entry);
@@ -44,7 +43,6 @@ const [topics, topicGroups] : [Topic[], TopicGroup[]] = (() => {
         for (const topic of temp) {
             const topicConfigPath = path.join(ARTICLE_PATH, topic, "config.json");
             if (!existsSync(topicConfigPath)) {
-                console.log(`Warning: invalid topic ${topic}`);
                 continue;
             }
             const topicConfig = readConfig(topicConfigPath);
