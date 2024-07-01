@@ -105,8 +105,9 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
     const guideContents = []
+    let number = 0;
     for (const content of props.guideContents) {
-        guideContents.push(<div className="text-nowrap mx-3">
+        guideContents.push(<div className="text-nowrap mx-3" key={number++}>
             <HyperRef href={`/${content.code}`}>{content.text}</HyperRef>
         </div>)
     }
