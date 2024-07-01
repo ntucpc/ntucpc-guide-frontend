@@ -42,7 +42,7 @@ export type ArticleProps = {
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const paths = getArticles().map(article => ({
-        params: {topic: article.topic, article: article.article}
+        params: { topic: article.topic, article: article.article }
     }));
     return {
         paths,
@@ -52,7 +52,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
 
-export const getStaticProps: GetStaticProps<{props: ArticleProps}> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ params }) => {
     if (!params) {
         throw Error("param doesn't exist in [article]");
     }
@@ -66,12 +66,12 @@ export const getStaticProps: GetStaticProps<{props: ArticleProps}> = async ({ pa
     const prereqs: Prereq[] = []
     for (const prereq of articleObj.prerequisites) {
         const prereqArticle = getArticle(prereq);
-        if (!prereqArticle){
-            prereqs.push({text: prereq, code: prereq});
+        if (!prereqArticle) {
+            prereqs.push({ text: prereq, code: prereq });
             continue;
         }
         const topicTitle = getTopic(prereqArticle.topic)?.title ?? prereqArticle.topic;
-        prereqs.push({text: `${topicTitle}/${prereqArticle.title}`, code: prereq});
+        prereqs.push({ text: `${topicTitle}/${prereqArticle.title}`, code: prereq });
     }
     const topicObject = getTopic(topic);
     const topicArticles: Article[] = []
@@ -110,9 +110,9 @@ type InformatIonItemProps = {
     icon: IconDefinition;
     children: ReactNode
 }
-function InformationItem({name, children, icon}: InformatIonItemProps) {
+function InformationItem({ name, children, icon }: InformatIonItemProps) {
     return <div className="flex my-2">
-        <div className="w-7 text-center text-indigo-500"><FontAwesomeIcon icon={icon}/></div>
+        <div className="w-7 text-center text-indigo-500"><FontAwesomeIcon icon={icon} /></div>
         <div className="ml-1">
             {name}：{children}
         </div>
@@ -130,21 +130,21 @@ function ArticleHeader(props: ArticleProps) {
     }
 
     return <div className="mb-8">
-    <div className="text-xl">{props.chapter?.title ?? "Chapter ???"}</div>
-    <div className="text-2xl text-gray-500 pt-1">{props.topic?.title ?? props.article.topic}</div>
-    <div className="text-5xl mt-1 mb-4">{props.article.title}</div>
+        <div className="text-xl">{props.chapter?.title ?? "Chapter ???"}</div>
+        <div className="text-2xl text-gray-500 pt-1">{props.topic?.title ?? props.article.topic}</div>
+        <div className="text-5xl mt-1 mb-4">{props.article.title}</div>
 
-    <InformationItem name="作者" icon={faUserPen}>{props.article.authors.join("、")}</InformationItem>
-    {
-        props.article.contributors.length > 0 ? 
-            <InformationItem name="協作者" icon={faUserGroup} >{props.article.contributors.join("、")}</InformationItem>
-            : <></>
-    }
-    {
-        props.prereqs.length > 0 ? 
-            <InformationItem name="先備知識" icon={faBook} >{prereqs} </InformationItem>
-            : <></>
-    }
+        <InformationItem name="作者" icon={faUserPen}>{props.article.authors.join("、")}</InformationItem>
+        {
+            props.article.contributors.length > 0 ?
+                <InformationItem name="協作者" icon={faUserGroup} >{props.article.contributors.join("、")}</InformationItem>
+                : <></>
+        }
+        {
+            props.prereqs.length > 0 ?
+                <InformationItem name="先備知識" icon={faBook} >{prereqs} </InformationItem>
+                : <></>
+        }
 
     </div>;
 }
@@ -157,9 +157,12 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     };
     const router = useRouter();
     useEffect(() => {
-        router.events.on("routeChangeComplete", (url, {shallow}) => {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub])
-            // TODO: highlight.js
+        router.events.on("routeChangeComplete", (url, { shallow }) => {
+            eval(`
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            hljs.highlightAll();
+            hljs.initLineNumbersOnLoad();
+            `)
         })
     }, [router]);
     return (<Layout>
