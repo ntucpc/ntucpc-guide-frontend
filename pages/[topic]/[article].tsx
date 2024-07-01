@@ -130,10 +130,11 @@ function ArticleHeader(props: ArticleProps) {
 
     const prereqs = [];
     let first = true;
+    let number = 0;
     for (const prereq of props.prereqs) {
         if (!first) prereqs.push("、");
         else first = false;
-        prereqs.push(<HyperRefBlank href={`/${prereq.code}`}>{prereq.text}</HyperRefBlank>)
+        prereqs.push(<HyperRefBlank href={`/${prereq.code}`} key={number++}>{prereq.text}</HyperRefBlank>)
     }
 
     return <div className="mb-8">
