@@ -15,12 +15,13 @@ import { HyperRefBlank } from '@/ntucpc-website-common-lib/components/basic';
 import { remarkContentReference } from '@/lib/parser/content-reference';
 import { ContentBody, Layout } from '@/components/layout';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faBook, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, useEffect } from 'react';
 import { Sidebar } from '@/components/sidebar';
 import { Section, remarkSection } from '@/lib/parser/section';
 import { useRouter } from 'next/router';
+import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 
 type Prereq = {
     text: string;
@@ -37,7 +38,9 @@ export type ArticleProps = {
     prereqs: Prereq[],
     topicArticles: Article[],
     chapterArticles: [string, Article[]][],
-    sections: Section[]
+    sections: Section[],
+    previousArticle: [string, Article] | null, // [topic name, article object]
+    nextArticle: [string, Article] | null
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -83,13 +86,24 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
     }
     const chapterObject = findChapter(code);
     const chapterArticles: [string, Article[]][] = []
+    let previousArticle: [string, Article] | null = null;
+    let nextArticle: [string, Article] | null = null;
     if (chapterObject) {
         let lastTopic = "";
+        let lastArticle: [string, Article] | undefined = undefined;
         for (const content of chapterObject.contents) {
             const temp = getArticle(content);
             if (!temp) continue;
+            if (content === code) {
+                previousArticle = lastArticle ?? null;
+            }
+            const topicName = getTopic(temp.topic)?.title ?? temp.topic;
+            if (lastArticle?.[1].code === code) {
+                nextArticle = [topicName, temp];
+            }
+            lastArticle = [topicName, temp];
+
             if(lastTopic != temp.topic){
-                const topicName = getTopic(temp.topic)?.title ?? temp.topic;
                 chapterArticles.push([topicName, []]);
                 lastTopic = temp.topic;
             }
@@ -107,7 +121,9 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
         prereqs: prereqs,
         topicArticles: topicArticles,
         chapterArticles: chapterArticles,
-        sections: sections
+        sections: sections,
+        previousArticle: previousArticle,
+        nextArticle: nextArticle
     }
     return { props: { props } };
 }
@@ -157,6 +173,39 @@ function ArticleHeader(props: ArticleProps) {
     </div>;
 }
 
+type ArticleFooterLinkProps = {
+    side: "left" | "right",
+    article: [string, Article] | null
+}
+function ArticleFooterLink({side, article}: ArticleFooterLinkProps) {
+    return <div className={`flex sm:w-64 ${side === "left" ? "justify-start" : "justify-end"}`}>
+        {article ?
+        <WrappedLink href={`/${article[1].code}`}
+            className="text-indigo-500 block p-3 hover:text-indigo-700 hover:bg-indigo-100">
+            <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
+                {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2" /> : <></>}
+                <div className="max-sm:hidden">
+                    {article?.[0]} /<br/> {article?.[1].title}
+                </div>
+                {side === "right" ? <FontAwesomeIcon icon={faChevronRight} className="ml-2" /> : <></>}
+            </div>
+        </WrappedLink>
+        : <div className="p-3 text-gray-500">
+            <FontAwesomeIcon icon={side === "left" ? faChevronLeft : faChevronRight} />
+        </div>}
+    </div>
+}
+function ArticleFooter({previousArticle, nextArticle, chapter}: ArticleProps) {
+    // console.log("test", previousArticle, nextArticle);
+    return <div className="flex mt-20 justify-between items-center">
+        <ArticleFooterLink side="left" article={previousArticle}/>
+        <div className="font-semibold p-3 text-nowrap">
+            {chapter?.title ?? "Chapter ???"}
+        </div>
+        <ArticleFooterLink side="right" article={nextArticle}/>
+    </div>
+}
+
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
     // console.log(props);
     const markdown_context: MarkdownContextType = {
@@ -178,6 +227,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         <ContentBody sidebar={true}>
             <ArticleHeader {...props} />
             <Submdx context={markdown_context} />
+            <ArticleFooter {...props} />
         </ContentBody>
         <HightlightJsScript />
         <MathJaxJS />
