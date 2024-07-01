@@ -53,7 +53,7 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
 }
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
-    return (<Layout>
+    return (<Layout title="主題目錄">
         <ContentBody>
             <H1Title>
                 主題目錄

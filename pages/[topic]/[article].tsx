@@ -222,7 +222,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             `)
         })
     }, [router]);
-    return (<Layout sidebar={true}>
+    return (<Layout sidebar={true} title={props.article.title}>
         <Sidebar {...props} />
         <ContentBody sidebar={true}>
             <ArticleHeader {...props} />

@@ -1,10 +1,12 @@
 import { Component, ReactNode } from "react";
 import { NavBar } from "./navbar";
 import { HyperRefBlank, Paragraph } from "@/ntucpc-website-common-lib/components/basic";
+import Head from "next/head";
 
 type Props = {
     children: ReactNode;
     sidebar?: boolean;
+    title?: string;
 }
 
 const SIDEBAR_MARGIN = "lg:ml-80 2xl:mx-auto max-lg:mt-14";
@@ -31,10 +33,14 @@ export function PageFooter({children, sidebar=false}: Props) {
 }
 
 
-export function Layout({children, sidebar=false}: Props) {
+export function Layout(props: Props) {
     return <>
+        <Head>
+            <title>{props.title ? `${props.title} - NTUCPC Guide` : "NTUCPC Guide"}</title>
+            <link rel="icon" type="image/png" href="/favicon.png" />
+        </Head>
         <NavBar />
-        {children}
-        <PageFooter children={children} sidebar={sidebar} />
+        {props.children}
+        <PageFooter {...props} />
     </>
 }
