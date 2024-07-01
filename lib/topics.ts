@@ -12,27 +12,57 @@ export type Topic = {
     title: string;
     contents: string[];
 };
+export type TopicGroup = {
+    single: boolean;
+    title: string;
+    topics: string[];
+};
 
-const topics: Topic[] = (() => {
+const [topics, topicGroups] : [Topic[], TopicGroup[]] = (() => {
     const config = readConfig(path.join(ARTICLE_PATH, "topics.json"));
     const topics: Topic[] = [];
-    for (const topic of config["topics"]) {
-        const topicConfigPath = path.join(ARTICLE_PATH, topic, "config.json");
-        if (!existsSync(topicConfigPath)) {
-            console.log(`Warning: invalid topic ${topic}`);
-            continue;
+    const topicGroups: TopicGroup[] = [];
+    for (const entry of config["topics"]) {
+        console.log("test", typeof(entry));
+        let temp = []
+        if (typeof(entry) === "string") {
+            temp.push(entry);
+            topicGroups.push({
+                single: true,
+                title: "",
+                topics: temp
+            });
         }
-        const topicConfig = readConfig(topicConfigPath);
-        topics.push({
-            code: topic,
-            ...topicConfig
-        })
+        else{
+            temp = entry["topics"];
+            topicGroups.push({
+                single: false,
+                title: entry["title"],
+                topics: temp
+            });
+        }
+        for (const topic of temp) {
+            const topicConfigPath = path.join(ARTICLE_PATH, topic, "config.json");
+            if (!existsSync(topicConfigPath)) {
+                console.log(`Warning: invalid topic ${topic}`);
+                continue;
+            }
+            const topicConfig = readConfig(topicConfigPath);
+            topics.push({
+                code: topic,
+                ...topicConfig
+            })
+        }
     }
-    return topics;
+    return [topics, topicGroups];
 })();
 
 export function getTopics() {
     return topics;
+}
+
+export function getTopicGroups() {
+    return topicGroups;
 }
 
 export function getTopic(code: string) {

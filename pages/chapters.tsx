@@ -1,19 +1,23 @@
 import { ContentBody, Layout } from "@/components/layout";
+import { ToCEntry, ToCSection } from "@/components/table-of-contents";
 import { getArticle, getArticles } from "@/lib/articles";
 import { getChapters } from "@/lib/chapters";
 import { getTopic, getTopics } from "@/lib/topics";
-import { H1Title, H2Title, HyperRef, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
+import { H1Title, H2Title, H3Title, HyperRef, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 
 type ContentProps = {
-    topic: string,
     title: string,
     code: string
 };
-type ChapterProps = {
+type TopicProps = {
     title: string,
     contents: ContentProps[]
+};
+type ChapterProps = {
+    title: string,
+    topics: TopicProps[]
 };
 type Props = {
     chapters: ChapterProps[]
@@ -26,19 +30,23 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
 
     const chapters: ChapterProps[] = []
     for (const chapter of getChapters()) {
-        const contents = []
+        const topics: TopicProps[] = []
+        let lastTopic = "";
         for (const content of chapter.contents) {
             const topicName = content.split("/")[0];
             const topic = getTopic(topicName);
-            contents.push({
-                topic: topic?.title ?? topicName,
+            if (lastTopic !== topicName) {
+                topics.push({title: topic?.title ?? topicName, contents: []});
+                lastTopic = topicName;
+            }
+            topics.at(-1)!.contents.push({
                 title: getArticle(content)?.title ?? content,
                 code: content
             });
         }
         const obj: ChapterProps = {
             title: `${chapter.title}`,
-            contents: contents
+            topics: topics
         };
         chapters.push(obj);
     }
@@ -58,15 +66,17 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             </H1Title>
 
             {props.chapters.map((obj, i) => {
+                const toC = [];
+                let number = 0;
+                for (const topic of obj.topics) {
+                    toC.push(<ToCSection key={number++} text={topic.title} />);
+                    for (const content of topic.contents) {
+                        toC.push(<ToCEntry key={number++} text={content.title} url={`/${content.code}`} />);
+                    }
+                }
                 return <div key={i}>
                     <H2Title>{obj.title}</H2Title>
-                    <UnorderedList>
-                        {obj.contents.map((content, j) => {
-                            return <li key={j}>
-                                <HyperRef href={`/${content.code}`} target="_self">{`${content.topic} - ${content.title}`}</HyperRef>
-                            </li>
-                        })}
-                    </UnorderedList>
+                    {toC}
                 </div>
             })}
         </ContentBody>
