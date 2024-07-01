@@ -18,7 +18,7 @@ export function remarkContentReference() {
             const mode = getAttribute(node, "mode") ?? "default";
             const topic = id.split("/")[0];
             const topicTitle = getTopic(topic)?.title ?? topic;
-            const articleTitle = getArticle(id)!.title
+            const articleTitle = getArticle(id)?.title ?? id
             setAttribute(node, {
                 type: type,
                 code: id,
