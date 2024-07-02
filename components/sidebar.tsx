@@ -106,7 +106,7 @@ export function Sidebar(props: ArticleProps) {
                 onClick={() => {setDisplaySidebar(true)}}>
             <FontAwesomeIcon className="mr-1" icon={faAnglesRight}/> 打開目錄
         </div>
-        <aside className={`fixed text-black z-50 w-72 h-screen pb-40 overflow-y-auto bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}`}>
+        <aside className={`fixed text-black z-50 w-72 h-screen pb-40 overflow-y-scroll bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}`}>
             <div className="m-5">
                 <div className="flex justify-evenly mt-8">
                     <SidebarTab text="本文" onClick={() => setDisplayTab(Tab.Article)} active={displayTab === Tab.Article} />
