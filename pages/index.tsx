@@ -113,27 +113,35 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     }
 
     return (<Layout>
+        <div className="bg-slate-100 py-8 items-center bg-home bg-no-repeat bg-center bg-auto">
+            <div className="max-w-4xl mx-auto font-sans px-4">
+                <div className="my-8">
+                    <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
+                </div>
+
+                <div className="text-center my-8 text-3xl text-black">
+                    這是一個標語但我想不到要寫什麼！
+                </div>
+
+                <div className="flex justify-evenly h-20 items-center">
+                    <ButtonLink text="章節目錄" color="rose" url="/chapters" />
+                    <ButtonLink text="主題目錄" color="lime" url="/topics" />
+                </div>
+            </div>
+        </div>
+        <div className="bg-indigo-50 py-4 items-center">
+            <div className="max-w-4xl mx-auto font-sans px-4">
+
+                <div className="m-5 flex flex-wrap justify-evenly text-black">
+                    <Feature icon={faHandshake} title="新手友善" />
+                    <Feature icon={faBookOpenReader} title="適合自學" />
+                    <Feature icon={faStar} title="專業團隊" />
+                    <Feature icon={faStairs} title="由淺入深" />
+                </div>
+
+            </div>
+        </div>
         <ContentBody>
-
-            <div className="my-8">
-                <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
-            </div>
-
-            <div className="text-center my-8 text-3xl">
-                這是一個標語但我想不到要寫什麼！
-            </div>
-
-            <div className="flex justify-evenly h-20 items-center">
-                <ButtonLink text="章節目錄" color="rose" url="/chapters" />
-                <ButtonLink text="主題目錄" color="lime" url="/topics" />
-            </div>
-
-            <div className="m-5 flex flex-wrap justify-evenly">
-                <Feature icon={faHandshake} title="新手友善" />
-                <Feature icon={faBookOpenReader} title="適合自學" />
-                <Feature icon={faStar} title="專業團隊" />
-                <Feature icon={faStairs} title="由淺入深" />
-            </div>
 
             <SpecialTitle>網站簡介</SpecialTitle>
 

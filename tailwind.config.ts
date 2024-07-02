@@ -22,6 +22,9 @@ const config: Config = {
         'sans': ['ui-sans-serif', 'system-ui', 'sans-serif']
     },
     extend: {
+      backgroundImage: {
+        'home': "url('/background.png')"
+      }
     }
   },
   plugins: [],
