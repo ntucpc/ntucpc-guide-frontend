@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ReactNode } from 'react';
 import path from 'path';
-import { getGuideRoot } from '@/lib/environment';
+import { getGuideRoot, getPublicRoot } from '@/lib/environment';
 
 type ButtonLinkProps = {
     text: string;
@@ -56,7 +56,7 @@ type ContributorCardProps = {
 function ContributorCard({contributor, publicRoot}: ContributorCardProps){
     return <div className="w-full max-w-96 border m-3 p-4 sm:flex items-center">
         <div className="sm:mr-3">
-            <img src={path.join(publicRoot.replace(new RegExp("^public"), ""), 
+            <img src={path.join("/", publicRoot, 
                     "contributors", "photos", `${contributor.code}.png`)} 
                     className="w-20 rounded-full max-sm:mx-auto max-sm:mb-2"/>
         </div>
@@ -98,7 +98,7 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
     const props = {
         guideContents: articles,
         contributors: getContributors(),
-        publicRoot: getGuideRoot()
+        publicRoot: getPublicRoot()
     }
     return { props: { props } };
 }

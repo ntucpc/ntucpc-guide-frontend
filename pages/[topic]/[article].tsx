@@ -21,7 +21,7 @@ import { Sidebar } from '@/components/sidebar';
 import { Section, remarkSection } from '@/lib/parser/section';
 import { useRouter } from 'next/router';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
-import { getGuideRoot } from '@/lib/environment';
+import { getGuideRoot, getPublicRoot } from '@/lib/environment';
 
 type Prereq = {
     text: string;
@@ -65,7 +65,14 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
     const articleObj = getArticle(code)!;
     const mdxPath = path.join(ARTICLE_PATH, topic, article, `${article}.mdx`);
     const sections: Section[] = [];
-    const content = await parseMdx(mdxPath, 1, [remarkProblem, remarkContentReference, [remarkSection, sections]]);
+    const content = await parseMdx(
+        mdxPath,
+        1,
+        [remarkProblem, remarkContentReference, [remarkSection, sections]],
+        (directory, name) => {
+            return path.join("/", directory.replace(getGuideRoot(), getPublicRoot()), "figure", name)
+        }
+    );
     const prereqs: Prereq[] = []
     for (const prereq of articleObj.prerequisites) {
         const prereqArticle = getArticle(prereq);
