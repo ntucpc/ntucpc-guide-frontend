@@ -19,7 +19,7 @@ const config: Config = {
   ],
   theme: {
     fontFamily:{
-        'sans': ['ui-sans-serif', 'system-ui', 'sans-serif']
+        'sans': ['"Noto Sans TC"', 'ui-sans-serif', 'system-ui', 'sans-serif']
     },
     extend: {
       backgroundImage: {
