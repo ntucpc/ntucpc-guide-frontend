@@ -1,10 +1,10 @@
 import path from 'path';
 
-import getEnvironmentVariable from 'lib/environment';
 import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
+import { getGuideRoot } from './environment';
 
-const CONTRIBUTORS_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "contributors");
+const CONTRIBUTORS_PATH = path.join(getGuideRoot(), "contributors");
 
 export type Contributor = {
     name: string,

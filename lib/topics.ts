@@ -1,11 +1,11 @@
 import path from 'path';
 
-import getEnvironmentVariable from 'lib/environment';
 import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
+import { getGuideRoot } from './environment';
 
-const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
-const CHAPTER_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "chapters");
+const ARTICLE_PATH = path.join(getGuideRoot(), "content");
+const CHAPTER_PATH = path.join(getGuideRoot(), "chapters");
 
 export type Topic = {
     code: string;

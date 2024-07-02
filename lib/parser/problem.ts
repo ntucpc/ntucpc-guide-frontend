@@ -1,11 +1,11 @@
 import { visit } from 'unist-util-visit'
 import { getAttribute, parseDirectiveLabel, pushAttribute, removeDirectiveLabel, setAttribute } from '@/ntucpc-website-common-lib/mdx-parser/util';
-import getEnvironmentVariable from '@/lib/environment';
 import path from 'path';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
 import { existsSync } from 'fs';
+import { getGuideRoot } from '../environment';
 
-const PROBLEMS_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "problems");
+const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
 
 /**
  * Problem attributes:

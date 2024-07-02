@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ReactNode } from 'react';
 import path from 'path';
-import getEnvironmentVariable from 'lib/environment';
+import { getGuideRoot } from '@/lib/environment';
 
 type ButtonLinkProps = {
     text: string;
@@ -98,7 +98,7 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
     const props = {
         guideContents: articles,
         contributors: getContributors(),
-        publicRoot: getEnvironmentVariable("GUIDE_RELATIVE_PATH")
+        publicRoot: getGuideRoot()
     }
     return { props: { props } };
 }

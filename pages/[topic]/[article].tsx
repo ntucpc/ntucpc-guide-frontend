@@ -3,7 +3,6 @@ import { Article, getArticle, getArticles } from '@/lib/articles';
 import { Topic, getTopic } from '@/lib/topics';
 import { Chapter, findChapter } from '@/lib/chapters';
 import path from 'path';
-import getEnvironmentVariable from '@/lib/environment';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { remarkProblem } from '@/lib/parser/problem';
 import { parseMdx } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
@@ -22,6 +21,7 @@ import { Sidebar } from '@/components/sidebar';
 import { Section, remarkSection } from '@/lib/parser/section';
 import { useRouter } from 'next/router';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
+import { getGuideRoot } from '@/lib/environment';
 
 type Prereq = {
     text: string;
@@ -53,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 }
 
-const ARTICLE_PATH = path.join(getEnvironmentVariable("GUIDE_RELATIVE_PATH"), "content");
+const ARTICLE_PATH = path.join(getGuideRoot(), "content");
 
 export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ params }) => {
     if (!params) {
