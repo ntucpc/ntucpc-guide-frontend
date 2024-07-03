@@ -81,9 +81,12 @@ export function Problem(context: MarkdownContextType) {
                 <div className={`px-6 py-2 border-l border-r border-b ${borderColor}`}>
                     <div className="text-sm text-neutral-400">
                         Source:
+                        { props.url ? 
                         <HyperRefBlank href={props.url} className="ml-2">{props.src}
                             <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs ml-2" />
-                        </HyperRefBlank>
+                        </HyperRefBlank> :
+                        <span className="ml-2">{props.src}</span>
+                        }
                     </div>
                     <div>
                         {descriptionNode}

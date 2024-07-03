@@ -40,7 +40,7 @@ export function remarkProblem() {
             const descriptionPath = path.join(directory, "description.mdx");
             const solutionPath = solution === undefined ? undefined : path.join(directory, `${solution}.mdx`);
             const attributes: {[key: string]: string} = {
-                "url": problemConfig["url"],
+                "url": problemConfig["url"] ?? "",
                 "src": problemConfig["source"],
                 "name": problemConfig["name"],
                 "expanded": String(expanded),
