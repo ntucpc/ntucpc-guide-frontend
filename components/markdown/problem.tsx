@@ -59,14 +59,14 @@ export function Problem(context: MarkdownContextType) {
             solutionNode = <Submdx context={subcontext} />;
         }
         let stars = <></>;
-        if(props.difficulty === "?") {
+        if (props.difficulty === "?") {
             stars = <FontAwesomeIcon icon={faQuestionCircle} />
-        } else if(props.difficulty !== "0") {
+        } else if (props.difficulty !== "0") {
             stars = <>{
-                Array.from({length: 5}, (_, index) => (
-                    (index < parseInt(props.difficulty)) ? 
-                    <FontAwesomeIcon key={index} icon={faStar}/> :
-                    <FontAwesomeIcon key={index} icon={faEmptyStar} />
+                Array.from({ length: 5 }, (_, index) => (
+                    (index < parseInt(props.difficulty)) ?
+                        <FontAwesomeIcon key={index} icon={faStar} /> :
+                        <FontAwesomeIcon key={index} icon={faEmptyStar} />
                 ))
             }</>
         }
@@ -90,18 +90,18 @@ export function Problem(context: MarkdownContextType) {
                 <div className={`px-6 py-2 border-l border-r border-b ${borderColor}`}>
                     <div className="text-sm text-neutral-400">
                         Source:
-                        { props.url ? 
-                        <HyperRefBlank href={props.url} className="ml-2">{props.src}
-                            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs ml-2" />
-                        </HyperRefBlank> :
-                        <span className="ml-2">{props.src}</span>
+                        {props.url ?
+                            <HyperRefBlank href={props.url} className="ml-2">{props.src}
+                                <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs ml-2" />
+                            </HyperRefBlank> :
+                            <span className="ml-2">{props.src}</span>
                         }
                     </div>
                     <div>
                         {descriptionNode}
-                        
-                        { props.constraintsMdx ?
-                            <details className={`py-4`}>
+
+                        {props.constraintsMdx ?
+                            <details className={`my-4`}>
                                 <summary className="cursor-pointer">條件限制</summary>
                                 {constraintsNode}
                             </details> : <></>
