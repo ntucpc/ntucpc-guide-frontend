@@ -17,6 +17,7 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
  * - descriptionMdx: description mdx file path, undefined if the file doesn't exist
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
+ * - constraintsMdx: constraints mdx file path, undefined if the file doesn't exist
  * - importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
@@ -38,6 +39,7 @@ export function remarkProblem() {
             const expanded = solution === undefined ? false : (difficulty === "0");
             const importPath: string[] = [];
             const descriptionPath = path.join(directory, "description.mdx");
+            const constraintsPath = path.join(directory, "constraints.mdx");
             const solutionPath = solution === undefined ? undefined : path.join(directory, `${solution}.mdx`);
             const attributes: {[key: string]: string} = {
                 "url": problemConfig["url"] ?? "",
@@ -49,6 +51,10 @@ export function remarkProblem() {
             if(existsSync(descriptionPath)){
                 importPath.push(descriptionPath);
                 attributes["descriptionMdx"] = descriptionPath;
+            }
+            if(existsSync(constraintsPath)){
+                importPath.push(constraintsPath);
+                attributes["constraintsMdx"] = constraintsPath;
             }
             if(solution !== undefined && existsSync(solutionPath!)){
                 importPath.push(solutionPath!);

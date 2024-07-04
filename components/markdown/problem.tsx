@@ -27,6 +27,7 @@ type ProblemProps = {
     descriptionMdx: string,
     solution: string,
     solutionMdx: string,
+    constraintsMdx: string,
     importMdx: string
 };
 
@@ -40,6 +41,14 @@ export function Problem(context: MarkdownContextType) {
                 mdx_path: props.descriptionMdx
             };
             descriptionNode = <Submdx context={subcontext} />;
+        }
+        let constraintsNode = <></>;
+        if (props.constraintsMdx) {
+            const subcontext: MarkdownContextType = {
+                ...context,
+                mdx_path: props.constraintsMdx
+            };
+            constraintsNode = <Submdx context={subcontext} />;
         }
         let solutionNode: React.ReactNode = <></>;
         if (props.solutionMdx) {
@@ -90,6 +99,13 @@ export function Problem(context: MarkdownContextType) {
                     </div>
                     <div>
                         {descriptionNode}
+                        
+                        { props.constraintsMdx ?
+                            <details className={`py-4`}>
+                                <summary className="cursor-pointer">條件限制</summary>
+                                {constraintsNode}
+                            </details> : <></>
+                        }
                     </div>
 
                 </div>
