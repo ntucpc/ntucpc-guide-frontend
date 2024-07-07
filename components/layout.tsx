@@ -19,7 +19,7 @@ export function ContentBody({ children, sidebar = false }: Props) {
 }
 
 export function PageFooter({ children, sidebar = false }: Props) {
-    return <div className={`w-full max-w-4xl mx-auto px-3 mt-20 text-sm text-neutral-500
+    return <footer className={`w-full max-w-4xl mx-auto px-3 mt-20 text-sm text-neutral-500
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         <Paragraph>
             國立臺灣大學程式解題社<br />
@@ -29,7 +29,7 @@ export function PageFooter({ children, sidebar = false }: Props) {
         <Paragraph>
             This work is licensed under <HyperRefBlank href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</HyperRefBlank>
         </Paragraph>
-    </div>;
+    </footer>;
 }
 
 
