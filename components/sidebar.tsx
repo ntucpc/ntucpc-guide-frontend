@@ -220,11 +220,19 @@ export function Sidebar(props: ArticleProps) {
     }
 
     return <aside className="print:hidden">
-        <div className={`fixed w-full lg:hidden text-black bg-slate-50 z-40 p-3 cursor-pointer ${displaySidebar ? "" : ""}`}
+        <div className={`fixed w-full lg:hidden text-black bg-slate-50 z-30 p-3 cursor-pointer ${displaySidebar ? "" : ""}`}
             onClick={() => { setDisplaySidebar(true) }}>
             <FontAwesomeIcon className="mr-1" icon={faAnglesRight} /> 打開目錄
         </div>
+        <div className={`${displaySidebar ? "" : "hidden"} lg:hidden
+                fixed inset-0 bg-gray-900 bg-opacity-50 z-40`}
+                onClick={ () => setDisplaySidebar(false) }/>
         <div className={`fixed text-black z-50 w-72 h-screen pb-40 overflow-y-scroll bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}`}>
+            <div className={`absolute z-50 p-3 flex items-center 
+                    justify-center cursor-pointer lg:hidden ${displaySidebar ? "" : "hidden"}`}
+                onClick={() => { setDisplaySidebar(false) }}>
+                <FontAwesomeIcon className="text-lg" icon={faXmark} />
+            </div>
             <div className="m-5">
                 <div className="flex justify-evenly mt-8 mb-5">
                     <SidebarTab text="本文" onClick={() => setDisplayTab(Tab.Article)} active={displayTab === Tab.Article} />
@@ -235,11 +243,6 @@ export function Sidebar(props: ArticleProps) {
                     {toC}
                 </div>
             </div>
-        </div>
-        <div className={`fixed left-72 top-20 z-50 w-10 h-10 flex items-center 
-                justify-center cursor-pointer lg:hidden ${displaySidebar ? "" : "hidden"}`}
-            onClick={() => { setDisplaySidebar(false) }}>
-            <FontAwesomeIcon className="text-lg" icon={faXmark} />
         </div>
     </aside>
 }
