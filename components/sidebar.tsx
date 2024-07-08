@@ -1,6 +1,6 @@
-import { Article } from "@/lib/articles"
+import { Article, getVirtualArticle } from "@/lib/articles"
 import { Chapter } from "@/lib/chapters"
-import { Topic } from "@/lib/topics"
+import { Topic, VirtualTopic } from "@/lib/topics"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { ArticleProps } from "@/pages/[topic]/[article]"
 import { faAnglesRight, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
@@ -54,22 +54,33 @@ export function Sidebar(props: ArticleProps) {
     const [displaySidebar, setDisplaySidebar] = useState(false);
 
     const chapterToC = (() => {
-        const toC = [];
-        let num = 0;
-        for (const [topic, articles] of props.chapterArticles) {
-            toC.push(<SidebarSection key={num++} text={topic} />);
-            for (const article of articles) {
-                toC.push(<SidebarEntry key={num++} href={`/${article.code}`} active={article.code === props.article.code}>{article.title}</SidebarEntry>)
-            }
-        }
+        const toC: ReactNode[] = []
+        let num = 0
+        props.chapterStructure.find(
+            (chapter) => chapter.code === props.virtualArticle.chapterCode
+        )?.topics.forEach((virtualTopic) =>{
+            toC.push(<SidebarSection key={num++} text={virtualTopic.displayTitle} />)
+            virtualTopic.articles.forEach((virtualArticle) => {
+                toC.push(<SidebarEntry key={num++} href={`/${virtualArticle.code}`}
+                            active={virtualArticle.code === props.virtualArticle.code}
+                             >{virtualArticle.articleDisplayTitle}</SidebarEntry>)
+            })
+        })
         return toC;
     })();
     const topicToC = (() => {
-        const toC = [];
-        let num = 0;
-        for (const article of props.topicArticles) {
-            toC.push(<SidebarEntry key={num++} href={`/${article.code}`} active={article.code === props.article.code}>{article.title}</SidebarEntry>)
-        }
+        const toC: ReactNode[] = [];
+        let num = 0
+        const compareTopic = (virtualTopic: VirtualTopic) => virtualTopic.code === props.virtualArticle.topicCode
+        props.topicStructure.find(
+            (topicGroup) => 
+                topicGroup.topics.find(compareTopic)
+        )?.topics.find(compareTopic)?.articles.forEach((virtualArticle) => {
+            toC.push(<SidebarEntry key={num++} href={`/${virtualArticle.code}`}
+                    active={virtualArticle.code === props.virtualArticle.code}>
+                        {virtualArticle.articleDisplayTitle}
+                    </SidebarEntry>)
+        })
         return toC;
     })();
     const articleToC = (() => {
@@ -88,15 +99,15 @@ export function Sidebar(props: ArticleProps) {
     let toC: ReactNode[] = [];
     switch(displayTab) {
         case Tab.Article:
-            title = props.article.title;
+            title = props.virtualArticle.articleDisplayTitle;
             toC = articleToC;
             break;
         case Tab.Chapter:
-            title = props.chapter?.title ?? "Chapter ???";
+            title = props.virtualArticle.chapterDisplayTitle;
             toC = chapterToC;
             break;
         case Tab.Topic:
-            title = props.topic?.title ?? props.topicName;
+            title = props.virtualArticle.topicDisplayTitle;
             toC = topicToC;
             break;
     }

@@ -3,6 +3,8 @@ import path from 'path';
 import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
 import { getGuideRoot } from './environment';
+import { getTopic, VirtualTopic } from './topics';
+import { getVirtualArticle } from './articles';
 
 const ARTICLE_PATH = path.join(getGuideRoot(), "content");
 const CHAPTER_PATH = path.join(getGuideRoot(), "chapters");
@@ -12,6 +14,12 @@ export type Chapter = {
     title: string;
     contents: string[];
 };
+
+export type VirtualChapter = {
+    code: string
+    displayTitle: string
+    topics: VirtualTopic[]
+}
 
 const chapters: Chapter[] = (() => {
     const config = readConfig(path.join(CHAPTER_PATH, "chapters.json"));
@@ -49,4 +57,27 @@ export function findChapter(content: string) {
         }
     }
     return undefined;
+}
+
+export function getFullChapterStructure(): VirtualChapter[] {
+    return chapters.map((chapter) => {
+        const topics: VirtualTopic[] = []
+        for (const articleFullCode of chapter.contents) {
+            const article = getVirtualArticle(articleFullCode)
+            const topicCode = article.topicCode
+            if (topics.length === 0 || topics.at(-1)?.code !== topicCode) {
+                topics.push({
+                    code: topicCode,
+                    displayTitle: article.topicDisplayTitle,
+                    articles: []
+                })
+            }
+            topics.at(-1)?.articles.push(getVirtualArticle(articleFullCode))
+        }
+        return {
+            code: chapter.code,
+            displayTitle: chapter.title,
+            topics: topics
+        }
+    })
 }

@@ -3,6 +3,7 @@ import path from 'path';
 import { Dirent, existsSync, readdirSync, readFileSync } from 'fs';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
 import { getGuideRoot } from './environment';
+import { getVirtualArticle, VirtualArticle } from './articles';
 
 const ARTICLE_PATH = path.join(getGuideRoot(), "content");
 const CHAPTER_PATH = path.join(getGuideRoot(), "chapters");
@@ -68,4 +69,34 @@ export function getTopic(code: string) {
         if (topic.code === code) return topic;
     }
     return undefined;
+}
+
+export type VirtualTopic = {
+    code: string
+    displayTitle: string
+    articles: VirtualArticle[]
+}
+export type VirtualTopicGroup = {
+    single: boolean
+    title: string
+    topics: VirtualTopic[]
+}
+export function getFullTopicStructure(): VirtualTopicGroup[] {
+    return topicGroups.map((topicGroup) => {
+        return {
+            single: topicGroup.single,
+            title: topicGroup.title,
+            topics: topicGroup.topics.map((topicCode) => {
+                const topicObj = getTopic(topicCode)
+                return { // VirtualTopic
+                    code: topicCode,
+                    displayTitle: topicObj?.title ?? topicCode,
+                    articles: topicObj?.contents.map((articleCode) => {
+                        const code = `${topicCode}/${articleCode}`
+                        return getVirtualArticle(code)
+                    }) ?? []
+                }
+            })
+        }
+    })
 }

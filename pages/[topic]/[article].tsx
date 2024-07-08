@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import { Article, getArticle, getArticles } from '@/lib/articles';
-import { Topic, getTopic } from '@/lib/topics';
-import { Chapter, findChapter } from '@/lib/chapters';
+import { Article, VirtualArticle, getArticle, getArticles, getVirtualArticle } from '@/lib/articles';
+import { Topic, VirtualTopicGroup, getFullTopicStructure, getTopic } from '@/lib/topics';
+import { Chapter, VirtualChapter, findChapter, getFullChapterStructure } from '@/lib/chapters';
 import path from 'path';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { remarkProblem } from '@/lib/parser/problem';
@@ -29,18 +29,21 @@ type Prereq = {
 };
 
 export type ArticleProps = {
-    topicName: string,
-    mdxPath: string,
-    article: Article,
-    topic: Topic | null,
-    chapter: Chapter | null,
-    content: [string, MDXRemoteSerializeResult][],
-    prereqs: Prereq[],
-    topicArticles: Article[],
-    chapterArticles: [string, Article[]][],
-    sections: Section[],
-    previousArticle: [string, Article] | null, // [topic name, article object]
-    nextArticle: [string, Article] | null
+    // topicName: string,
+    mdxPath: string
+    // article: Article,
+    // topic: Topic | null,
+    // chapter: Chapter | null,
+    content: [string, MDXRemoteSerializeResult][]
+    prereqs: Prereq[]
+    // topicArticles: Article[],
+    // chapterArticles: [string, Article[]][],
+    sections: Section[]
+    previousArticle: VirtualArticle | null
+    nextArticle: VirtualArticle | null
+    virtualArticle: VirtualArticle
+    topicStructure: VirtualTopicGroup[]
+    chapterStructure: VirtualChapter[]
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -75,62 +78,39 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
     );
     const prereqs: Prereq[] = []
     for (const prereq of articleObj.prerequisites) {
-        const prereqArticle = getArticle(prereq);
-        if (!prereqArticle) {
-            prereqs.push({ text: prereq, code: prereq });
-            continue;
-        }
-        const topicTitle = getTopic(prereqArticle.topic)?.title ?? prereqArticle.topic;
-        prereqs.push({ text: `${topicTitle}/${prereqArticle.title}`, code: prereq });
-    }
-    const topicObject = getTopic(topic);
-    const topicArticles: Article[] = []
-    if (topicObject) {
-        for (const content of topicObject.contents) {
-            const temp = getArticle(`${topic}/${content}`);
-            if (temp) topicArticles.push(temp);
-        }
+        const virtualArticle = getVirtualArticle(prereq)
+        prereqs.push({
+            code: virtualArticle.code,
+            text: virtualArticle.fullDisplayTitle
+        })
     }
     const chapterObject = findChapter(code);
-    const chapterArticles: [string, Article[]][] = []
-    let previousArticle: [string, Article] | null = null;
-    let nextArticle: [string, Article] | null = null;
+    let previousArticle: VirtualArticle | null = null;
+    let nextArticle: VirtualArticle | null = null;
     if (chapterObject) {
-        let lastTopic = "";
-        let lastArticle: [string, Article] | undefined = undefined;
+        let lastArticle: VirtualArticle | undefined = undefined;
         for (const content of chapterObject.contents) {
-            const temp = getArticle(content);
-            if (!temp) continue;
+            const current = getVirtualArticle(content);
             if (content === code) {
                 previousArticle = lastArticle ?? null;
             }
-            const topicName = getTopic(temp.topic)?.title ?? temp.topic;
-            if (lastArticle?.[1].code === code) {
-                nextArticle = [topicName, temp];
+            if (lastArticle?.code === code) {
+                nextArticle = current;
             }
-            lastArticle = [topicName, temp];
-
-            if(lastTopic != temp.topic){
-                chapterArticles.push([topicName, []]);
-                lastTopic = temp.topic;
-            }
-            chapterArticles.at(-1)![1].push(temp);
+            lastArticle = current;
         }
     }
 
     const props = {
-        topicName: topic,
         mdxPath: mdxPath,
-        article: articleObj,
-        topic: topicObject ?? null,
-        chapter: chapterObject ?? null,
         content: Array.from(content.entries()),
         prereqs: prereqs,
-        topicArticles: topicArticles,
-        chapterArticles: chapterArticles,
         sections: sections,
         previousArticle: previousArticle,
-        nextArticle: nextArticle
+        nextArticle: nextArticle,
+        virtualArticle: getVirtualArticle(code),
+        topicStructure: getFullTopicStructure(),
+        chapterStructure: getFullChapterStructure()
     }
     return { props: { props } };
 }
@@ -159,16 +139,17 @@ function ArticleHeader(props: ArticleProps) {
         else first = false;
         prereqs.push(<HyperRefBlank href={`/${prereq.code}`} key={number++}>{prereq.text}</HyperRefBlank>)
     }
+    const article = props.virtualArticle.article!
 
     return <div className="mb-8">
-        <div className="text-xl">{props.chapter?.title ?? "Chapter ???"}</div>
-        <div className="text-2xl text-gray-500 pt-1">{props.topic?.title ?? props.article.topic}</div>
-        <div className="text-5xl mt-1 mb-4">{props.article.title}</div>
+        <div className="text-xl">{props.virtualArticle.chapterDisplayTitle}</div>
+        <div className="text-2xl text-gray-500 pt-1">{props.virtualArticle.topicDisplayTitle}</div>
+        <div className="text-5xl mt-1 mb-4">{props.virtualArticle.articleDisplayTitle}</div>
 
-        <InformationItem name="作者" icon={faUserPen}>{props.article.authors.join("、")}</InformationItem>
+        <InformationItem name="作者" icon={faUserPen}>{article.authors.join("、")}</InformationItem>
         {
-            props.article.contributors.length > 0 ?
-                <InformationItem name="協作者" icon={faUserGroup} >{props.article.contributors.join("、")}</InformationItem>
+            article.contributors.length > 0 ?
+                <InformationItem name="協作者" icon={faUserGroup} >{article.contributors.join("、")}</InformationItem>
                 : <></>
         }
         {
@@ -182,17 +163,17 @@ function ArticleHeader(props: ArticleProps) {
 
 type ArticleFooterLinkProps = {
     side: "left" | "right",
-    article: [string, Article] | null
+    article: VirtualArticle | null
 }
 function ArticleFooterLink({side, article}: ArticleFooterLinkProps) {
     return <div className={`flex sm:w-64 ${side === "left" ? "justify-start" : "justify-end"}`}>
         {article ?
-        <WrappedLink href={`/${article[1].code}`}
+        <WrappedLink href={`/${article.code}`}
             className="text-indigo-500 block p-3 hover:text-indigo-700 hover:bg-indigo-100">
             <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
                 {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2" /> : <></>}
                 <div className="max-sm:hidden">
-                    {article?.[0]} /<br/> {article?.[1].title}
+                    {article.topicDisplayTitle} /<br/> {article.articleDisplayTitle}
                 </div>
                 {side === "right" ? <FontAwesomeIcon icon={faChevronRight} className="ml-2" /> : <></>}
             </div>
@@ -202,12 +183,12 @@ function ArticleFooterLink({side, article}: ArticleFooterLinkProps) {
         </div>}
     </div>
 }
-function ArticleFooter({previousArticle, nextArticle, chapter}: ArticleProps) {
+function ArticleFooter({previousArticle, nextArticle, virtualArticle}: ArticleProps) {
     // console.log("test", previousArticle, nextArticle);
     return <div className="flex mt-20 justify-between items-center">
         <ArticleFooterLink side="left" article={previousArticle}/>
         <div className="font-semibold p-3 text-nowrap">
-            {chapter?.title ?? "Chapter ???"}
+            {virtualArticle.chapterDisplayTitle}
         </div>
         <ArticleFooterLink side="right" article={nextArticle}/>
     </div>
@@ -235,7 +216,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         }
     }, [router]);
     return (<>
-        <Layout sidebar={true} title={props.article.title}>
+        <Layout sidebar={true} title={props.virtualArticle.articleDisplayTitle}>
             <Sidebar {...props} />
             <ContentBody sidebar={true}>
                 <ArticleHeader {...props} />
