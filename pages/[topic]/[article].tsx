@@ -73,8 +73,14 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
         mdxPath,
         1,
         [remarkProblem, remarkContentReference, [remarkSection, sections]],
-        (directory, name) => {
-            return path.join("/", directory.replace(getGuideRoot(), getPublicRoot()), "figure", name)
+        {
+            getFigurePath: (directory, name) => {
+                return path.join("/", directory.replace(getGuideRoot(), getPublicRoot()), "figure", name)
+            },
+            refcodeParam: {
+                refcodeIndent: 4,
+                refcodeIndentWarning: true
+            }
         }
     );
     const prereqs: Prereq[] = []
