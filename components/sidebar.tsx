@@ -2,10 +2,11 @@ import { Article, getVirtualArticle } from "@/lib/articles"
 import { Chapter } from "@/lib/chapters"
 import { Topic, VirtualTopic } from "@/lib/topics"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
 import { faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, useState } from "react"
+import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, useEffect, useState } from "react"
 
 type SidebarTabProps = {
     text: string,
@@ -108,6 +109,10 @@ export function Sidebar(props: ArticleProps) {
         useState(articleChapter)
     const [activeTopic, setActiveTopic] =
         useState(articleTopic)
+
+    useEffect(() => {
+        reloadMathJax(true)
+    }, [displayTab, displaySidebar, activeChapter, activeTopic])
 
     const chapterToC = (() => {
         const toC: ReactNode[] = []

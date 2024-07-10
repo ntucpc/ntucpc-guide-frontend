@@ -16,12 +16,13 @@ import { ContentBody, Layout } from '@/components/layout';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Sidebar } from '@/components/sidebar';
 import { Section, remarkSection } from '@/lib/parser/section';
 import { useRouter } from 'next/router';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 import { getGuideRoot, getPublicRoot } from '@/lib/environment';
+import { reloadMathJax, reloadHighlightJs } from '@/ntucpc-website-common-lib/scripts/reload';
 
 type Prereq = {
     text: string;
@@ -165,32 +166,32 @@ type ArticleFooterLinkProps = {
     side: "left" | "right",
     article: VirtualArticle | null
 }
-function ArticleFooterLink({side, article}: ArticleFooterLinkProps) {
+function ArticleFooterLink({ side, article }: ArticleFooterLinkProps) {
     return <div className={`flex sm:w-64 ${side === "left" ? "justify-start" : "justify-end"}`}>
         {article ?
-        <WrappedLink href={`/${article.code}`}
-            className="text-indigo-500 block p-3 hover:text-indigo-700 hover:bg-indigo-100">
-            <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
-                {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2" /> : <></>}
-                <div className="max-sm:hidden">
-                    {article.topicDisplayTitle} /<br/> {article.articleDisplayTitle}
+            <WrappedLink href={`/${article.code}`}
+                className="text-indigo-500 block p-3 hover:text-indigo-700 hover:bg-indigo-100">
+                <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
+                    {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2" /> : <></>}
+                    <div className="max-sm:hidden">
+                        {article.topicDisplayTitle} /<br /> {article.articleDisplayTitle}
+                    </div>
+                    {side === "right" ? <FontAwesomeIcon icon={faChevronRight} className="ml-2" /> : <></>}
                 </div>
-                {side === "right" ? <FontAwesomeIcon icon={faChevronRight} className="ml-2" /> : <></>}
-            </div>
-        </WrappedLink>
-        : <div className="p-3 text-gray-500">
-            <FontAwesomeIcon icon={side === "left" ? faChevronLeft : faChevronRight} />
-        </div>}
+            </WrappedLink>
+            : <div className="p-3 text-gray-500">
+                <FontAwesomeIcon icon={side === "left" ? faChevronLeft : faChevronRight} />
+            </div>}
     </div>
 }
-function ArticleFooter({previousArticle, nextArticle, virtualArticle}: ArticleProps) {
+function ArticleFooter({ previousArticle, nextArticle, virtualArticle }: ArticleProps) {
     // console.log("test", previousArticle, nextArticle);
     return <div className="flex mt-20 justify-between items-center">
-        <ArticleFooterLink side="left" article={previousArticle}/>
+        <ArticleFooterLink side="left" article={previousArticle} />
         <div className="font-semibold p-3 text-nowrap">
             {virtualArticle.chapterDisplayTitle}
         </div>
-        <ArticleFooterLink side="right" article={nextArticle}/>
+        <ArticleFooterLink side="right" article={nextArticle} />
     </div>
 }
 
@@ -202,12 +203,8 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     };
     const router = useRouter();
     const reload = () => {
-        console.log("reload MathJax and hljs");
-        eval(`
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-        hljs.highlightAll();
-        hljs.initLineNumbersOnLoad({singleLine: true});
-        `)
+        reloadHighlightJs()
+        reloadMathJax()
     }
     useEffect(() => {
         router.events.on("routeChangeComplete", reload);
