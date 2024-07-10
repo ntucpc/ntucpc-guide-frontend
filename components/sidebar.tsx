@@ -6,7 +6,8 @@ import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
 import { faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
 
 type SidebarTabProps = {
     text: string,
@@ -109,6 +110,18 @@ export function Sidebar(props: ArticleProps) {
         useState(articleChapter)
     const [activeTopic, setActiveTopic] =
         useState(articleTopic)
+
+    const router = useRouter()
+    const resetActive = () => {
+        setActiveChapter(articleChapter)
+        setActiveTopic(articleTopic)
+    }
+    useEffect(() => {
+        router.events.on("routeChangeComplete", resetActive);
+        return () => {
+            router.events.off("routeChangeComplete", resetActive);
+        }
+    }, [router])
 
     useEffect(() => {
         reloadMathJax(true)
