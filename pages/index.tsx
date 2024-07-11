@@ -53,12 +53,12 @@ type ContributorCardProps = {
     contributor: Contributor,
     publicRoot: string
 }
-function ContributorCard({contributor, publicRoot}: ContributorCardProps){
+function ContributorCard({ contributor, publicRoot }: ContributorCardProps) {
     return <div className="h-fit w-full max-w-[25rem] md:w-[25rem] md:max-w-[46%] border m-3 p-4 md:flex items-center">
         <div className="md:mr-3 flex-shrink-0">
-            <img src={path.join("/", publicRoot, 
-                    "contributors", "photos", `${contributor.code}.png`)} 
-                    className="w-20 rounded-full max-md:mx-auto max-md:mb-2"/>
+            <img src={path.join("/", publicRoot,
+                "contributors", "photos", `${contributor.code}.png`)}
+                className="w-20 rounded-full max-md:mx-auto max-md:mb-2" />
         </div>
         <div>
             <div className="flex items-end flex-nowrap">
@@ -83,7 +83,8 @@ type ArticleProps = {
 type Props = {
     guideContents: ArticleProps[],
     contributors: Contributor[],
-    publicRoot: string
+    publicRoot: string,
+    isDev: boolean
 }
 export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     const guideTopic = getTopic("Guide");
@@ -98,7 +99,8 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
     const props = {
         guideContents: articles,
         contributors: getContributors(),
-        publicRoot: getPublicRoot()
+        publicRoot: getPublicRoot(),
+        isDev: process.env.NODE_ENV === "development"
     }
     return { props: { props } };
 }
@@ -156,15 +158,20 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             <SpecialTitle>團隊成員</SpecialTitle>
 
             <div className="flex flex-wrap justify-evenly items-center">
-                {props.contributors.map((contributor, index) =>{
+                {props.contributors.map((contributor, index) => {
                     return <ContributorCard key={index} contributor={contributor} publicRoot={props.publicRoot} />
                 })}
             </div>
 
-            <Paragraph>
-                喔不，這裡還在施工，你是不是需要這個
-            </Paragraph>
-            <ButtonLink text="全部東西" color="orange" url="/all" />
+            {
+                props.isDev ? <>
+                    <Paragraph>
+                        You are in development mode!<br />
+                        （Production 不會有這按鈕，請放心）
+                    </Paragraph>
+                    <ButtonLink text="全部東西" color="orange" url="/all" />
+                </> : <></>
+            }
         </ContentBody>
     </Layout>);
 };
