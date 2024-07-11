@@ -54,11 +54,11 @@ type ContributorCardProps = {
     publicRoot: string
 }
 function ContributorCard({contributor, publicRoot}: ContributorCardProps){
-    return <div className="w-full max-w-96 border m-3 p-4 sm:flex items-center">
-        <div className="sm:mr-3">
+    return <div className="h-fit w-full max-w-[25rem] md:w-[25rem] md:max-w-[46%] border m-3 p-4 md:flex items-center">
+        <div className="md:mr-3 flex-shrink-0">
             <img src={path.join("/", publicRoot, 
                     "contributors", "photos", `${contributor.code}.png`)} 
-                    className="w-20 rounded-full max-sm:mx-auto max-sm:mb-2"/>
+                    className="w-20 rounded-full max-md:mx-auto max-md:mb-2"/>
         </div>
         <div>
             <div className="flex items-end flex-nowrap">
@@ -68,7 +68,7 @@ function ContributorCard({contributor, publicRoot}: ContributorCardProps){
             <div className="mt-2">
                 <UnorderedList>
                     {contributor.experience.map((entry, index) => {
-                        return <li key={index}>{entry}</li>
+                        return <li key={index} className="text-start">{entry}</li>
                     })}
                 </UnorderedList>
             </div>
@@ -155,7 +155,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
 
             <SpecialTitle>團隊成員</SpecialTitle>
 
-            <div className="flex flex-wrap justify-evenly">
+            <div className="flex flex-wrap justify-evenly items-center">
                 {props.contributors.map((contributor, index) =>{
                     return <ContributorCard key={index} contributor={contributor} publicRoot={props.publicRoot} />
                 })}
