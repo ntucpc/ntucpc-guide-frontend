@@ -2,7 +2,7 @@ import { ContentBody, Layout } from '@/components/layout';
 import { getArticle } from '@/lib/articles';
 import { Contributor, SpecialThanksGroup, getContributors, getSpecialThanks } from '@/lib/contributors';
 import { getTopic } from '@/lib/topics';
-import { HyperRef, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
+import { HyperRef, HyperRefBlank, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBookOpenReader, faHandshake, faQuestionCircle, faStairs, faStar, faUserPen } from '@fortawesome/free-solid-svg-icons';
@@ -177,6 +177,10 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             </div>
 
             <SpecialTitle>致謝</SpecialTitle>
+
+            <div className="my-3 text-center">
+                NTUCPC Guide 受到來自許多人與其他網站的啟發，特別感謝 <HyperRefBlank href="https://usaco.guide/">USACO Guide</HyperRefBlank> 和 <HyperRefBlank href="https://oi-wiki.org/">OI Wiki</HyperRefBlank> 給了我們很多啟發，也感謝所有在網路上公開程式競賽資源的人們。
+            </div>
 
             {
                 props.specialThanks.map((group, index) =>
