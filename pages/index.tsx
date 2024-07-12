@@ -1,6 +1,6 @@
 import { ContentBody, Layout } from '@/components/layout';
 import { getArticle } from '@/lib/articles';
-import { Contributor, getContributors } from '@/lib/contributors';
+import { Contributor, SpecialThanksGroup, getContributors, getSpecialThanks } from '@/lib/contributors';
 import { getTopic } from '@/lib/topics';
 import { HyperRef, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
@@ -76,6 +76,17 @@ function ContributorCard({ contributor, publicRoot }: ContributorCardProps) {
     </div>
 }
 
+type SpecialThanksMemberProps = {
+    name: string
+    handle: string
+}
+function SpecialThanksMember({name, handle}: SpecialThanksMemberProps) {
+    return <div className="flex items-end flex-nowrap mx-2">
+        <div className="text-nowrap">{name}</div>
+        <div className="ml-1 text-sm text-gray-500 text-nowrap">/ {handle}</div>
+    </div>
+}
+
 type ArticleProps = {
     text: string;
     code: string;
@@ -84,7 +95,8 @@ type Props = {
     guideContents: ArticleProps[],
     contributors: Contributor[],
     publicRoot: string,
-    isDev: boolean
+    isDev: boolean,
+    specialThanks: SpecialThanksGroup[]
 }
 export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     const guideTopic = getTopic("Guide");
@@ -100,7 +112,8 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
         guideContents: articles,
         contributors: getContributors(),
         publicRoot: getPublicRoot(),
-        isDev: process.env.NODE_ENV === "development"
+        isDev: process.env.NODE_ENV === "development",
+        specialThanks: getSpecialThanks()
     }
     return { props: { props } };
 }
@@ -162,6 +175,21 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                     return <ContributorCard key={index} contributor={contributor} publicRoot={props.publicRoot} />
                 })}
             </div>
+
+            <SpecialTitle>致謝</SpecialTitle>
+
+            {
+                props.specialThanks.map((group, index) => 
+                    <div key={index}>
+                    <div className="my-3 text-center">{group.text}</div>
+                    <div className="flex flex-wrap justify-center">
+                    {group.members.map(([name, handle], index) => 
+                        <SpecialThanksMember name={name} handle={handle} key={index} />
+                    )}
+                    </div>
+                    </div>
+                )
+            }
 
             {
                 props.isDev ? <>

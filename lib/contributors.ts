@@ -13,6 +13,11 @@ export type Contributor = {
     code: string
 }
 
+export type SpecialThanksGroup = {
+    text: string
+    members: [string, string][]
+}
+
 const contributors: Contributor[] = (() => {
     const config = readConfig(path.join(CONTRIBUTORS_PATH, "contributors.json"));
     const contributors: Contributor[] = [];
@@ -28,6 +33,16 @@ const contributors: Contributor[] = (() => {
     return contributors;
 })();
 
+const specialThanks: SpecialThanksGroup[] = (() =>{
+    const config = readConfig(path.join(CONTRIBUTORS_PATH, "special_thanks.json"))
+    const groups = config["special_thanks"]
+    return groups
+})()
+
 export function getContributors() {
     return contributors;
+}
+
+export function getSpecialThanks() {
+    return specialThanks
 }
