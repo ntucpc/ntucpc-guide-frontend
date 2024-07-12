@@ -11,7 +11,7 @@ export default function Document() {
                     crossOrigin=""
                 />
                 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
-                <meta name="description" content="測試測試測試" />
+                <meta name="description" content="由專業選手們撰寫的程式競賽教學講義，以帶領新手從零成為程式競賽高手為目標。" />
                 <meta property="og:image" content="https://guide.ntucpc.org/preview.png" />
                 <meta property="og:site_name" content="NTUCPC Guide" />
             </Head>

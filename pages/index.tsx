@@ -134,8 +134,8 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                     <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
                 </div>
 
-                <div className="text-center my-8 text-3xl text-black">
-                    這是一個標語但我想不到要寫什麼！
+                <div className="text-center my-8 text-2xl text-black leading-normal">
+                    由專業選手們撰寫的自學講義，<br/>帶領新手從零成為程式競賽高手！
                 </div>
 
                 <div className="flex justify-evenly h-20 items-center">
@@ -179,14 +179,14 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             <SpecialTitle>致謝</SpecialTitle>
 
             {
-                props.specialThanks.map((group, index) => 
+                props.specialThanks.map((group, index) =>
                     <div key={index}>
-                    <div className="my-3 text-center">{group.text}</div>
-                    <div className="flex flex-wrap justify-center">
-                    {group.members.map(([name, handle], index) => 
-                        <SpecialThanksMember name={name} handle={handle} key={index} />
-                    )}
-                    </div>
+                        <div className="my-3 text-center">{group.text}</div>
+                        <div className="flex flex-wrap justify-center">
+                            {group.members.map(([name, handle], index) =>
+                                <SpecialThanksMember name={name} handle={handle} key={index} />
+                            )}
+                        </div>
                     </div>
                 )
             }
