@@ -1,0 +1,51 @@
+name: Build NTUCPC Guide
+on:
+  push:
+    branches: ["master", "build-test"]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: node:20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: refactor
+          submodules: recursive
+          token: ${{ secrets.TOKEN }}
+      - name: Checkout submodule guide
+        uses: actions/checkout@v4
+        with:
+          repository: ntucpc/ntucpc-guide
+          ref: main
+          path: guide
+          token: ${{ secrets.TOKEN }}
+      - name: Setup env
+        run: |
+          cp .env.example .env
+          echo "PUBLIC_ROOT=files/" >> .env
+      - name: npm install
+        run: |
+          npm install
+      - name: Build
+        run: |
+          python3 build_public.py guide
+          npm run build
+          cp -r out/ ../out
+      - name: Checkout build
+        uses: actions/checkout@v4
+        with:
+          ref: build
+      - name: Copy out
+        run: |
+          cp -r ../out out
+      - name: Set safe directory
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: build from ${{ github.ref_name }} - ${{ github.sha }}
+          file_pattern: out/
