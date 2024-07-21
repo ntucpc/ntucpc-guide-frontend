@@ -13,7 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: refactor
           submodules: recursive
           token: ${{ secrets.TOKEN }}
       - name: Checkout submodule guide
