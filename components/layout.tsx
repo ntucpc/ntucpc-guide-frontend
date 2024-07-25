@@ -7,12 +7,13 @@ type Props = {
     children: ReactNode;
     sidebar?: boolean;
     title?: string;
+    maxWidth?: string
 }
 
 const SIDEBAR_MARGIN = "lg:ml-80 2xl:mx-auto max-lg:mt-14";
 
-export function ContentBody({ children, sidebar = false }: Props) {
-    return <div className={`px-4 my-3 max-w-4xl mx-auto pt-5 font-sans 
+export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: Props) {
+    return <div className={`px-4 my-3 max-w-${maxWidth} mx-auto pt-5 font-sans 
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         {children}
     </div>

@@ -201,7 +201,10 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                         You are in development mode!<br />
                         （Production 不會有這按鈕，請放心）
                     </Paragraph>
-                    <ButtonLink text="全部東西" color="orange" url="/all" />
+                    <div className="flex justify-start">
+                        <ButtonLink text="全部東西" color="orange" url="/test/all" />
+                        <ButtonLink text="題目" color="teal" url="/test/problems" />
+                    </div>
                 </> : <></>
             }
         </ContentBody>

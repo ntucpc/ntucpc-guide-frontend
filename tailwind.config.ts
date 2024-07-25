@@ -15,6 +15,9 @@ const config: Config = {
     },
     {
       pattern: /[mp][lrbtxy]-\d+/
+    },
+    {
+      pattern: /max-w-(\dxl|fit)/
     }
   ],
   theme: {
