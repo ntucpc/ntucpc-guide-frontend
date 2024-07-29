@@ -19,7 +19,7 @@ type ButtonLinkProps = {
 };
 
 function ButtonLink({ text, color, url }: ButtonLinkProps) {
-    return <div className={`items-center justify-center`}>
+    return <div className={`items-center justify-center select-none`}>
         <WrappedLink href={url}
             className={`px-4 py-3 bg-${color}-500 text-white hover:bg-${color}-600
                              transition duration-150 ease-out hover:ease-in`}>

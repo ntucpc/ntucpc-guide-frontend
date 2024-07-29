@@ -50,7 +50,7 @@ enum Tab {
 
 function SidebarTab(props: SidebarTabProps) {
     return <div className={`cursor-pointer text-nowrap px-3 py-2 font-semibold
-                hover:bg-indigo-100 hover:text-indigo-600 
+                hover:bg-indigo-100 hover:text-indigo-600 select-none
                 ${props.active ? "bg-indigo-100 text-indigo-600" : ""}`} onClick={props.onClick}>
         {props.text}
     </div>
@@ -58,7 +58,7 @@ function SidebarTab(props: SidebarTabProps) {
 
 function SidebarTableButton(props: SidebarTableButtonProps) {
     return <div className="mb-1">
-        <span className="px-2 py-1 text-indigo-600 font-semibold hover:bg-indigo-100 cursor-pointer" onClick={props.effect}>
+        <span className="px-2 py-1 text-indigo-600 font-semibold select-none hover:bg-indigo-100 cursor-pointer" onClick={props.effect}>
             {props.children}
         </span>
     </div>
@@ -66,7 +66,7 @@ function SidebarTableButton(props: SidebarTableButtonProps) {
 
 function SidebarPageButton(props: SidebarPageButtonProps) {
     return <span className={`px-2 rounded ${props.effect ? "text-indigo-500 hover:text-indigo-700 hover:bg-indigo-100 cursor-pointer"
-        : "text-gray-500"}`}
+        : "text-gray-500"} select-none`}
         onClick={props.effect}>{props.children}</span>
 }
 
