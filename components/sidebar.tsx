@@ -1,5 +1,6 @@
 import { Article, getVirtualArticle } from "@/lib/articles"
 import { Chapter } from "@/lib/chapters"
+import { Section } from "@/lib/parser/section"
 import { Topic, VirtualTopic } from "@/lib/topics"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
@@ -108,7 +109,11 @@ function ScrollSection({children}: SectionProps) {
                         pb-32 pr-2 ml-5`}>
         {children}
     </div>
+}
 
+type SectionInfo = {
+    section: Section
+    start: number
 }
 
 export function Sidebar(props: ArticleProps) {
@@ -144,6 +149,40 @@ export function Sidebar(props: ArticleProps) {
     useEffect(() => {
         reloadMathJax(true)
     }, [displayTab, displaySidebar, activeChapter, activeTopic])
+
+
+    const [currentSection, setCurrentSection] = useState("")
+    const sections: SectionInfo[] = []
+    const handleScroll = () => {
+        const position = window.scrollY
+        let temp = ""
+        for (const section of sections) {
+            if (position >= section.start)
+                temp = section.section.code
+        }
+        if (temp !== currentSection) {
+            setCurrentSection(temp)
+        }
+    }
+
+    const recomputeSections = () => {
+        sections.length = 0
+        props.sections.forEach((section) => {
+            if (section.depth >= 3) return
+            const element = document.getElementById(`section-${section.code}`)!
+            const position = element.getBoundingClientRect().top - document.body.getBoundingClientRect().top
+            sections.push({section: section, start: position})
+        })
+    }
+
+    // https://stackoverflow.com/questions/53158796/get-scroll-position-with-reactjs
+    useEffect(() => {
+        recomputeSections()
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [props.sections, currentSection])
 
     const chapterToC = (() => {
         const toC: ReactNode[] = []
@@ -261,7 +300,8 @@ export function Sidebar(props: ArticleProps) {
         for (const section of props.sections) {
             if (section.depth >= 3) continue;
 
-            toC.push(<SidebarEntry key={num++} effect={`#section-${section.code}`} active={false}>
+            toC.push(<SidebarEntry key={num++} effect={`#section-${section.code}`} 
+                    active={section.code === currentSection || currentSection.startsWith(`${section.code}.`)}>
                 <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
             </SidebarEntry>);
         }
