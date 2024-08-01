@@ -93,6 +93,24 @@ function SidebarEntry(props: SidebarEntryProps) {
     </div>
 }
 
+type SectionProps = {
+    children: ReactNode
+}
+function TitleSection({children}: SectionProps) {
+    return <div className="flex-shrink-0 mx-5">
+        {children}
+    </div>
+}
+function ScrollSection({children}: SectionProps) {
+    return <div className={`flex-grow overflow-y-scroll
+                        scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin 
+                        scrollbar-thumb-zinc-300 scrollbar-track-slate-50
+                        pb-32 pr-2 ml-5`}>
+        {children}
+    </div>
+
+}
+
 export function Sidebar(props: ArticleProps) {
     const allTopics: VirtualTopic[] = []
     props.topicStructure.forEach((virtualTopicGroup) => {
@@ -135,12 +153,6 @@ export function Sidebar(props: ArticleProps) {
             const previousChapter = index > 0 ? props.chapterStructure[index - 1] : undefined
             const nextChapter = index + 1 < props.chapterStructure.length ? props.chapterStructure[index + 1] : undefined
 
-            toC.push(<SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>)
-
-            toC.push(<SidebarTitle key={num++} text={activeChapter.displayTitle}
-                page={true} 
-                left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
-                right={nextChapter ? () => {setActiveChapter(nextChapter)} : undefined} />)
             
             activeChapter.topics.forEach((virtualTopic) =>{
                 toC.push(<SidebarSection key={num++} text={virtualTopic.displayTitle} />)
@@ -150,19 +162,38 @@ export function Sidebar(props: ArticleProps) {
                                 >{virtualArticle.articleDisplayTitle}</SidebarEntry>)
                 })
             })
+            return <>
+                <TitleSection>
+                    <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
+
+                    <SidebarTitle key={num++} text={activeChapter.displayTitle}
+                        page={true}
+                        left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
+                        right={nextChapter ? () => { setActiveChapter(nextChapter) } : undefined} />
+                </TitleSection>
+                <ScrollSection>
+                    {toC}
+                </ScrollSection>
+            </>
         }
         else {
-            toC.push(<SidebarTableButton key={num++} effect={() => {setActiveChapter(articleChapter)}}>
-                <FontAwesomeIcon icon={faChevronLeft}/> {articleChapter?.displayTitle}
-            </SidebarTableButton>)
-            toC.push(<SidebarTitle key={num++} text="章節目錄" />)
-
             props.chapterStructure.forEach((chapter) => {
                 toC.push(<SidebarEntry key={num++} effect={() => {setActiveChapter(chapter)}}
                         active={chapter.code === props.virtualArticle.chapterCode}>
                     {chapter.displayTitle}
                 </SidebarEntry>)
             })
+            return <>
+                <TitleSection>
+                    <SidebarTableButton key={num++} effect={() => { setActiveChapter(articleChapter) }}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> {articleChapter?.displayTitle}
+                    </SidebarTableButton>
+                    <SidebarTitle key={num++} text="章節目錄" />
+                </TitleSection>
+                <ScrollSection>
+                    {toC}
+                </ScrollSection>
+            </>
         }
         return toC;
     })();
@@ -170,20 +201,23 @@ export function Sidebar(props: ArticleProps) {
         const toC: ReactNode[] = [];
         let num = 0
         if (activeTopic) {
-            toC.push(<SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>)
-            toC.push(<SidebarTitle key={num++} text={activeTopic.displayTitle} />)
             activeTopic.articles.forEach((virtualArticle) => {
                 toC.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
                     active={virtualArticle.code === props.virtualArticle.code}>
                     {virtualArticle.articleDisplayTitle}
                 </SidebarEntry>)
             })
+            return <>
+            <TitleSection>
+                <SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>
+                <SidebarTitle key={num++} text={activeTopic.displayTitle} />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+            </>
         }
         else {
-            toC.push(<SidebarTableButton key={num++} effect={() => {setActiveTopic(articleTopic)}}>
-                <FontAwesomeIcon icon={faChevronLeft}/> {articleTopic?.displayTitle}
-            </SidebarTableButton>)
-            toC.push(<SidebarTitle key={num++} text="主題目錄" />)
             let lastGroup = false
             props.topicStructure.forEach((topicGroup) => {
                 if (topicGroup.single) {
@@ -208,13 +242,22 @@ export function Sidebar(props: ArticleProps) {
                     })
                 }
             })
+            return <>
+            <TitleSection>
+                <SidebarTableButton key={num++} effect={() => { setActiveTopic(articleTopic) }}>
+                    <FontAwesomeIcon icon={faChevronLeft} /> {articleTopic?.displayTitle}
+                </SidebarTableButton>
+                <SidebarTitle key={num++} text="主題目錄" />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+            </>
         }
-        return toC;
     })();
     const articleToC = (() => {
         const toC = [];
         let num = 0;
-        toC.push(<SidebarTitle key={num++} text={props.virtualArticle.articleDisplayTitle} />)
         for (const section of props.sections) {
             if (section.depth >= 3) continue;
 
@@ -222,9 +265,16 @@ export function Sidebar(props: ArticleProps) {
                 <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
             </SidebarEntry>);
         }
-        return toC;
+        return <>
+            <TitleSection>
+                <SidebarTitle key={num++} text={props.virtualArticle.articleDisplayTitle} />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+        </>
     })();
-    let toC: ReactNode[] = [];
+    let toC: ReactNode = <></>;
     switch(displayTab) {
         case Tab.Article:
             toC = articleToC;
@@ -245,21 +295,21 @@ export function Sidebar(props: ArticleProps) {
         <div className={`${displaySidebar ? "" : "hidden"} lg:hidden
                 fixed inset-0 bg-gray-900 bg-opacity-50 z-40`}
                 onClick={ () => setDisplaySidebar(false) }/>
-        <div className={`fixed text-black z-50 w-72 h-screen pb-40 overflow-y-scroll bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}`}>
+        <div className={`fixed text-black z-50 w-72 h-screen pb-20 bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}
+                        `}>
+                            {/* Note that some of this are not supported by some browsers like FireFox */}
             <div className={`absolute z-50 p-3 flex items-center 
                     justify-center cursor-pointer lg:hidden ${displaySidebar ? "" : "hidden"}`}
                 onClick={() => { setDisplaySidebar(false) }}>
                 <FontAwesomeIcon className="text-lg" icon={faXmark} />
             </div>
-            <div className="m-5">
-                <div className="flex justify-evenly mt-8 mb-5">
+            <div className="flex flex-col h-full">
+                <div className="flex-shrink-0 flex justify-evenly mt-8 mb-5 mx-5">
                     <SidebarTab text="本文" onClick={() => setDisplayTab(Tab.Article)} active={displayTab === Tab.Article} />
                     <SidebarTab text="章節" onClick={() => setDisplayTab(Tab.Chapter)} active={displayTab === Tab.Chapter} />
                     <SidebarTab text="主題" onClick={() => setDisplayTab(Tab.Topic)} active={displayTab === Tab.Topic} />
                 </div>
-                <div>
-                    {toC}
-                </div>
+                {toC}
             </div>
         </div>
     </aside>
