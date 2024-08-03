@@ -26,14 +26,14 @@ type ToCButtonProps = {
 }
 
 export function ToCButton(props: ToCButtonProps) {
-    return <button onClick={props.onClick} className="m-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-800 text-white">
+    return <button onClick={props.onClick} className="m-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-800 text-white select-none">
         {props.text}
     </button>
 }
 
 export function ToCSection(props: ToCSectionProps) {
     return <>
-        <div className="mb-2 mt-7 font-semibold cursor-pointer flex justify-between items-end" onClick={props.toggleExpand}>
+        <div className="mb-2 mt-7 font-semibold cursor-pointer flex justify-between items-end select-none" onClick={props.toggleExpand}>
             <div className="text-3xl ">
                 {props.title}
             </div>

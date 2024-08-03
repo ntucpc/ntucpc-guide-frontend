@@ -1,8 +1,32 @@
 /* FUCK CSS */
 .hljs-ln div.hljs-ln-n {
     text-align: right;
-    margin-right: 8px;
-    padding-right: 8px;
-    border-right: #ddd solid 2px;
-    color: #aaa;
+    padding-left: 1rem;
+    margin-right: 0.8rem;
+    padding-right: 0.8rem;
+}
+
+.hljs {
+    border-radius: 0.8rem;
+    padding-right: 1.2rem;
+}
+
+.hljs-ln tr:first-child div.hljs-ln-n {
+    padding-top: 1rem;
+}
+.hljs-ln tr:first-child td.hljs-ln-code {
+    padding-top: 1rem;
+}
+.hljs-ln tr:last-child div.hljs-ln-n {
+    padding-bottom: 1rem;
+}
+.hljs-ln tr:last-child td.hljs-ln-code {
+    padding-bottom: 1rem;
+}
+
+.nohljsln {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }

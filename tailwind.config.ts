@@ -15,6 +15,9 @@ const config: Config = {
     },
     {
       pattern: /[mp][lrbtxy]-\d+/
+    },
+    {
+      pattern: /max-w-(\dxl|fit)/
     }
   ],
   theme: {
@@ -27,6 +30,8 @@ const config: Config = {
       }
     }
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')({ nocompatible: true, preferredStrategy: 'pseudoelements' }),
+  ],
 };
 export default config;

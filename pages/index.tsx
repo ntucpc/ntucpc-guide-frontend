@@ -19,7 +19,7 @@ type ButtonLinkProps = {
 };
 
 function ButtonLink({ text, color, url }: ButtonLinkProps) {
-    return <div className={`items-center justify-center`}>
+    return <div className={`items-center justify-center select-none`}>
         <WrappedLink href={url}
             className={`px-4 py-3 bg-${color}-500 text-white hover:bg-${color}-600
                              transition duration-150 ease-out hover:ease-in`}>
@@ -201,7 +201,10 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                         You are in development mode!<br />
                         （Production 不會有這按鈕，請放心）
                     </Paragraph>
-                    <ButtonLink text="全部東西" color="orange" url="/all" />
+                    <div className="flex justify-start">
+                        <ButtonLink text="全部東西" color="orange" url="/test/all" />
+                        <ButtonLink text="題目" color="teal" url="/test/problems" />
+                    </div>
                 </> : <></>
             }
         </ContentBody>

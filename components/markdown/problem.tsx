@@ -113,7 +113,7 @@ export function Problem(context: MarkdownContextType) {
                     <>
                         <div className="mt-2 py-2 px-5 font-bold text-white bg-green-600 flex justify-between cursor-pointer"
                             onClick={() => { setShowSolution(!showSolution) }}>
-                            <div>
+                            <div className="select-none">
                                 題解
                             </div>
                             <div>
