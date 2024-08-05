@@ -25,7 +25,7 @@ export function PageFooter({ children, sidebar = false }: Props) {
         <Paragraph>
             國立臺灣大學程式解題社<br />
             National Taiwan University<br />
-            Competitive Porgramming Club<br />
+            Competitive Programming Club<br />
         </Paragraph>
         <Paragraph>
             This work is licensed under <HyperRefBlank href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</HyperRefBlank>
