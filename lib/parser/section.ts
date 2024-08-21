@@ -12,7 +12,7 @@ export type Section = {
 
 const BASE_DEPTH = 1
 export function remarkSection(sections: Section[]) {
-    return function(tree: any) {
+    return function (tree: any) {
         const currentPath: String[] = []
         visit(tree, function (node) {
             if (node.type != "heading") return
@@ -26,9 +26,8 @@ export function remarkSection(sections: Section[]) {
                 currentPath.push("")
             currentPath.push(text)
             const code = currentPath.slice(BASE_DEPTH).join("-")
-            console.log("code", code)
-            setAttribute(node, {refId: `${code}`})
-            sections.push({text: text, depth: depth, code: code})
+            setAttribute(node, { refId: `${code}` })
+            sections.push({ text: text, depth: depth, code: code })
         })
         console.log(sections)
     }
