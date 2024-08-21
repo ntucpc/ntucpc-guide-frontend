@@ -170,7 +170,6 @@ export function Sidebar(props: ArticleProps) {
         props.sections.forEach((section) => {
             if (section.depth >= 3) return
             const element = document.getElementById(`${section.code}`)!
-            console.log(element)
             const position = element.getBoundingClientRect().top - document.body.getBoundingClientRect().top
             sections.push({section: section, start: position})
         })
