@@ -301,7 +301,7 @@ export function Sidebar(props: ArticleProps) {
             if (section.depth >= 3) continue;
 
             toC.push(<SidebarEntry key={num++} effect={`#${section.code}`} 
-                    active={section.code === currentSection || currentSection.startsWith(`${section.code}.`)}>
+                    active={section.code === currentSection || currentSection.startsWith(`${section.code}-`)}>
                 <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
             </SidebarEntry>);
         }
