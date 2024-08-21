@@ -22,7 +22,7 @@ export function remarkSection(sections: Section[]) {
             for (let i = depth + 1; i < 6; i++) currentNumber[i] = 0;
             currentNumber[depth]++;
             const code = currentNumber.slice(0, depth + 1).join(".");
-            setAttribute(node, {id: `section-${code}`})
+            setAttribute(node, {anchorId: `${code}`})
             sections.push({text: text, depth: depth, code: code});
         });
     }

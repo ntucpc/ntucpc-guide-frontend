@@ -169,7 +169,8 @@ export function Sidebar(props: ArticleProps) {
         sections.length = 0
         props.sections.forEach((section) => {
             if (section.depth >= 3) return
-            const element = document.getElementById(`section-${section.code}`)!
+            const element = document.getElementById(`${section.code}`)!
+            console.log(element)
             const position = element.getBoundingClientRect().top - document.body.getBoundingClientRect().top
             sections.push({section: section, start: position})
         })
@@ -300,7 +301,7 @@ export function Sidebar(props: ArticleProps) {
         for (const section of props.sections) {
             if (section.depth >= 3) continue;
 
-            toC.push(<SidebarEntry key={num++} effect={`#section-${section.code}`} 
+            toC.push(<SidebarEntry key={num++} effect={`#${section.code}`} 
                     active={section.code === currentSection || currentSection.startsWith(`${section.code}.`)}>
                 <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
             </SidebarEntry>);
