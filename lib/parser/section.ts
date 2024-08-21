@@ -29,6 +29,5 @@ export function remarkSection(sections: Section[]) {
             setAttribute(node, { refId: `${code}` })
             sections.push({ text: text, depth: depth, code: code })
         })
-        console.log(sections)
     }
 }
