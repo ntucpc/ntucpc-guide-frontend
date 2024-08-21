@@ -3,7 +3,7 @@ import Submdx from "components/submdx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faChevronDown, faChevronUp, faQuestionCircle, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
-import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic";
+import { BLOCK_MARGIN, HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic";
 import { useState } from "react";
 
 /**
@@ -79,7 +79,7 @@ export function Problem(context: MarkdownContextType) {
         const [showSolution, setShowSolution] = useState(props.expanded === "true")
 
         return (
-            <div className="my-4">
+            <div className={`${BLOCK_MARGIN}`}>
                 <div className={`flex ${titleColor}`}>
                     <div className={`py-2 px-5 font-bold ${typeColor} text-white flex`}>
                         {isSample ? "例題" : "習題"}
