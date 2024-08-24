@@ -10,20 +10,24 @@ export type Section = {
     code: string
 };
 
+const BASE_DEPTH = 1
 export function remarkSection(sections: Section[]) {
-    return function(tree: any) {
-        const currentNumber = [0, 0, 0, 0, 0, 0];
+    return function (tree: any) {
+        const currentPath: String[] = []
         visit(tree, function (node) {
-            if (node.type != "heading") return;
-            node.type = "mdxJsxFlowElement";
-            const text = node.children[0].value;
-            const depth = node.depth - 1;
-            node.name = `h${depth + 1}`;
-            for (let i = depth + 1; i < 6; i++) currentNumber[i] = 0;
-            currentNumber[depth]++;
-            const code = currentNumber.slice(0, depth + 1).join(".");
-            setAttribute(node, {id: `section-${code}`})
-            sections.push({text: text, depth: depth, code: code});
-        });
+            if (node.type != "heading") return
+            node.type = "mdxJsxFlowElement"
+            const text = node.children[0].value
+            const depth = node.depth - 1
+            node.name = `h${depth + 1}`
+            while (currentPath.length > depth)
+                currentPath.pop()
+            while (currentPath.length < depth)
+                currentPath.push("")
+            currentPath.push(text)
+            const code = currentPath.slice(BASE_DEPTH).join("-")
+            setAttribute(node, { refId: `${code}` })
+            sections.push({ text: text, depth: depth, code: code })
+        })
     }
 }
