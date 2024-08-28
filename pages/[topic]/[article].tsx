@@ -48,7 +48,9 @@ export type ArticleProps = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const paths = getArticles().map(article => ({
+    const filteredArticles = getArticles().filter(article =>
+        process.env.NODE_ENV === "development" || !article.coming)
+    const paths = filteredArticles.map(article => ({
         params: { topic: article.topic, article: article.article }
     }));
     return {

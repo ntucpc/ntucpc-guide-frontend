@@ -5,7 +5,7 @@ import { Topic, VirtualTopic } from "@/lib/topics"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
-import { faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
@@ -19,11 +19,15 @@ type SidebarTabProps = {
 type SidebarEntryProps = {
     children: ReactNode,
     effect: string | (() => (void)),
-    active: boolean
+    active: boolean,
+    disable?: boolean
 }
 
 type SidebarSectionProps = {
-    text: string
+    title: string
+    children: ReactNode
+    expand?: boolean
+    toggleExpand?: () => void
 }
 
 type SidebarTitleProps = {
@@ -80,29 +84,60 @@ function SidebarTitle(props: SidebarTitleProps) {
 }
 
 function SidebarSection(props: SidebarSectionProps) {
-    return <div className="font-semibold mb-2 mt-3">{props.text}</div>;
+    return <>
+        <div className="mb-2 mt-3 flex flex-nowrap items-center select-none cursor-pointer" onClick={props.toggleExpand}>
+            {props.expand === undefined ? <></> :
+                <FontAwesomeIcon icon={props.expand ? faCircleChevronUp : faCircleChevronDown}
+                    className={`mr-2 text-xs text-neutral-700`} />}
+            <div className="font-semibold">{props.title}</div>
+        </div>
+        <div className={props.expand ? "" : "hidden"}>
+            {props.children}
+        </div>
+    </>
 }
 
 function SidebarEntry(props: SidebarEntryProps) {
-    return <div className={`w-full border-l-4 hover:border-indigo-600 hover:bg-indigo-100 hover:text-indigo-600 hover:font-semibold
-            ${props.active ? "border-indigo-600 bg-indigo-100 text-indigo-600 font-semibold" : 
-                "border-gray-200"}`}>
-        {typeof props.effect === "string" ? 
-            <WrappedLink className="pl-2 py-2 block" href={props.effect}>{props.children}</WrappedLink> :
-            <div className="pl-2 py-2 cursor-pointer" onClick={props.effect}>{props.children}</div>
-        }
+    let innerComponent: ReactNode
+    if (props.disable)
+        innerComponent = <div className="pl-2 py-2 text-neutral-500">
+            {props.children}
+        </div>
+    else if (typeof props.effect === "string")
+        innerComponent = <WrappedLink className="pl-2 py-2 block" href={props.effect}>
+            {props.children}
+        </WrappedLink>
+    else
+        innerComponent = <div className="pl-2 py-2 cursor-pointer" onClick={props.effect}>
+            {props.children}
+        </div>
+    return <div className={`w-full border-l-4 
+            ${!props.disable ? "hover:border-indigo-600 hover:bg-indigo-100 hover:text-indigo-600 hover:font-semibold" : ""}
+            ${props.active ? "border-indigo-600 bg-indigo-100 text-indigo-600 font-semibold" :
+            "border-gray-200"}`}>
+        {innerComponent}
+    </div>
+}
+
+type SidebarSmallButtonProps = {
+    text: string
+    effect: () => void
+}
+function SidebarSmallButton(props: SidebarSmallButtonProps) {
+    return <div onClick={props.effect} className="select-none cursor-pointer text-sm mx-3 px-3 py-1 bg-indigo-500 hover:bg-indigo-800 text-white rounded-full">
+        {props.text}
     </div>
 }
 
 type SectionProps = {
     children: ReactNode
 }
-function TitleSection({children}: SectionProps) {
+function TitleSection({ children }: SectionProps) {
     return <div className="flex-shrink-0 mx-5">
         {children}
     </div>
 }
-function ScrollSection({children}: SectionProps) {
+function ScrollSection({ children }: SectionProps) {
     return <div className={`flex-grow overflow-y-scroll
                         scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin 
                         scrollbar-thumb-zinc-300 scrollbar-track-slate-50
@@ -119,16 +154,16 @@ type SectionInfo = {
 export function Sidebar(props: ArticleProps) {
     const allTopics: VirtualTopic[] = []
     props.topicStructure.forEach((virtualTopicGroup) => {
-        virtualTopicGroup.topics.forEach((virtualTopic) => 
-            allTopics.push(virtualTopic) 
+        virtualTopicGroup.topics.forEach((virtualTopic) =>
+            allTopics.push(virtualTopic)
         )
     })
     const [displayTab, setDisplayTab] = useState(Tab.Article)
     const [displaySidebar, setDisplaySidebar] = useState(false)
     const articleChapter = props.chapterStructure.find(
-            (chapter) => chapter.code === props.virtualArticle.chapterCode)
+        (chapter) => chapter.code === props.virtualArticle.chapterCode)
     const articleTopic = allTopics.find(
-            (topic) => topic.code === props.virtualArticle.topicCode)
+        (topic) => topic.code === props.virtualArticle.topicCode)
     const [activeChapter, setActiveChapter] =
         useState(articleChapter)
     const [activeTopic, setActiveTopic] =
@@ -171,7 +206,7 @@ export function Sidebar(props: ArticleProps) {
             if (section.depth >= 3) return
             const element = document.getElementById(`${section.code}`)!
             const position = element.getBoundingClientRect().top - document.body.getBoundingClientRect().top
-            sections.push({section: section, start: position})
+            sections.push({ section: section, start: position })
         })
     }
 
@@ -184,6 +219,13 @@ export function Sidebar(props: ArticleProps) {
         }
     }, [props.sections, currentSection])
 
+    const expandStates: Map<string, [boolean, Dispatch<SetStateAction<boolean>>]> = new Map()
+    props.chapterStructure.forEach((chapter) => {
+        chapter.topics.forEach((virtualTopic) => {
+            expandStates.set(`${chapter.code}/${virtualTopic.code}`, useState(true))
+        })
+    })
+
     const chapterToC = (() => {
         const toC: ReactNode[] = []
         let num = 0
@@ -192,14 +234,18 @@ export function Sidebar(props: ArticleProps) {
             const previousChapter = index > 0 ? props.chapterStructure[index - 1] : undefined
             const nextChapter = index + 1 < props.chapterStructure.length ? props.chapterStructure[index + 1] : undefined
 
-            
-            activeChapter.topics.forEach((virtualTopic) =>{
-                toC.push(<SidebarSection key={num++} text={virtualTopic.displayTitle} />)
+            const expandSetter: Dispatch<SetStateAction<boolean>>[] = []
+            activeChapter.topics.forEach((virtualTopic) => {
+                const section: ReactNode[] = []
+                const [expand, setExpand] = expandStates.get(`${activeChapter.code}/${virtualTopic.code}`)!
+                expandSetter.push(setExpand)
                 virtualTopic.articles.forEach((virtualArticle) => {
-                    toC.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
-                                active={virtualArticle.code === props.virtualArticle.code}
-                                >{virtualArticle.articleDisplayTitle}</SidebarEntry>)
+                    section.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
+                        active={virtualArticle.code === props.virtualArticle.code}
+                        disable={virtualArticle.article === null || virtualArticle.article.coming}
+                    >{virtualArticle.articleDisplayTitle}</SidebarEntry>)
                 })
+                toC.push(<SidebarSection key={num++} title={virtualTopic.displayTitle} expand={expand} toggleExpand={() => { setExpand(!expand) }}>{section}</SidebarSection>)
             })
             return <>
                 <TitleSection>
@@ -210,6 +256,10 @@ export function Sidebar(props: ArticleProps) {
                         left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
                         right={nextChapter ? () => { setActiveChapter(nextChapter) } : undefined} />
                 </TitleSection>
+                <div className="flex justify-center mb-2">
+                    <SidebarSmallButton text="展開" effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }} />
+                    <SidebarSmallButton text="收合" effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }} />
+                </div>
                 <ScrollSection>
                     {toC}
                 </ScrollSection>
@@ -217,8 +267,8 @@ export function Sidebar(props: ArticleProps) {
         }
         else {
             props.chapterStructure.forEach((chapter) => {
-                toC.push(<SidebarEntry key={num++} effect={() => {setActiveChapter(chapter)}}
-                        active={chapter.code === props.virtualArticle.chapterCode}>
+                toC.push(<SidebarEntry key={num++} effect={() => { setActiveChapter(chapter) }}
+                    active={chapter.code === props.virtualArticle.chapterCode}>
                     {chapter.displayTitle}
                 </SidebarEntry>)
             })
@@ -234,7 +284,6 @@ export function Sidebar(props: ArticleProps) {
                 </ScrollSection>
             </>
         }
-        return toC;
     })();
     const topicToC = (() => {
         const toC: ReactNode[] = [];
@@ -242,55 +291,57 @@ export function Sidebar(props: ArticleProps) {
         if (activeTopic) {
             activeTopic.articles.forEach((virtualArticle) => {
                 toC.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
-                    active={virtualArticle.code === props.virtualArticle.code}>
+                    active={virtualArticle.code === props.virtualArticle.code}
+                    disable={virtualArticle.article === null || virtualArticle.article.coming}>
                     {virtualArticle.articleDisplayTitle}
                 </SidebarEntry>)
             })
             return <>
-            <TitleSection>
-                <SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>
-                <SidebarTitle key={num++} text={activeTopic.displayTitle} />
-            </TitleSection>
-            <ScrollSection>
-                {toC}
-            </ScrollSection>
+                <TitleSection>
+                    <SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>
+                    <SidebarTitle key={num++} text={activeTopic.displayTitle} />
+                </TitleSection>
+                <ScrollSection>
+                    {toC}
+                </ScrollSection>
             </>
         }
         else {
             let lastGroup = false
             props.topicStructure.forEach((topicGroup) => {
                 if (topicGroup.single) {
-                    if (lastGroup) {
-                        toC.push(<SidebarSection key={num++} text="" />)
+                    if (lastGroup) { // a little bit ugly
+                        toC.push(<SidebarSection key={num++} title=""><></></SidebarSection>)
                         lastGroup = false
                     }
                     const topic = topicGroup.topics[0]!
-                    toC.push(<SidebarEntry key={num++} effect={() => {setActiveTopic(topic)}}
-                    active={topic.code === props.virtualArticle.topicCode}>
+                    toC.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
+                        active={topic.code === props.virtualArticle.topicCode}>
                         {topic.displayTitle}
                     </SidebarEntry>)
                 }
                 else {
                     lastGroup = true
-                    toC.push(<SidebarSection key={num++} text={topicGroup.title}/>)
+                    const section: ReactNode[] = []
                     topicGroup.topics.forEach((topic) => {
-                        toC.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
+                        section.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
                             active={topic.code === props.virtualArticle.topicCode}>
                             {topic.displayTitle}
                         </SidebarEntry>)
                     })
+                    toC.push(<SidebarSection key={num++} title={topicGroup.title}>{section}</SidebarSection>)
                 }
             })
             return <>
-            <TitleSection>
-                <SidebarTableButton key={num++} effect={() => { setActiveTopic(articleTopic) }}>
-                    <FontAwesomeIcon icon={faChevronLeft} /> {articleTopic?.displayTitle}
-                </SidebarTableButton>
-                <SidebarTitle key={num++} text="主題目錄" />
-            </TitleSection>
-            <ScrollSection>
-                {toC}
-            </ScrollSection>
+                <TitleSection>
+                    <SidebarTableButton key={num++} effect={() => { setActiveTopic(articleTopic) }}>
+                        <FontAwesomeIcon icon={faChevronLeft} /> {articleTopic?.displayTitle}
+                    </SidebarTableButton>
+                    <SidebarTitle key={num++} text="主題目錄" />
+                </TitleSection>
+                <ScrollSection>
+                    {toC}
+                </ScrollSection>
             </>
         }
     })();
@@ -300,8 +351,8 @@ export function Sidebar(props: ArticleProps) {
         for (const section of props.sections) {
             if (section.depth >= 3) continue;
 
-            toC.push(<SidebarEntry key={num++} effect={`#${section.code}`} 
-                    active={section.code === currentSection || currentSection.startsWith(`${section.code}-`)}>
+            toC.push(<SidebarEntry key={num++} effect={`#${section.code}`}
+                active={section.code === currentSection || currentSection.startsWith(`${section.code}-`)}>
                 <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
             </SidebarEntry>);
         }
@@ -315,7 +366,7 @@ export function Sidebar(props: ArticleProps) {
         </>
     })();
     let toC: ReactNode = <></>;
-    switch(displayTab) {
+    switch (displayTab) {
         case Tab.Article:
             toC = articleToC;
             break;
@@ -334,10 +385,10 @@ export function Sidebar(props: ArticleProps) {
         </div>
         <div className={`${displaySidebar ? "" : "hidden"} lg:hidden
                 fixed inset-0 bg-gray-900 bg-opacity-50 z-40`}
-                onClick={ () => setDisplaySidebar(false) }/>
+            onClick={() => setDisplaySidebar(false)} />
         <div className={`fixed text-black z-50 w-72 h-screen pb-20 bg-slate-50 ${displaySidebar ? "" : "max-lg:hidden"}
                         `}>
-                            {/* Note that some of this are not supported by some browsers like FireFox */}
+            {/* Note that some of this are not supported by some browsers like FireFox */}
             <div className={`absolute z-50 p-3 flex items-center 
                     justify-center cursor-pointer lg:hidden ${displaySidebar ? "" : "hidden"}`}
                 onClick={() => { setDisplaySidebar(false) }}>

@@ -63,6 +63,7 @@ export async function getProblemOccurs(): Promise<Map<string, ProblemOccur[]>> {
     for (const article of getArticles()) {
         const virtualArticle = getVirtualArticle(article.code)
         const mdxPath = path.join(ARTICLE_PATH, virtualArticle.topicCode, virtualArticle.articleCode, `${virtualArticle.articleCode}.mdx`)
+        if (!existsSync(mdxPath)) continue
         await parseMdx(mdxPath, 1, [[remarkProblemScan, addOccur, virtualArticle]], {})
     }
     return problemOccurs

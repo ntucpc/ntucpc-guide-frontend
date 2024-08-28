@@ -10,14 +10,14 @@ const ARTICLE_PATH = path.join(getGuideRoot(), "content");
 const CHAPTER_PATH = path.join(getGuideRoot(), "chapters");
 
 export type Article = {
-    code: string; // Guide/welcome
-    topic: string; // Guide
-    article: string; // welcome
-    title: string;
-    authors: string[];
-    contributors: string[];
-    description: string[];
-    prerequisites: string[];
+    code: string // Guide/welcome
+    topic: string // Guide
+    article: string // welcome
+    title: string
+    authors: string[]
+    contributors: string[]
+    prerequisites: string[]
+    coming: boolean
 };
 export type VirtualArticle = {
     code: string
@@ -32,13 +32,13 @@ export type VirtualArticle = {
 }
 
 const articles = (() => {
-    const topicDirs = readdirSync(ARTICLE_PATH, {withFileTypes: true})
-            .filter((dir) => dir.isDirectory());
+    const topicDirs = readdirSync(ARTICLE_PATH, { withFileTypes: true })
+        .filter((dir) => dir.isDirectory());
     const articles: Article[] = []
     for (const topicDir of topicDirs) {
         const topic = topicDir.name;
-        const articleDirs = readdirSync(path.join(ARTICLE_PATH, topic), {withFileTypes: true})
-                .filter((dir) => dir.isDirectory());
+        const articleDirs = readdirSync(path.join(ARTICLE_PATH, topic), { withFileTypes: true })
+            .filter((dir) => dir.isDirectory());
         for (const articleDir of articleDirs) {
             const article = articleDir.name;
             const configPath = path.join(path.join(articleDir.path, article), "config.json");
@@ -48,6 +48,11 @@ const articles = (() => {
                 code: `${topic}/${article}`,
                 topic: topic,
                 article: article,
+                title: "",
+                authors: [],
+                contributors: [],
+                prerequisites: [],
+                coming: false,
                 ...config
             });
         }
@@ -69,7 +74,7 @@ export function getArticle(code: string) {
 export function getVirtualArticle(code: string): VirtualArticle {
     const [topicCode, articleCode] = code.split("/")
     const topicTitle = getTopic(topicCode)?.title ?? topicCode
-    const articleObj =  getArticle(code)
+    const articleObj = getArticle(code)
     const articleTitle = articleObj?.title ?? articleCode
     const chapter = findChapter(code)
     return {
