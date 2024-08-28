@@ -5,7 +5,7 @@ import { Topic, VirtualTopic } from "@/lib/topics"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
-import { faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDoubleDown, faAngleDoubleUp, faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
@@ -120,12 +120,12 @@ function SidebarEntry(props: SidebarEntryProps) {
 }
 
 type SidebarSmallButtonProps = {
-    text: string
+    children: ReactNode
     effect: () => void
 }
 function SidebarSmallButton(props: SidebarSmallButtonProps) {
-    return <div onClick={props.effect} className="select-none cursor-pointer text-sm mx-3 px-3 py-1 bg-indigo-500 hover:bg-indigo-800 text-white rounded-full">
-        {props.text}
+    return <div onClick={props.effect} className="select-none cursor-pointer text-xs mx-1 px-2 py-1 bg-indigo-500 hover:bg-indigo-800 text-white rounded-full">
+        {props.children}
     </div>
 }
 
@@ -249,17 +249,24 @@ export function Sidebar(props: ArticleProps) {
             })
             return <>
                 <TitleSection>
-                    <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
+                    <div className="flex justify-between items-end flex-nowrap">
+                        <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
+
+                        <div className="flex justify-center mb-1">
+                            <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
+                                <FontAwesomeIcon icon={faAngleDoubleUp}/>
+                            </SidebarSmallButton>
+                            <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }}>
+                                <FontAwesomeIcon icon={faAngleDoubleDown}/>
+                            </SidebarSmallButton>
+                        </div>
+                    </div>
 
                     <SidebarTitle key={num++} text={activeChapter.displayTitle}
                         page={true}
                         left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
                         right={nextChapter ? () => { setActiveChapter(nextChapter) } : undefined} />
                 </TitleSection>
-                <div className="flex justify-center mb-2">
-                    <SidebarSmallButton text="展開" effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }} />
-                    <SidebarSmallButton text="收合" effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }} />
-                </div>
                 <ScrollSection>
                     {toC}
                 </ScrollSection>
