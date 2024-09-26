@@ -41,8 +41,8 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
                         index++
                     })
                 })
+                if (!ok) return [-1, -1]
                 const topic = getTopic(article.topic)
-                if (!ok || !topic) return [-1, -1]
                 const subIndex = topic.contents.findIndex((content) => content === article.article)
                 return [index, subIndex]
             })()
