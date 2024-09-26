@@ -3,11 +3,11 @@ import { getAttribute, parseDirectiveLabel, pushAttribute, removeDirectiveLabel,
 import path from 'path';
 import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
 import { existsSync } from 'fs';
-import { getTopic } from '../topics';
-import { getArticle } from '../articles';
+import { getTopic } from '../structure/topics';
+import { getArticle } from '../structure/articles';
 
 export function remarkContentReference() {
-    return function(tree: any) {
+    return function (tree: any) {
         visit(tree, function (node) {
             if (node.type != "mdxJsxFlowElement" && node.type != "mdxJsxTextElement") return;
             if (node.name != "reference") return;

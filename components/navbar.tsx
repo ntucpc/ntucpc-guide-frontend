@@ -11,7 +11,7 @@ type NavbarItemProps = {
 };
 export function NavbarItem({text, url, blank=false}: NavbarItemProps) {
     return <div className="">
-        <WrappedLink href={url} className="hover:bg-slate-950 px-3 py-3 mx-2 transition duration-200 ease-out hover:ease-in" target={blank ? "_blank" : "_self"}>{text}</WrappedLink>
+        <WrappedLink href={url} className="hover:bg-slate-950 px-3 py-3 mx-2 color-animation-long" target={blank ? "_blank" : "_self"}>{text}</WrappedLink>
     </div>
 }
 export function ExpandedNavbarItem({text, url, blank=false}: NavbarItemProps) {

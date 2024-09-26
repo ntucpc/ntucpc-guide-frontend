@@ -1,8 +1,8 @@
 import { ContentBody, Layout } from "@/components/layout";
-import { VirtualArticle, getArticles, getVirtualArticle } from "@/lib/articles";
-import { findChapter, getChapters, getFullChapterStructure } from "@/lib/chapters";
 import { Problem, ProblemOccur, getProblemOccurs, getProblems } from "@/lib/problems";
-import { getFullTopicStructure, getTopic, getTopicGroups } from "@/lib/topics";
+import { getStructure } from "@/lib/structure";
+import { parseStructure } from "@/lib/structure/client";
+import { StructureData } from "@/lib/structure/type";
 import { H1Title, HyperRef, HyperRefBlank, Table, TableBody, TableCell, TableHead, TableRow, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { ReactNode, useState } from "react";
@@ -13,6 +13,7 @@ type ProblemProps = {
 }
 type Props = {
     problems: ProblemProps[]
+    structure: StructureData
 }
 
 export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
@@ -23,13 +24,15 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
     }})
 
     const props = {
-        problems: problems
+        problems: problems,
+        structure: getStructure()
     }
     return { props: { props } }
 }
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
 
+    const structure = parseStructure(props.structure)
     let number = 0
     return <Layout title="題目">
         <ContentBody maxWidth="fit">
@@ -56,8 +59,8 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                                 let index = 0
                                 problemProps.occurs.forEach((occur) => {
                                     occurs.push(<HyperRefBlank key={index++}
-                                        href={`/${occur.virtualArticle.code}`}>
-                                        {occur.virtualArticle.articleDisplayTitle}({occur.difficulty})
+                                        href={`/${occur.article}`}>
+                                        {structure.getArticleTitle(occur.article)}({occur.difficulty})
                                     </HyperRefBlank>)
                                     occurs.push(<span key={index++}>、</span>)
                                 })
