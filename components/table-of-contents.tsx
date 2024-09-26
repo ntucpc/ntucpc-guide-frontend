@@ -1,6 +1,6 @@
 import { H2Title } from "@/ntucpc-website-common-lib/components/basic"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
-import { faChevronDown, faChevronUp, faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons"
+import { IconDefinition, faChevronDown, faChevronUp, faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactNode } from "react"
 
@@ -23,13 +23,15 @@ type ToCSectionTemplateProps = {
 }
 
 type ToCButtonProps = {
-    onClick: () => void,
+    onClick: () => void
+    icon: IconDefinition
     text: string
 }
 
 export function ToCButton(props: ToCButtonProps) {
-    return <button onClick={props.onClick} className="m-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-800 text-white select-none">
-        {props.text}
+    return <button onClick={props.onClick} 
+    className="m-1 py-2 px-3 rounded-full bg-indigo-600 hover:bg-indigo-800 text-white select-none">
+        <FontAwesomeIcon icon={props.icon} className="text-sm"/> {props.text}
     </button>
 }
 
