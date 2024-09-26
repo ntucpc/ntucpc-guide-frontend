@@ -8,6 +8,7 @@ import { faAngleDoubleDown, faAngleDoubleUp, faAnglesRight, faArrowLeft, faChevr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NextRouter, useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
+import { ComingSoonTag } from "./table-of-contents"
 
 type SidebarTabProps = {
     text: string,
@@ -100,7 +101,7 @@ function SidebarEntry(props: SidebarEntryProps) {
     let innerComponent: ReactNode
     if (props.disable)
         innerComponent = <div className="pl-2 py-2 text-neutral-500">
-            {props.children}
+            {props.children} <ComingSoonTag/>
         </div>
     else if (typeof props.effect === "string")
         innerComponent = <WrappedLink className="pl-2 py-2 block" href={props.effect}>

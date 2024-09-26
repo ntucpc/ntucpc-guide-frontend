@@ -94,6 +94,12 @@ export function ToCEntry(props: ToCEntryProps) {
     else
         return <div className="py-1 border-l-4 border-gray-200 pl-2
                 text-neutral-500">
-            {props.text}
+            {props.text} <ComingSoonTag/>
         </div>
+}
+
+export function ComingSoonTag() {
+    return <span className="text-xs rounded-full text-slate-400 ml-1">
+        敬請期待
+    </span>
 }
