@@ -27,11 +27,6 @@ import { reloadMathJax, reloadHighlightJs } from '@/ntucpc-website-common-lib/sc
 import { getStructure } from '@/lib/structure';
 import { Structure, parseStructure } from '@/lib/structure/client';
 
-type Prereq = {
-    text: string;
-    code: string;
-};
-
 export type ArticleProps = {
     mdxPath: string
     code: string
