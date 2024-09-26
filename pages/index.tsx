@@ -1,7 +1,5 @@
 import { ContentBody, Layout } from '@/components/layout';
-import { getArticle } from '@/lib/articles';
 import { Contributor, SpecialThanksGroup, getContributors, getSpecialThanks } from '@/lib/contributors';
-import { getTopic } from '@/lib/topics';
 import { HyperRef, HyperRefBlank, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
@@ -11,6 +9,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ReactNode } from 'react';
 import path from 'path';
 import { getGuideRoot, getPublicRoot } from '@/lib/environment';
+import { getTopic } from '@/lib/structure/topics';
+import { getArticle } from '@/lib/structure/articles';
 
 type ButtonLinkProps = {
     text: string;
@@ -103,9 +103,9 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
     const articles: ArticleProps[] = [];
     if (guideTopic) {
         for (const content of guideTopic.contents) {
-            const article = getArticle(`Guide/${content}`);
+            const article = getArticle(content);
             const articleTitle = article?.title ?? content;
-            articles.push({ text: articleTitle, code: `Guide/${content}` });
+            articles.push({ text: articleTitle, code: content });
         }
     }
     const props = {

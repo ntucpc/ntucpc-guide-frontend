@@ -1,30 +1,31 @@
 import { ContentBody, Layout } from "@/components/layout";
-import { VirtualArticle, getArticles, getVirtualArticle } from "@/lib/articles";
-import { findChapter, getChapters, getFullChapterStructure } from "@/lib/chapters";
-import { getFullTopicStructure, getTopic, getTopicGroups } from "@/lib/topics";
+import { getStructure } from "@/lib/structure";
+import { getArticles } from "@/lib/structure/articles";
+import { getChapters } from "@/lib/structure/chapters";
+import { parseStructure } from "@/lib/structure/client";
+import { getTopic, getTopicGroups } from "@/lib/structure/topics";
+import { Article, StructureData } from "@/lib/structure/type";
 import { H1Title, HyperRef, Table, TableBody, TableCell, TableHead, TableRow, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useState } from "react";
 
 type ArticleProps = {
     code: string
-    virtualArticle: VirtualArticle
     chapterIndex: [number, number]
     topicIndex: [number, number]
 }
 type Props = {
     articles: ArticleProps[]
+    structure: StructureData
 }
 
 export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
     
     const articles: ArticleProps[] = getArticles().map((article) => {
-        const virtualArticle = getVirtualArticle(article.code)
         return {
             code: article.code,
-            virtualArticle: virtualArticle,
             chapterIndex: (() => {
-                const index = getChapters().findIndex((chapter) => chapter.code === virtualArticle.chapterCode)
+                const index = getChapters().findIndex((chapter) => chapter.code === article.chapter)
                 if (index === -1) return [-1, -1]
                 const chapter = getChapters()[index]
                 const subIndex = chapter.contents.findIndex((content) => content === article.code)
@@ -49,12 +50,14 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
     })
 
     const props = {
-        articles: articles
+        articles: articles,
+        structure: getStructure()
     }
     return { props: { props } }
 }
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
+    const structure = parseStructure(props.structure)
 
     const [sortBy, setSortBy] = useState("chapter")
     const getSortKey = (article: ArticleProps) => {
@@ -97,9 +100,9 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                             articles.map((article) => {
                                 return <TableRow key={article.code}>
                                     <TableCell>{++number}</TableCell>
-                                    <TableCell>{article.virtualArticle.chapterDisplayTitle} ({article.chapterIndex.join(".")})</TableCell>
-                                    <TableCell>{article.virtualArticle.topicDisplayTitle} ({article.topicIndex.join(".")})</TableCell>
-                                    <TableCell><HyperRef href={`/${article.code}`}>{article.virtualArticle.article!.title}</HyperRef></TableCell>
+                                    <TableCell>{structure.getArticleChapterTitle(article.code)} ({article.chapterIndex.join(".")})</TableCell>
+                                    <TableCell>{structure.getArticleTopicTitle(article.code)} ({article.topicIndex.join(".")})</TableCell>
+                                    <TableCell><HyperRef href={`/${article.code}`}>{structure.getArticleTitle(article.code)}</HyperRef></TableCell>
                                 </TableRow>
                             })
                         }

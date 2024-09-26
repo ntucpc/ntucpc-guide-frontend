@@ -1,13 +1,12 @@
-import { Article, getVirtualArticle } from "@/lib/articles"
-import { Chapter } from "@/lib/chapters"
 import { Section } from "@/lib/parser/section"
-import { Topic, VirtualTopic } from "@/lib/topics"
+import { Structure, parseStructure } from "@/lib/structure/client"
+import { Article, Topic } from "@/lib/structure/type"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
 import { faAngleDoubleDown, faAngleDoubleUp, faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useRouter } from "next/router"
+import { NextRouter, useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
 
 type SidebarTabProps = {
@@ -151,41 +150,195 @@ type SectionInfo = {
     start: number
 }
 
-export function Sidebar(props: ArticleProps) {
-    const allTopics: VirtualTopic[] = []
-    props.topicStructure.forEach((virtualTopicGroup) => {
-        virtualTopicGroup.topics.forEach((virtualTopic) =>
-            allTopics.push(virtualTopic)
-        )
-    })
-    const [displayTab, setDisplayTab] = useState(Tab.Article)
-    const [displaySidebar, setDisplaySidebar] = useState(false)
-    const articleChapter = props.chapterStructure.find(
-        (chapter) => chapter.code === props.virtualArticle.chapterCode)
-    const articleTopic = allTopics.find(
-        (topic) => topic.code === props.virtualArticle.topicCode)
+function makeChapterToC(structure: Structure, props: ArticleProps, router: NextRouter): ReactNode {
     const [activeChapter, setActiveChapter] =
-        useState(articleChapter)
-    const [activeTopic, setActiveTopic] =
-        useState(articleTopic)
-
-    const router = useRouter()
+        useState(structure.getArticle(props.code)?.chapter)
     const resetActive = () => {
-        setActiveChapter(articleChapter)
-        setActiveTopic(articleTopic)
+        setActiveChapter(structure.getExistArticle(props.code).chapter)
     }
     useEffect(() => {
-        router.events.on("routeChangeComplete", resetActive);
+        router.events.on("routeChangeComplete", resetActive)
         return () => {
-            router.events.off("routeChangeComplete", resetActive);
+            router.events.off("routeChangeComplete", resetActive)
         }
     }, [router])
-
     useEffect(() => {
         reloadMathJax(true)
-    }, [displayTab, displaySidebar, activeChapter, activeTopic])
+    }, [activeChapter])
 
+    const chapters = props.structure.chapters
 
+    const expandStates: Map<string, [boolean, Dispatch<SetStateAction<boolean>>]> = new Map()
+    chapters.forEach((chapter) => {
+        let lastTopic: string | undefined = undefined
+        chapter.contents.forEach((fullArticleCode) => {
+            const topic = structure.getExistArticle(fullArticleCode).topic
+            if (lastTopic !== topic) {
+                lastTopic = topic
+                expandStates.set(`${chapter.code}/${topic}`, useState(true))
+            }
+        })
+    })
+
+    const toC: ReactNode[] = []
+    let num = 0
+    if (activeChapter) {
+        const index = chapters.findIndex((chapter) => chapter.code === activeChapter)
+        const previousChapter = index > 0 ? chapters[index - 1].code : undefined
+        const nextChapter = index + 1 < chapters.length ? chapters[index + 1].code : undefined
+        const chapterObj = structure.getChapter(activeChapter)!
+
+        const expandSetter: Dispatch<SetStateAction<boolean>>[] = []
+        type Subtopic = {
+            topic: string
+            articles: string[]
+        }
+        const subtopics: Subtopic[] = []
+        chapterObj.contents.forEach((fullArticleCode) => {
+            const article = structure.getExistArticle(fullArticleCode)
+            if (subtopics.length === 0 || subtopics.at(-1)?.topic !== article?.topic)
+                subtopics.push({topic: article.topic, articles: []})
+            subtopics.at(-1)?.articles.push(fullArticleCode)
+        })
+        for (const subtopic of subtopics) {
+            const section: ReactNode[] = []
+            const [expand, setExpand] = expandStates.get(`${activeChapter}/${subtopic.topic}`)!
+            expandSetter.push(setExpand)
+            subtopic.articles.forEach((fullArticleCode) => {
+                const articleObj = structure.getArticle(fullArticleCode)
+                section.push(<SidebarEntry key={num++} effect={`/${fullArticleCode}`}
+                    active={fullArticleCode === props.code}
+                    disable={!articleObj || articleObj.coming}
+                >{structure.getArticleTitle(fullArticleCode)}</SidebarEntry>)
+            })
+            toC.push(<SidebarSection key={num++} title={structure.getTopicTitle(subtopic.topic)} 
+                    expand={expand} toggleExpand={() => { setExpand(!expand) }}>{section}</SidebarSection>)
+        }
+        return <>
+            <TitleSection>
+                <div className="flex justify-between items-end flex-nowrap">
+                    <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
+
+                    <div className="flex justify-center mb-1">
+                        <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
+                            <FontAwesomeIcon icon={faAngleDoubleUp}/>
+                        </SidebarSmallButton>
+                        <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }}>
+                            <FontAwesomeIcon icon={faAngleDoubleDown}/>
+                        </SidebarSmallButton>
+                    </div>
+                </div>
+
+                <SidebarTitle key={num++} text={structure.getChapterTitle(activeChapter)}
+                    page={true}
+                    left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
+                    right={nextChapter ? () => { setActiveChapter(nextChapter) } : undefined} />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+        </>
+    }
+    else {
+        props.structure.chapters.forEach((chapter) => {
+            toC.push(<SidebarEntry key={num++} effect={() => { setActiveChapter(chapter.code) }}
+                active={chapter.code === structure.getArticleChapter(props.code)}>
+                {structure.getChapterTitle(chapter.code)}
+            </SidebarEntry>)
+        })
+        return <>
+            <TitleSection>
+                <SidebarTableButton key={num++} effect={() => { setActiveChapter(structure.getArticleChapter(props.code)) }}>
+                    <FontAwesomeIcon icon={faChevronLeft} /> {structure.getArticleChapterTitle(props.code)}
+                </SidebarTableButton>
+                <SidebarTitle key={num++} text="章節目錄" />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+        </>
+    }
+}
+
+function makeTopicToC(structure: Structure, props: ArticleProps, router: NextRouter): ReactNode {
+    const [activeTopic, setActiveTopic] =
+        useState(structure.getArticle(props.code)?.topic)
+    const resetActive = () => {
+        setActiveTopic(structure.getExistArticle(props.code).topic)
+    }
+    useEffect(() => {
+        router.events.on("routeChangeComplete", resetActive)
+        return () => {
+            router.events.off("routeChangeComplete", resetActive)
+        }
+    }, [router])
+    useEffect(() => {
+        reloadMathJax(true)
+    }, [activeTopic])
+
+    const toC: ReactNode[] = [];
+    let num = 0
+    if (activeTopic) {
+        const topicObj = structure.getTopic(activeTopic)
+        topicObj?.contents.forEach((fullArticleCode) => {
+            const articleObj = structure.getArticle(fullArticleCode)
+            toC.push(<SidebarEntry key={num++} effect={`/${fullArticleCode}`}
+                active={fullArticleCode === props.code}
+                disable={!articleObj || articleObj.coming}>
+                {structure.getArticleTitle(fullArticleCode)}
+            </SidebarEntry>)
+        })
+        return <>
+            <TitleSection>
+                <SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>
+                <SidebarTitle key={num++} text={structure.getTopicTitle(activeTopic)} />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+        </>
+    }
+    else {
+        let lastGroup = false
+        props.structure.topicGroups.forEach((topicGroup) => {
+            if (topicGroup.single) {
+                if (lastGroup) { // a little bit ugly
+                    toC.push(<SidebarSection key={num++} title=""><></></SidebarSection>)
+                    lastGroup = false
+                }
+                const topic = topicGroup.topics[0]!
+                toC.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
+                    active={topic === structure.getArticleTopic(props.code)!.code}>
+                    {structure.getTopicTitle(topic)}
+                </SidebarEntry>)
+            }
+            else {
+                lastGroup = true
+                const section: ReactNode[] = []
+                topicGroup.topics.forEach((topic) => {
+                    section.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
+                        active={topic === structure.getArticleTopic(props.code)?.code}>
+                        {structure.getTopicTitle(topic)}
+                    </SidebarEntry>)
+                })
+                toC.push(<SidebarSection key={num++} title={topicGroup.title}>{section}</SidebarSection>)
+            }
+        })
+        return <>
+            <TitleSection>
+                <SidebarTableButton key={num++} effect={() => { setActiveTopic(structure.getArticleTopic(props.code)?.code) }}>
+                    <FontAwesomeIcon icon={faChevronLeft} /> {structure.getArticleTopicTitle(props.code)}
+                </SidebarTableButton>
+                <SidebarTitle key={num++} text="主題目錄" />
+            </TitleSection>
+            <ScrollSection>
+                {toC}
+            </ScrollSection>
+        </>
+    }
+}
+
+function makeArticleToC(structure: Structure, props: ArticleProps, router: NextRouter): ReactNode  {
     const [currentSection, setCurrentSection] = useState("")
     const sections: SectionInfo[] = []
     const handleScroll = () => {
@@ -219,160 +372,41 @@ export function Sidebar(props: ArticleProps) {
         }
     }, [props.sections, currentSection])
 
-    const expandStates: Map<string, [boolean, Dispatch<SetStateAction<boolean>>]> = new Map()
-    props.chapterStructure.forEach((chapter) => {
-        chapter.topics.forEach((virtualTopic) => {
-            expandStates.set(`${chapter.code}/${virtualTopic.code}`, useState(true))
-        })
-    })
+    const toC = [];
+    let num = 0;
+    for (const section of props.sections) {
+        if (section.depth >= 3) continue;
 
-    const chapterToC = (() => {
-        const toC: ReactNode[] = []
-        let num = 0
-        if (activeChapter) {
-            const index = props.chapterStructure.findIndex((chapter) => chapter.code === activeChapter.code)
-            const previousChapter = index > 0 ? props.chapterStructure[index - 1] : undefined
-            const nextChapter = index + 1 < props.chapterStructure.length ? props.chapterStructure[index + 1] : undefined
+        toC.push(<SidebarEntry key={num++} effect={`#${section.code}`}
+            active={section.code === currentSection || currentSection.startsWith(`${section.code}-`)}>
+            <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
+        </SidebarEntry>);
+    }
+    return <>
+        <TitleSection>
+            <SidebarTitle key={num++} text={structure.getArticleTitle(props.code)} />
+        </TitleSection>
+        <ScrollSection>
+            {toC}
+        </ScrollSection>
+    </>
+}
 
-            const expandSetter: Dispatch<SetStateAction<boolean>>[] = []
-            activeChapter.topics.forEach((virtualTopic) => {
-                const section: ReactNode[] = []
-                const [expand, setExpand] = expandStates.get(`${activeChapter.code}/${virtualTopic.code}`)!
-                expandSetter.push(setExpand)
-                virtualTopic.articles.forEach((virtualArticle) => {
-                    section.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
-                        active={virtualArticle.code === props.virtualArticle.code}
-                        disable={virtualArticle.article === null || virtualArticle.article.coming}
-                    >{virtualArticle.articleDisplayTitle}</SidebarEntry>)
-                })
-                toC.push(<SidebarSection key={num++} title={virtualTopic.displayTitle} expand={expand} toggleExpand={() => { setExpand(!expand) }}>{section}</SidebarSection>)
-            })
-            return <>
-                <TitleSection>
-                    <div className="flex justify-between items-end flex-nowrap">
-                        <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
+export function Sidebar(props: ArticleProps) {
+    const [displayTab, setDisplayTab] = useState(Tab.Article)
+    const [displaySidebar, setDisplaySidebar] = useState(false)
+    const structure = parseStructure(props.structure)
 
-                        <div className="flex justify-center mb-1">
-                            <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
-                                <FontAwesomeIcon icon={faAngleDoubleUp}/>
-                            </SidebarSmallButton>
-                            <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }}>
-                                <FontAwesomeIcon icon={faAngleDoubleDown}/>
-                            </SidebarSmallButton>
-                        </div>
-                    </div>
+    const router = useRouter()
 
-                    <SidebarTitle key={num++} text={activeChapter.displayTitle}
-                        page={true}
-                        left={previousChapter ? () => { setActiveChapter(previousChapter) } : undefined}
-                        right={nextChapter ? () => { setActiveChapter(nextChapter) } : undefined} />
-                </TitleSection>
-                <ScrollSection>
-                    {toC}
-                </ScrollSection>
-            </>
-        }
-        else {
-            props.chapterStructure.forEach((chapter) => {
-                toC.push(<SidebarEntry key={num++} effect={() => { setActiveChapter(chapter) }}
-                    active={chapter.code === props.virtualArticle.chapterCode}>
-                    {chapter.displayTitle}
-                </SidebarEntry>)
-            })
-            return <>
-                <TitleSection>
-                    <SidebarTableButton key={num++} effect={() => { setActiveChapter(articleChapter) }}>
-                        <FontAwesomeIcon icon={faChevronLeft} /> {articleChapter?.displayTitle}
-                    </SidebarTableButton>
-                    <SidebarTitle key={num++} text="章節目錄" />
-                </TitleSection>
-                <ScrollSection>
-                    {toC}
-                </ScrollSection>
-            </>
-        }
-    })();
-    const topicToC = (() => {
-        const toC: ReactNode[] = [];
-        let num = 0
-        if (activeTopic) {
-            activeTopic.articles.forEach((virtualArticle) => {
-                toC.push(<SidebarEntry key={num++} effect={`/${virtualArticle.code}`}
-                    active={virtualArticle.code === props.virtualArticle.code}
-                    disable={virtualArticle.article === null || virtualArticle.article.coming}>
-                    {virtualArticle.articleDisplayTitle}
-                </SidebarEntry>)
-            })
-            return <>
-                <TitleSection>
-                    <SidebarTableButton key={num++} effect={() => { setActiveTopic(undefined) }}>主題目錄</SidebarTableButton>
-                    <SidebarTitle key={num++} text={activeTopic.displayTitle} />
-                </TitleSection>
-                <ScrollSection>
-                    {toC}
-                </ScrollSection>
-            </>
-        }
-        else {
-            let lastGroup = false
-            props.topicStructure.forEach((topicGroup) => {
-                if (topicGroup.single) {
-                    if (lastGroup) { // a little bit ugly
-                        toC.push(<SidebarSection key={num++} title=""><></></SidebarSection>)
-                        lastGroup = false
-                    }
-                    const topic = topicGroup.topics[0]!
-                    toC.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
-                        active={topic.code === props.virtualArticle.topicCode}>
-                        {topic.displayTitle}
-                    </SidebarEntry>)
-                }
-                else {
-                    lastGroup = true
-                    const section: ReactNode[] = []
-                    topicGroup.topics.forEach((topic) => {
-                        section.push(<SidebarEntry key={num++} effect={() => { setActiveTopic(topic) }}
-                            active={topic.code === props.virtualArticle.topicCode}>
-                            {topic.displayTitle}
-                        </SidebarEntry>)
-                    })
-                    toC.push(<SidebarSection key={num++} title={topicGroup.title}>{section}</SidebarSection>)
-                }
-            })
-            return <>
-                <TitleSection>
-                    <SidebarTableButton key={num++} effect={() => { setActiveTopic(articleTopic) }}>
-                        <FontAwesomeIcon icon={faChevronLeft} /> {articleTopic?.displayTitle}
-                    </SidebarTableButton>
-                    <SidebarTitle key={num++} text="主題目錄" />
-                </TitleSection>
-                <ScrollSection>
-                    {toC}
-                </ScrollSection>
-            </>
-        }
-    })();
-    const articleToC = (() => {
-        const toC = [];
-        let num = 0;
-        for (const section of props.sections) {
-            if (section.depth >= 3) continue;
+    useEffect(() => {
+        reloadMathJax(true)
+    }, [displayTab, displaySidebar])
 
-            toC.push(<SidebarEntry key={num++} effect={`#${section.code}`}
-                active={section.code === currentSection || currentSection.startsWith(`${section.code}-`)}>
-                <div className={section.depth == 2 ? "ml-3" : ""}>{section.text}</div>
-            </SidebarEntry>);
-        }
-        return <>
-            <TitleSection>
-                <SidebarTitle key={num++} text={props.virtualArticle.articleDisplayTitle} />
-            </TitleSection>
-            <ScrollSection>
-                {toC}
-            </ScrollSection>
-        </>
-    })();
     let toC: ReactNode = <></>;
+    const chapterToC = makeChapterToC(structure, props, router)
+    const topicToC = makeTopicToC(structure, props, router)
+    const articleToC = makeArticleToC(structure, props, router)
     switch (displayTab) {
         case Tab.Article:
             toC = articleToC;

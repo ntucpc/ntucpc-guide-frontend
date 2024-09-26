@@ -2,7 +2,7 @@ import { existsSync, readdirSync } from "fs"
 import path from "path"
 import { getGuideRoot } from "./environment"
 import { parseMdx, readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
-import { VirtualArticle, getArticle, getArticles, getVirtualArticle } from "./articles"
+import { getArticle, getArticleMdxPath, getArticles } from "./structure/articles"
 import { remarkProblemScan } from "./parser/problem-scanner"
 
 export type Problem = {
@@ -15,7 +15,7 @@ export type Problem = {
 }
 
 export type ProblemOccur = {
-    virtualArticle: VirtualArticle
+    article: string
     difficulty: string
 }
 
@@ -27,20 +27,20 @@ const problems = (() => {
         .forEach((dirent) => {
             const sourceCode = dirent.name
             readdirSync(path.join(PROBLEMS_PATH, sourceCode), { withFileTypes: true }).filter((dir) => dir.isDirectory)
-            .forEach((dirent) => {
-                const problemCode = dirent.name
-                const directory = path.join(PROBLEMS_PATH, sourceCode, problemCode)
-                const configPath = path.join(directory, "config.json")
-                if (!existsSync(configPath)) return
-                const problemConfig = readConfig(configPath)
-                const code = `${sourceCode}/${problemCode}`
-                problems.set(code, {
-                    code: code,
-                    sourceCode: sourceCode,
-                    problemCode: problemCode,
-                    ...problemConfig
+                .forEach((dirent) => {
+                    const problemCode = dirent.name
+                    const directory = path.join(PROBLEMS_PATH, sourceCode, problemCode)
+                    const configPath = path.join(directory, "config.json")
+                    if (!existsSync(configPath)) return
+                    const problemConfig = readConfig(configPath)
+                    const code = `${sourceCode}/${problemCode}`
+                    problems.set(code, {
+                        code: code,
+                        sourceCode: sourceCode,
+                        problemCode: problemCode,
+                        ...problemConfig
+                    })
                 })
-            })
         })
     return problems
 })()
@@ -61,10 +61,9 @@ export async function getProblemOccurs(): Promise<Map<string, ProblemOccur[]>> {
     }
     // move this to a place in charge of all preprocessing in the future
     for (const article of getArticles()) {
-        const virtualArticle = getVirtualArticle(article.code)
-        const mdxPath = path.join(ARTICLE_PATH, virtualArticle.topicCode, virtualArticle.articleCode, `${virtualArticle.articleCode}.mdx`)
-        if (!existsSync(mdxPath)) continue
-        await parseMdx(mdxPath, 1, [[remarkProblemScan, addOccur, virtualArticle]], {})
+        if (!article.valid) continue
+        const mdxPath = getArticleMdxPath(article.code)
+        await parseMdx(mdxPath, 1, [[remarkProblemScan, addOccur, article.code]], {})
     }
     return problemOccurs
 }
