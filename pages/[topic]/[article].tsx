@@ -162,6 +162,7 @@ function ArticleFooter(props: ArticleProps) {
     if (chapterObject) {
         let last: string | undefined = undefined
         for (const content of chapterObject.contents) {
+            if (structure.getArticle(content)?.coming ?? true) continue
             if (last === props.code) nextArticle = content
             if (content === props.code) previousArticle = last
             last = content
