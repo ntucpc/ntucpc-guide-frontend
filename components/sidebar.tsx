@@ -54,7 +54,7 @@ enum Tab {
 }
 
 function SidebarTab(props: SidebarTabProps) {
-    return <div className={`cursor-pointer text-nowrap px-3 py-2 font-semibold rounded-full
+    return <div className={`cursor-pointer text-nowrap px-3 py-2 font-semibold rounded-full color-animation
                 hover:bg-indigo-100 hover:text-indigo-600 select-none
                 ${props.active ? "bg-indigo-100 text-indigo-600" : ""}`} onClick={props.onClick}>
         {props.text}
@@ -63,14 +63,14 @@ function SidebarTab(props: SidebarTabProps) {
 
 function SidebarTableButton(props: SidebarTableButtonProps) {
     return <div className="mb-1">
-        <span className="px-2 py-1 text-indigo-600 font-semibold select-none rounded-full hover:bg-indigo-100 cursor-pointer" onClick={props.effect}>
+        <span className="px-2 py-1 text-indigo-600 font-semibold select-none rounded-full color-animation hover:bg-indigo-100 cursor-pointer" onClick={props.effect}>
             {props.children}
         </span>
     </div>
 }
 
 function SidebarPageButton(props: SidebarPageButtonProps) {
-    return <span className={`px-2 rounded-full ${props.effect ? "text-indigo-500 hover:text-indigo-700 hover:bg-indigo-100 cursor-pointer"
+    return <span className={`px-2 rounded-full ${props.effect ? "text-indigo-500 color-animation hover:text-indigo-700 hover:bg-indigo-100 cursor-pointer"
         : "text-gray-500"} select-none`}
         onClick={props.effect}>{props.children}</span>
 }
@@ -112,7 +112,7 @@ function SidebarEntry(props: SidebarEntryProps) {
             {props.children}
         </div>
     return <div className={`w-full border-l-4 
-            ${!props.disable ? "hover:border-indigo-600 hover:bg-indigo-100 hover:text-indigo-600 hover:font-semibold" : ""}
+            ${!props.disable ? "color-animation hover:border-indigo-600 hover:bg-indigo-100 hover:text-indigo-600 hover:font-semibold" : ""}
             ${props.active ? "border-indigo-600 bg-indigo-100 text-indigo-600 font-semibold" :
             "border-gray-200"}`}>
         {innerComponent}
@@ -124,7 +124,7 @@ type SidebarSmallButtonProps = {
     effect: () => void
 }
 function SidebarSmallButton(props: SidebarSmallButtonProps) {
-    return <div onClick={props.effect} className="select-none cursor-pointer text-xs mx-1 px-2 py-1 bg-indigo-500 hover:bg-indigo-800 text-white rounded-full">
+    return <div onClick={props.effect} className="select-none cursor-pointer text-xs mx-1 px-2 py-1 color-animation bg-indigo-500 hover:bg-indigo-800 text-white rounded-full">
         {props.children}
     </div>
 }

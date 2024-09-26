@@ -30,7 +30,7 @@ type ToCButtonProps = {
 
 export function ToCButton(props: ToCButtonProps) {
     return <button onClick={props.onClick} 
-    className="m-1 py-2 px-3 rounded-full bg-indigo-600 hover:bg-indigo-800 text-white select-none">
+    className="m-1 py-2 px-3 rounded-full color-animation bg-indigo-600 hover:bg-indigo-800 text-white select-none">
         <FontAwesomeIcon icon={props.icon} className="text-sm"/> {props.text}
     </button>
 }
@@ -73,7 +73,7 @@ export function ToCSubsection(props: ToCSectionProps) {
         <div className="mt-4 mb-2 flex flex-nowrap items-center cursor-pointer select-none group" 
                 onClick={props.toggleExpand}>
                 <FontAwesomeIcon icon={props.expand ? faCircleChevronUp : faCircleChevronDown}
-                    className={`flex-shrink-0 text-sm mr-2 
+                    className={`flex-shrink-0 text-sm mr-2 color-animation
                     ${props.expand ? "text-indigo-500" : "text-gray-600 group-hover:text-indigo-500"}`} />
                 <div className="font-semibold text-xl">
                     {props.title}
@@ -89,10 +89,10 @@ export function ToCSubsection(props: ToCSectionProps) {
 
 export function ToCEntry(props: ToCEntryProps) {
     if (props.url)
-        return <div className="py-1 border-l-4 border-gray-200 pl-2
-                hover:border-indigo-600 hover:text-indigo-600">
-            <WrappedLink target="_self" href={props.url}>{props.text}</WrappedLink>
-        </div>
+        return <WrappedLink target="_self" href={props.url} 
+            className="block py-1 border-l-4 border-gray-200 pl-2 color-animation hover:border-indigo-600 hover:text-indigo-600 hover:font-semibold">
+                {props.text}
+            </WrappedLink>
     else
         return <div className="py-1 border-l-4 border-gray-200 pl-2
                 text-neutral-500">

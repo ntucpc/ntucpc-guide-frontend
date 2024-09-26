@@ -139,7 +139,7 @@ function ArticleFooterLink({ side, code, structure }: ArticleFooterLinkProps) {
     return <div className={`flex sm:w-64 ${side === "left" ? "justify-start" : "justify-end"}`}>
         {code ?
             <WrappedLink href={`/${code}`}
-                className="text-indigo-500 block p-3 rounded-xl hover:text-indigo-700 hover:bg-indigo-100">
+                className="text-indigo-500 block p-3 rounded-xl color-animation hover:text-indigo-700 hover:bg-indigo-100">
                 <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
                     {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2" /> : <></>}
                     <div className="max-sm:hidden">
