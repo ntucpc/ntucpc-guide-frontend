@@ -1,6 +1,6 @@
 import { ContentBody, Layout } from '@/components/layout';
 import { Contributor, SpecialThanksGroup, getContributors, getSpecialThanks } from '@/lib/contributors';
-import { HyperRef, HyperRefBlank, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
+import { HyperRef, HyperRefBlank, PARAGRAPH_SEP, Paragraph, UnorderedList } from '@/ntucpc-website-common-lib/components/basic';
 import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBookOpenReader, faHandshake, faQuestionCircle, faStairs, faStar, faUserPen } from '@fortawesome/free-solid-svg-icons';
@@ -21,23 +21,9 @@ type ButtonLinkProps = {
 function ButtonLink({ text, color, url }: ButtonLinkProps) {
     return <div className={`items-center justify-center select-none`}>
         <WrappedLink href={url}
-            className={`px-4 py-3 bg-${color}-500 text-white rounded-full hover:bg-${color}-600 color-animation`}>
+            className={`px-4 py-3 bg-${color}-500 font-semibold text-white rounded-full hover:bg-${color}-600 color-animation`}>
             {text}
         </WrappedLink>
-    </div>
-}
-
-type FeatureProps = {
-    icon: IconDefinition;
-    title: string;
-};
-
-function Feature({ icon, title }: FeatureProps) {
-    return <div className="items-center text-center w-1/2 sm:w-1/4 my-3">
-        <div className="text-8xl text-indigo-500">
-            <FontAwesomeIcon icon={icon} />
-        </div>
-        <div className="mt-3 text-xl">{title}</div>
     </div>
 }
 
@@ -121,8 +107,9 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     const guideContents = []
     let number = 0;
     for (const content of props.guideContents) {
-        guideContents.push(<div className="text-nowrap mx-3" key={number++}>
-            <HyperRef href={`/${content.code}`}>{content.text}</HyperRef>
+        guideContents.push(<div className="text-nowrap mx-1" key={number++}>
+            <WrappedLink className="block py-1 px-2 rounded-lg text-indigo-500 hover:bg-indigo-100 hover:text-indigo-700 color-animation" 
+            href={`/${content.code}`}>{content.text}</WrappedLink>
         </div>)
     }
 
@@ -133,26 +120,15 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                     <img src="/banner2.png" className="w-full max-w-xl mx-auto" />
                 </div>
 
-                <div className="text-center my-8 text-2xl text-black leading-normal">
-                    由專業選手們撰寫的自學講義，<br/>帶領新手從零成為程式競賽高手！
+                <div className="my-8 text-xl text-slate-700 font-medium leading-normal flex flex-wrap justify-center">
+                    <div className="text-nowrap">由專業選手們撰寫的自學講義，</div>
+                    <div className="text-nowrap">帶領新手從零成為程式競賽高手！</div>
                 </div>
 
                 <div className="flex justify-evenly h-20 items-center">
-                    <ButtonLink text="章節目錄" color="rose" url="/chapters" />
-                    <ButtonLink text="主題目錄" color="lime" url="/topics" />
+                    <ButtonLink text="章節目錄" color="teal" url="/chapters" />
+                    <ButtonLink text="主題目錄" color="teal" url="/topics" />
                 </div>
-            </div>
-        </div>
-        <div className="bg-indigo-50 py-4 items-center">
-            <div className="max-w-4xl mx-auto font-sans px-4">
-
-                <div className="m-5 flex flex-wrap justify-evenly text-black">
-                    <Feature icon={faHandshake} title="新手友善" />
-                    <Feature icon={faBookOpenReader} title="適合自學" />
-                    <Feature icon={faStar} title="專業團隊" />
-                    <Feature icon={faStairs} title="由淺入深" />
-                </div>
-
             </div>
         </div>
         <ContentBody>
@@ -160,7 +136,13 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             <SpecialTitle>網站簡介</SpecialTitle>
 
             <div className="text-center">
-                不知道怎麼開始嗎？看看網站簡介吧！
+                <p className={`${PARAGRAPH_SEP}`}>
+                    NTUCPC Guide 是由專業程式競賽選手編寫的講義，提供適合新手自學、由淺入深的程式競賽學習資源。
+                </p>
+
+                <p>
+                    不知道怎麼開始嗎？看看網站簡介吧！
+                </p>
             </div>
 
             <div className="flex flex-wrap justify-center my-4">
