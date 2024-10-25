@@ -4,7 +4,7 @@ import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Pages() {
-    return (<Layout title="404 Not Found">
+    return (<Layout title="404 Not Found" gaId="">
         <ContentBody>
             <div className="text-center my-20">
 

@@ -4,6 +4,7 @@ import { getStructure } from "@/lib/structure";
 import { parseStructure } from "@/lib/structure/client";
 import { StructureData } from "@/lib/structure/type";
 import { H1Title, HyperRef, HyperRefBlank, Table, TableBody, TableCell, TableHead, TableRow, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
+import { getGAId } from "@/ntucpc-website-common-lib/lib/environments";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { ReactNode, useState } from "react";
 
@@ -14,6 +15,7 @@ type ProblemProps = {
 type Props = {
     problems: ProblemProps[]
     structure: StructureData
+    gaId: string
 }
 
 export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
@@ -25,7 +27,8 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
 
     const props = {
         problems: problems,
-        structure: getStructure()
+        structure: getStructure(),
+        gaId: getGAId()
     }
     return { props: { props } }
 }
@@ -34,7 +37,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
 
     const structure = parseStructure(props.structure)
     let number = 0
-    return <Layout title="題目">
+    return <Layout title="題目" gaId={props.gaId}>
         <ContentBody maxWidth="fit">
             <H1Title>
                 題目

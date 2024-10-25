@@ -5,17 +5,20 @@ import { parseStructure } from "@/lib/structure/client";
 import { Article, StructureData, Topic } from "@/lib/structure/type";
 import { H1Title, H2Title, H3Title, HyperRef, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common";
+import { getGAId } from "@/ntucpc-website-common-lib/lib/environments";
 import { faAngleDoubleDown, faAngleDoubleUp } from "@fortawesome/free-solid-svg-icons";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
 type Props = {
     structure: StructureData
+    gaId: string
 };
 
 export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     const props = {
-        structure: getStructure()
+        structure: getStructure(),
+        gaId: getGAId()
     }
     return { props: { props } };
 }
@@ -69,7 +72,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         </ToCSection>)
     })
 
-    return (<Layout title="章節目錄">
+    return (<Layout title="章節目錄" gaId={props.gaId}>
         <ContentBody>
             <H1Title>
                 章節目錄

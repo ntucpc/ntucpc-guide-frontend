@@ -26,6 +26,7 @@ import { getGuideRoot, getPublicRoot } from '@/lib/environment';
 import { reloadMathJax, reloadHighlightJs } from '@/ntucpc-website-common-lib/scripts/reload';
 import { getStructure } from '@/lib/structure';
 import { Structure, parseStructure } from '@/lib/structure/client';
+import { getGAId } from '@/ntucpc-website-common-lib/lib/environments';
 
 export type ArticleProps = {
     mdxPath: string
@@ -33,6 +34,7 @@ export type ArticleProps = {
     structure: StructureData
     content: [string, MDXRemoteSerializeResult][]
     sections: Section[]
+    gaId: string
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -76,7 +78,8 @@ export const getStaticProps: GetStaticProps<{ props: ArticleProps }> = async ({ 
         code: code,
         structure: getStructure(),
         content: Array.from(content.entries()),
-        sections: sections
+        sections: sections,
+        gaId: getGAId()
     }
     return { props: { props } };
 }
@@ -197,7 +200,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     }, [router]);
     const structure = parseStructure(props.structure)
     return (<>
-        <Layout sidebar={true} title={structure.getArticleTitle(props.code)}>
+        <Layout sidebar={true} title={structure.getArticleTitle(props.code)} gaId={getGAId()}>
             <Sidebar {...props} />
             <ContentBody sidebar={true}>
                 <ArticleHeader {...props} />

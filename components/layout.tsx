@@ -2,24 +2,27 @@ import { Component, ReactNode } from "react";
 import { NavBar } from "./navbar";
 import { HyperRefBlank, Paragraph } from "@/ntucpc-website-common-lib/components/basic";
 import Head from "next/head";
-
-type Props = {
-    children: ReactNode;
-    sidebar?: boolean;
-    title?: string;
-    maxWidth?: string
-}
+import { GATag } from "@/ntucpc-website-common-lib/components/analytics";
 
 const SIDEBAR_MARGIN = "lg:ml-80 2xl:mx-auto max-lg:mt-14";
 
-export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: Props) {
+type ContentBodyProps = {
+    children: ReactNode
+    sidebar?: boolean
+    maxWidth?: string
+}
+export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: ContentBodyProps) {
     return <div className={`px-4 my-3 max-w-${maxWidth} mx-auto pt-5 font-sans 
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         {children}
     </div>
 }
 
-export function PageFooter({ children, sidebar = false }: Props) {
+type PageFooterProps = {
+    children: ReactNode
+    sidebar?: boolean
+}
+export function PageFooter({ children, sidebar = false }: PageFooterProps) {
     return <footer className={`w-full max-w-4xl mx-auto px-3 mt-20 text-sm text-neutral-500
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         <Paragraph>
@@ -33,8 +36,14 @@ export function PageFooter({ children, sidebar = false }: Props) {
     </footer>;
 }
 
-
-export function Layout(props: Props) {
+type LayoutProps = {
+    children: ReactNode;
+    sidebar?: boolean;
+    title?: string;
+    maxWidth?: string
+    gaId: string
+}
+export function Layout(props: LayoutProps) {
     const title = props.title ? `${props.title} - NTUCPC Guide` : "NTUCPC Guide";
     return <>
         <Head>
@@ -54,5 +63,6 @@ export function Layout(props: Props) {
         <NavBar />
         {props.children}
         <PageFooter {...props} />
+        <GATag gaId={props.gaId}/>
     </>
 }

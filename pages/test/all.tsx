@@ -6,6 +6,7 @@ import { parseStructure } from "@/lib/structure/client";
 import { getTopic, getTopicGroups } from "@/lib/structure/topics";
 import { Article, StructureData } from "@/lib/structure/type";
 import { H1Title, HyperRef, Table, TableBody, TableCell, TableHead, TableRow, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
+import { getGAId } from "@/ntucpc-website-common-lib/lib/environments";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { useState } from "react";
 
@@ -17,6 +18,7 @@ type ArticleProps = {
 type Props = {
     articles: ArticleProps[]
     structure: StructureData
+    gaId: string
 }
 
 export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
@@ -51,7 +53,8 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
 
     const props = {
         articles: articles,
-        structure: getStructure()
+        structure: getStructure(),
+        gaId: getGAId()
     }
     return { props: { props } }
 }
@@ -73,7 +76,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
     articles.sort((a, b) => compKey(getSortKey(a), getSortKey(b)))
 
     let number = 0
-    return <Layout title="全部東西">
+    return <Layout title="全部東西" gaId={props.gaId}>
         <ContentBody maxWidth="5xl">
             <H1Title>
                 全部東西

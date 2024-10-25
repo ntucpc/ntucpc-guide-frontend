@@ -11,6 +11,7 @@ import path from 'path';
 import { getGuideRoot, getPublicRoot } from '@/lib/environment';
 import { getTopic } from '@/lib/structure/topics';
 import { getArticle } from '@/lib/structure/articles';
+import { getGAId } from '@/ntucpc-website-common-lib/lib/environments';
 
 type ButtonLinkProps = {
     text: string;
@@ -82,6 +83,7 @@ type Props = {
     publicRoot: string,
     isDev: boolean,
     specialThanks: SpecialThanksGroup[]
+    gaId: string
 }
 export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
     const guideTopic = getTopic("Guide");
@@ -98,7 +100,8 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
         contributors: getContributors(),
         publicRoot: getPublicRoot(),
         isDev: process.env.NODE_ENV === "development",
-        specialThanks: getSpecialThanks()
+        specialThanks: getSpecialThanks(),
+        gaId: getGAId()
     }
     return { props: { props } };
 }
@@ -113,7 +116,7 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
         </div>)
     }
 
-    return (<Layout>
+    return (<Layout gaId={props.gaId}>
         <div className="bg-slate-100 py-8 items-center bg-home bg-no-repeat bg-center bg-auto">
             <div className="max-w-4xl mx-auto font-sans px-4">
                 <div className="my-8">
