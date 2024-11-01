@@ -21,8 +21,8 @@ type Props = {
     gaId: string
 }
 
-export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params }) => {
-    
+export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params }) => {
+
     const articles: ArticleProps[] = getArticles().map((article) => {
         return {
             code: article.code,
@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps<{props: Props}> = async ({ params })
                 })
                 if (!ok) return [-1, -1]
                 const topic = getTopic(article.topic)
-                const subIndex = topic.contents.findIndex((content) => content === article.article)
+                const subIndex = topic.contents.findIndex((content) => content === article.code)
                 return [index, subIndex]
             })()
         }
