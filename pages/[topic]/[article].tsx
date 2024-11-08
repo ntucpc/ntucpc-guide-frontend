@@ -108,8 +108,12 @@ function ArticleHeader(props: ArticleProps) {
     for (const prereq of article.prerequisites) {
         if (!first) prereqs.push("、")
         else first = false
-        prereqs.push(<HyperRefBlank href={`/${prereq}`} key={number++}>
-            {structure.getArticleTitle(prereq)}</HyperRefBlank>)
+        const prereqArticle = structure.getArticle(prereq)
+        if (prereqArticle && !prereqArticle.coming)
+            prereqs.push(<HyperRefBlank href={`/${prereq}`} key={number++}>
+                {structure.getArticleTitle(prereq)}</HyperRefBlank>)
+        else
+            prereqs.push(<span className="text-neutral-500">{structure.getArticleTitle(prereq)}</span>)
     }
     // const article = props.virtualArticle.article!
 
