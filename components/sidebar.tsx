@@ -4,7 +4,7 @@ import { Article, Topic } from "@/lib/structure/type"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
 import { ArticleProps } from "@/pages/[topic]/[article]"
-import { faAngleDoubleDown, faAngleDoubleUp, faAnglesRight, faArrowLeft, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faX, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faAnglesRight, faChevronLeft, faChevronRight, faCircleChevronDown, faCircleChevronUp, faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NextRouter, useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
@@ -221,11 +221,11 @@ function makeChapterToC(structure: Structure, props: ArticleProps, router: NextR
                     <SidebarTableButton key={num++} effect={() => { setActiveChapter(undefined) }}>章節目錄</SidebarTableButton>
 
                     <div className="flex justify-center mb-1">
-                        <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
-                            <FontAwesomeIcon icon={faAngleDoubleUp}/>
-                        </SidebarSmallButton>
                         <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }}>
-                            <FontAwesomeIcon icon={faAngleDoubleDown}/>
+                            <FontAwesomeIcon icon={faPlus}/>
+                        </SidebarSmallButton>
+                        <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
+                            <FontAwesomeIcon icon={faMinus}/>
                         </SidebarSmallButton>
                     </div>
                 </div>
