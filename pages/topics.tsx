@@ -5,7 +5,7 @@ import { parseStructure } from "@/lib/structure/client";
 import { StructureData } from "@/lib/structure/type";
 import { H1Title, H2Title, HyperRef, UnorderedList } from "@/ntucpc-website-common-lib/components/basic";
 import { getGAId } from "@/ntucpc-website-common-lib/lib/environments";
-import { faAngleDoubleDown, faAngleDoubleUp } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 
@@ -74,12 +74,12 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
             </H1Title>
 
             <div className="flex justify-start">
-                <ToCButton text="全部展開" icon={faAngleDoubleDown} onClick={() => {
+                <ToCButton text="全部展開" icon={faPlus} onClick={() => {
                     for (const setExpand of expandSetter) {
                         setExpand(true);
                     }
                 }} />
-                <ToCButton text="全部收合" icon={faAngleDoubleUp} onClick={() => {
+                <ToCButton text="全部收合" icon={faMinus} onClick={() => {
                     for (const setExpand of expandSetter) {
                         setExpand(false);
                     }
