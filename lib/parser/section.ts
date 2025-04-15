@@ -17,7 +17,10 @@ export function remarkSection(sections: Section[]) {
         visit(tree, function (node) {
             if (node.type != "heading") return
             node.type = "mdxJsxFlowElement"
-            const text = node.children[0].value
+            let text = ""
+            node.children.forEach((element: any) => {
+                text += element.value
+            })
             const depth = node.depth - 1
             node.name = `h${depth + 1}`
             while (currentPath.length > depth)
