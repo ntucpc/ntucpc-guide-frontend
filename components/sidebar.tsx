@@ -8,7 +8,6 @@ import { faAnglesRight, faChevronLeft, faChevronRight, faCircleChevronDown, faCi
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NextRouter, useRouter } from "next/router"
 import { Dispatch, MouseEventHandler, ReactNode, SetStateAction, use, useEffect, useState } from "react"
-import { ComingSoonTag } from "./table-of-contents"
 
 type SidebarTabProps = {
     text: string,
@@ -51,6 +50,12 @@ enum Tab {
     Article,
     Chapter,
     Topic
+}
+
+export function ComingSoonText() {
+    return <span className="text-xs rounded-full text-slate-400 ml-1">
+        敬請期待
+    </span>
 }
 
 function SidebarTab(props: SidebarTabProps) {
@@ -101,7 +106,7 @@ function SidebarEntry(props: SidebarEntryProps) {
     let innerComponent: ReactNode
     if (props.disable)
         innerComponent = <div className="pl-2 py-2 text-neutral-500">
-            {props.children} <ComingSoonTag/>
+            {props.children} <ComingSoonText />
         </div>
     else if (typeof props.effect === "string")
         innerComponent = <WrappedLink className="pl-2 py-2 block" href={props.effect}>
@@ -198,7 +203,7 @@ function makeChapterToC(structure: Structure, props: ArticleProps, router: NextR
         chapterObj.contents.forEach((fullArticleCode) => {
             const article = structure.getExistArticle(fullArticleCode)
             if (subtopics.length === 0 || subtopics.at(-1)?.topic !== article?.topic)
-                subtopics.push({topic: article.topic, articles: []})
+                subtopics.push({ topic: article.topic, articles: [] })
             subtopics.at(-1)?.articles.push(fullArticleCode)
         })
         for (const subtopic of subtopics) {
@@ -212,8 +217,8 @@ function makeChapterToC(structure: Structure, props: ArticleProps, router: NextR
                     disable={!articleObj || articleObj.coming}
                 >{structure.getArticleTitle(fullArticleCode)}</SidebarEntry>)
             })
-            toC.push(<SidebarSection key={num++} title={structure.getTopicTitle(subtopic.topic)} 
-                    expand={expand} toggleExpand={() => { setExpand(!expand) }}>{section}</SidebarSection>)
+            toC.push(<SidebarSection key={num++} title={structure.getTopicTitle(subtopic.topic)}
+                expand={expand} toggleExpand={() => { setExpand(!expand) }}>{section}</SidebarSection>)
         }
         return <>
             <TitleSection>
@@ -222,10 +227,10 @@ function makeChapterToC(structure: Structure, props: ArticleProps, router: NextR
 
                     <div className="flex justify-center mb-1">
                         <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(true) }) }}>
-                            <FontAwesomeIcon icon={faPlus}/>
+                            <FontAwesomeIcon icon={faPlus} />
                         </SidebarSmallButton>
                         <SidebarSmallButton effect={() => { expandSetter.forEach((setExpand) => { setExpand(false) }) }}>
-                            <FontAwesomeIcon icon={faMinus}/>
+                            <FontAwesomeIcon icon={faMinus} />
                         </SidebarSmallButton>
                     </div>
                 </div>
@@ -339,7 +344,7 @@ function makeTopicToC(structure: Structure, props: ArticleProps, router: NextRou
     }
 }
 
-function makeArticleToC(structure: Structure, props: ArticleProps, router: NextRouter): ReactNode  {
+function makeArticleToC(structure: Structure, props: ArticleProps, router: NextRouter): ReactNode {
     const [currentSection, setCurrentSection] = useState("")
     const sections: SectionInfo[] = []
     const handleScroll = () => {

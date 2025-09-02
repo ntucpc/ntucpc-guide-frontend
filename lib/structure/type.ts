@@ -9,19 +9,22 @@ export type Article = {
     article: string // article code, e.g., welcome
     topic: string // topic code, e.g., Introduction
     chapter: string | null // chapter code, e.g. I, null if the article doesn't belong to any chapter
-    valid: boolean // whether the article has .mdx
+    valid: boolean // whether the article has .mdx, deprecated
     // article settings
     title: string // default: ""
     authors: string[] // default: []
     contributors: string[] // default: []
     prerequisites: string[] // default: []
+    description: string[] // default: "????"
     coming: boolean // default: false, should the article be shown as coming soon in tables of contents
+    importance: number // default: 0
 }
 
 export type Topic = {
     code: string // topic code
     title: string // title
     contents: string[] // in full article code
+    description: string // default: "????"
 }
 export type TopicGroup = {
     single: boolean
@@ -31,8 +34,13 @@ export type TopicGroup = {
 
 export type Chapter = {
     code: string
+    // Chapter ${number}. ${title}
+    number: string
     title: string
     contents: string[] // in full article code
+    icon: string // icon svg name, default: "nothing"
+    iconColor: string // icon color, default: ""
+    description: string // summary displayed in toc, default: "????"
 }
 
 export type StructureData = {

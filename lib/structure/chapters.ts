@@ -20,6 +20,9 @@ const chapters: Chapter[] = (() => {
         const chapterConfig = readConfig(chapterFilePath)
         chapters.push({
             code: chapter,
+            icon: "nothing",
+            iconColor: "",
+            description: "????",
             ...chapterConfig
         })
     }
