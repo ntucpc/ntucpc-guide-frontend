@@ -12,17 +12,16 @@ type ContentBodyProps = {
     maxWidth?: string
 }
 export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: ContentBodyProps) {
-    return <div className={`px-4 my-3 max-w-${maxWidth} mx-auto pt-5 font-sans 
+    return <div className={`px-4 my-3 max-w-${maxWidth} mx-auto pt-5
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         {children}
     </div>
 }
 
 type PageFooterProps = {
-    children: ReactNode
     sidebar?: boolean
 }
-export function PageFooter({ children, sidebar = false }: PageFooterProps) {
+export function PageFooter({ sidebar = false }: PageFooterProps) {
     return <footer className={`w-full max-w-4xl mx-auto px-3 mt-20 text-sm text-neutral-500
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         <Paragraph>
@@ -63,6 +62,6 @@ export function Layout(props: LayoutProps) {
         <NavBar />
         {props.children}
         <PageFooter {...props} />
-        <GATag gaId={props.gaId}/>
+        <GATag gaId={props.gaId} />
     </>
 }

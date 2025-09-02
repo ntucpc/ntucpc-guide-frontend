@@ -1,3 +1,5 @@
+"use client"
+
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,12 +11,12 @@ type NavbarItemProps = {
     url: string,
     blank?: boolean
 };
-export function NavbarItem({text, url, blank=false}: NavbarItemProps) {
+export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
     return <div className="">
         <WrappedLink href={url} className="hover:bg-slate-950 px-3 py-3 mx-2 color-animation-long" target={blank ? "_blank" : "_self"}>{text}</WrappedLink>
     </div>
 }
-export function ExpandedNavbarItem({text, url, blank=false}: NavbarItemProps) {
+export function ExpandedNavbarItem({ text, url, blank = false }: NavbarItemProps) {
     return <div className="px-5 py-1">
         <WrappedLink href={url} target={blank ? "_blank" : "_self"}>
             {text}
@@ -37,8 +39,8 @@ export function NavBar() {
                 </div>
 
                 <div className="sm:hidden ml-auto w-5">
-                    <button className="mx-auto" onClick={() => {setShowMenu(!showMenu)}}>
-                        <FontAwesomeIcon className={showMenu ? "text-xl" : ""} icon={showMenu ? faXmark : faBars}/>
+                    <button className="mx-auto" onClick={() => { setShowMenu(!showMenu) }}>
+                        <FontAwesomeIcon className={showMenu ? "text-xl" : ""} icon={showMenu ? faXmark : faBars} />
                     </button>
                 </div>
             </div>
