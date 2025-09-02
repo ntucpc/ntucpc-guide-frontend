@@ -1,9 +1,10 @@
 import { IconWrapper } from "@/components/icon";
 import { ContentBody, Layout } from "@/components/layout";
+import { getChapterArticleGroups } from "@/lib/structure";
 import { getArticle } from "@/lib/structure/articles";
 import { getChapters } from "@/lib/structure/chapters";
 import { getTopic } from "@/lib/structure/topics";
-import { Article, Chapter } from "@/lib/structure/type";
+import { Article, ArticleGroup, Chapter } from "@/lib/structure/type";
 import { composeMetadata } from "@/lib/util";
 import { H1Title } from "@/ntucpc-website-common-lib/components/basic";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
@@ -48,13 +49,8 @@ function ChapterEntryDescription({ chapter }: { chapter: Chapter }) {
     </div>
 }
 
-type ArticleGroup = {
-    topicCode: string,
-    articles: Article[]
-}
-
 function ChapterEntryGroup({ group }: { group: ArticleGroup }) {
-    const topic = getTopic(group.topicCode)
+    const topic = getTopic(group.code)
     return <div className="text-sm flex text-gray-700 mt-0.5 flex-col sm:flex-row items-start">
         <div className="flex-shrink-0 flex flex-row gap-x-2 items-center min-w-28">
             <FontAwesomeIcon icon={faAngleRight} />
@@ -77,18 +73,8 @@ function ChapterEntryGroup({ group }: { group: ArticleGroup }) {
 }
 
 function ChapterEntryGroups({ chapter }: { chapter: Chapter }) {
-    // make groups according to topics
-    const groups: ArticleGroup[] = []
-    let lastTopic = undefined
-    for (const articleCode of chapter.contents) {
-        const article = getArticle(articleCode)
-        if (article.topic !== lastTopic) {
-            lastTopic = article.topic
-            groups.push({ topicCode: lastTopic, articles: [] })
-        }
-        groups.at(-1)!.articles.push(article)
-    }
-    return groups.map(group => <ChapterEntryGroup key={group.topicCode} group={group} />)
+    const groups = getChapterArticleGroups(chapter)
+    return groups.map(group => <ChapterEntryGroup key={group.code} group={group} />)
 }
 
 function ChapterEntry({ chapter }: { chapter: Chapter }) {

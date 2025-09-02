@@ -1,6 +1,6 @@
 /**
  * A data structure representing an article.
- * 
+ *
  * After the coming feature is added, there should not be any non-existing article
  * referred by chapters or topics.
  */
@@ -48,4 +48,9 @@ export type StructureData = {
     topics: Topic[]
     topicGroups: TopicGroup[]
     chapters: Chapter[]
+}
+
+export type ArticleGroup = {
+    code: string
+    articles: Article[]
 }
