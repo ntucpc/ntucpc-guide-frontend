@@ -11,7 +11,7 @@ const config: Config = {
   safelist: [
     {
       pattern: /(bg|text|border)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|purple|fuchsia|pink|rose)-\d{2,3}/,
-      variants: ["hover"]
+      variants: ["hover", "group-hover"]
     },
     {
       pattern: /[mp][lrbtxy]-\d+/
@@ -21,8 +21,8 @@ const config: Config = {
     }
   ],
   theme: {
-    fontFamily:{
-        'sans': ['"Noto Sans TC"', 'ui-sans-serif', 'system-ui', 'sans-serif']
+    fontFamily: {
+      'sans': ['"Noto Sans TC"', 'ui-sans-serif', 'system-ui', 'sans-serif']
     },
     extend: {
       backgroundImage: {

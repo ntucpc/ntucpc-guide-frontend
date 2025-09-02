@@ -1,107 +1,66 @@
+import { Article } from "@/lib/structure/type"
 import { H2Title } from "@/ntucpc-website-common-lib/components/basic"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
 import { IconDefinition, faChevronDown, faChevronUp, faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Link from "next/link"
 import { ReactNode } from "react"
+import { ComingSoonTag, ImportanceTag } from "./common"
 
-type ToCEntryProps = {
-    text: string,
-    url: string | undefined
+function ArticleEntry(article: Article) {
+    const transitionStyle = "transition duration-200"
+    if (article.coming) {
+        return <div className="pb-4 relative pl-8 group block">
+            <div className={`absolute left-0 top-2 w-4 h-4 bg-gray-300 group-hover:bg-indigo-600 rounded-full ${transitionStyle}`} />
+            <div className={`absolute left-1.5 top-0 bottom-0 w-1 bg-gray-300 group-hover:bg-indigo-600 rounded-full ${transitionStyle}`} />
+            <div className={`text-xl font-medium text-gray-500 ${transitionStyle}`}>
+                {article.title} <ComingSoonTag/>
+            </div>
+            <div className={`text-sm mt-2 text-gray-500 ${transitionStyle}`}>
+                <ImportanceTag importance={article.importance} />
+                {article.description}
+            </div>
+        </div>
+    }
+    else {
+        return <Link href={`/${article.code}`} className="pb-4 relative pl-8 group block">
+            <div className={`absolute left-0 top-2 w-4 h-4 bg-gray-300 group-hover:bg-indigo-600 rounded-full ${transitionStyle}`} />
+            <div className={`absolute left-1.5 top-0 bottom-0 w-1 bg-gray-300 group-hover:bg-indigo-600 rounded-full ${transitionStyle}`} />
+            <div className={`text-xl font-medium text-gray-900 group-hover:text-indigo-600 ${transitionStyle}`}>
+                {article.title}
+            </div>
+            <div className={`text-sm mt-2 text-gray-500 group-hover:text-indigo-500 ${transitionStyle}`}>
+                <ImportanceTag importance={article.importance} />
+                {article.description}
+            </div>
+        </Link>
+    }
 }
 
-type ToCSectionProps = {
+export type SectionEntryProps = {
+    url: string
     title: string
-    children: ReactNode
-    expand: boolean
-    toggleExpand: () => void
+    description: string
+    articles: Article[]
 }
-
-type ToCSectionTemplateProps = {
-    expand: boolean
-    heading: ReactNode
-    body: ReactNode
-}
-
-type ToCButtonProps = {
-    onClick: () => void
-    icon: IconDefinition
-    text: string
-}
-
-export function ToCButton(props: ToCButtonProps) {
-    return <button onClick={props.onClick} 
-    className="m-1 py-2 px-3 rounded-full color-animation bg-indigo-600 hover:bg-indigo-800 text-white select-none">
-        <FontAwesomeIcon icon={props.icon} className="text-sm"/> {props.text}
-    </button>
-}
-
-export function ToCSectionTemplate(props: ToCSectionTemplateProps) {
-    return <>
-        {props.heading}
-        <div className={props.expand ? "" : "hidden"}>
-            {props.body}
-        </div>
-    </>
-}
-
-export function ToCSection(props: ToCSectionProps) {
-    return <ToCSectionTemplate
-        expand={props.expand}
-        heading={ <>
-        <div className="mb-2 mt-7 font-semibold cursor-pointer flex justify-between items-end select-none" onClick={props.toggleExpand}>
-            <div className="text-3xl ">
-                {props.title}
-            </div>
-            <div className="text-xl">
-                <FontAwesomeIcon icon={props.expand ? faChevronUp : faChevronDown} />
+export function SectionEntry({ url, title, description, articles }: SectionEntryProps) {
+    const transitionStyle = "transition duration-200"
+    return <div className="sm:flex sm:flex-row mb-4">
+        <div className="flex-grow-0 flex-shrink-0 w-60 mb-4">
+            {
+                url ? <Link href={url} className={`text-2xl font-semibold hover:text-indigo-600 ${transitionStyle}`}>
+                    {title}
+                </Link> : <div className="text-2xl font-semibold"> {title} </div>
+            }
+            <div className="text-gray-500 mt-2 text-sm">
+                {description}
             </div>
         </div>
-        <hr className="mb-4" />
-        </>}
-        body={
-        <div className={props.expand ? "" : "hidden"}>
-            {props.children}
+        <div className="flex-grow relative">
+            <div className="absolute left-1.5 top-0 bottom-0 w-1 bg-gray-300 rounded-full" />
+            {
+                articles.map(article => <ArticleEntry key={article.code} {...article} />)
+            }
         </div>
-        }
-    />
-}
-
-export function ToCSubsection(props: ToCSectionProps) {
-    return <ToCSectionTemplate
-        expand={props.expand}
-        heading={ 
-        <div className="mt-4 mb-2 flex flex-nowrap items-center cursor-pointer select-none group" 
-                onClick={props.toggleExpand}>
-                <FontAwesomeIcon icon={props.expand ? faCircleChevronUp : faCircleChevronDown}
-                    className={`flex-shrink-0 text-sm mr-2 color-animation
-                    ${props.expand ? "text-indigo-500" : "text-gray-600 group-hover:text-indigo-500"}`} />
-                <div className="font-semibold text-xl">
-                    {props.title}
-                </div>
-            </div>}
-        body={
-            <div className={props.expand ? "" : "hidden"}>
-                {props.children}
-            </div>
-        }
-    />
-}
-
-export function ToCEntry(props: ToCEntryProps) {
-    if (props.url)
-        return <WrappedLink target="_self" href={props.url} 
-            className="block py-1 border-l-4 border-gray-200 pl-2 color-animation hover:border-indigo-600 hover:text-indigo-600 hover:font-semibold">
-                {props.text}
-            </WrappedLink>
-    else
-        return <div className="py-1 border-l-4 border-gray-200 pl-2
-                text-neutral-500">
-            {props.text} <ComingSoonTag/>
-        </div>
-}
-
-export function ComingSoonTag() {
-    return <span className="text-xs rounded-full text-slate-400 ml-1">
-        敬請期待
-    </span>
+    </div>
 }

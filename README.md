@@ -64,3 +64,20 @@ Done rendering MathJax from [jsdelivr](https://cdnjs.com/).
 ### Coding style
 
 部份參考 [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
+
+## 其他注意事項
+
+### Custom Icon
+
+Custom SVG icon files are stored in `@/raw-icons` and can be converted into React components by running `npm run build:icons`.
+**Note:** This command will overwrite all files in `@/icons`, so **do not modify anything in `@/icons` directly**. Instead, make changes only to files in `@/raw-icons`.
+
+Currently, custom icons are used exclusively for chapter icons.
+
+Since the workflow does not run `build:icons` automatically, the generated component files in `@/icons` must be committed and pushed to the repository. This design choice avoids requiring Guide authors to run extra build steps in order to get the frontend working.
+
+Here are guidelines for raw SVG files:
+
+- **Avoid using strokes.** In Inkscape, you can convert strokes to paths via: `Path → Stroke to Path`.
+- **Do not include colors or stroke styles.** The root `<svg>` tag should contain `fill="currentColor"` to ensure that Tailwind classes (e.g., `text-blue-500`) can control the icon color.
+- **Clean up non-standard attributes.** Inkscape may insert proprietary styles like `-inkscape-stroke:none`, even in plain SVG exports. These must be removed manually to satisfy strict TSX attribute checking.

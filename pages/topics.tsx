@@ -1,5 +1,4 @@
 import { ContentBody, Layout } from "@/components/layout";
-import { ToCButton, ToCEntry, ToCSection, ToCSubsection } from "@/components/table-of-contents";
 import { getStructure } from "@/lib/structure";
 import { parseStructure } from "@/lib/structure/client";
 import { StructureData } from "@/lib/structure/type";
@@ -7,7 +6,48 @@ import { H1Title, H2Title, HyperRef, UnorderedList } from "@/ntucpc-website-comm
 import { getGAId } from "@/ntucpc-website-common-lib/lib/environments";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
+import Link from "next/link";
 import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+
+type ArticleInfo = {
+    code: string | undefined
+    title: string
+}
+type TopicEntryProps = {
+    code: string
+    title: string
+    description: string
+    groupTitle: string | undefined
+    articles: ArticleInfo[]
+}
+function TopicEntry(props: TopicEntryProps) {
+    const transitionStyle = "transition duration-200"
+    return <div className={`md:w-1/2 relative group hover:bg-indigo-50 my-3 p-2 rounded-lg ${transitionStyle}`}>
+        <Link
+            href={`/${props.code}`}
+            className="z-1 absolute inset-0 pointer-events-auto"
+        />
+        <div className="pointer-events-none relative">
+            <div className={`text-3xl font-bold group-hover:text-indigo-700 ${transitionStyle}`}>
+                {props.title}
+            </div>
+            <div className="text-sm mt-1 text-gray-500">
+                {props.description}
+            </div>
+            <div className="text-sm flex flex-row gap-x-4 flex-wrap mt-1 text-gray-700">
+                {props.articles.map((article) => {
+                    return <span key={article.code} className="whitespace-nowrap">
+                        {article.code ?
+                            <Link href={`/${article.code}`} className={`hover:text-indigo-500 ${transitionStyle} pointer-events-auto`}>
+                                {article.title}
+                            </Link> :
+                            <span className="text-gray-400">{article.title}</span>}
+                    </span>
+                })}
+            </div>
+        </div>
+    </div>
+}
 
 type Props = {
     structure: StructureData
@@ -23,49 +63,28 @@ export const getStaticProps: GetStaticProps<{ props: Props }> = async ({ params 
 }
 
 export default function Pages({ props }: InferGetStaticPropsType<typeof getStaticProps>) {
-
     const structure = parseStructure(props.structure)
-    const expandSetter: Dispatch<SetStateAction<boolean>>[] = []
 
-    const sections: ReactNode[] = []
-    props.structure.topicGroups.forEach((topicGroup, i) => {
-        const [expand, setExpand] = useState(true)
-        expandSetter.push(setExpand)
-        const toC: ReactNode[] = [];
-        let number = 0;
-        topicGroup.topics.forEach((topic) => {
-            const topicObject = structure.getTopic(topic)
-            if (!topicObject) {
-                console.log(`Warning: invalid topic ${topic} in topic table`)
-            }
-            const subsection: ReactNode[] = []
-            for (const article of topicObject!.contents) {
-                const articleObject = structure.getArticle(article)
-                let url: string | undefined = `/${article}`
-                if (!articleObject || articleObject.coming)
-                    url = undefined
-                subsection.push(<ToCEntry key={number++} text={articleObject!.title} url={url} />);
-            }
-            if (topicGroup.single) {
-                subsection.forEach((value) => toC.push(value))
-                return
-            }
-            const [subexpand, setSubexpand] = useState(false)
-            expandSetter.push(setSubexpand)
-            toC.push(<ToCSubsection
-                expand={subexpand}
-                toggleExpand={() => { setSubexpand(!subexpand) }}
-                key={number++}
-                title={topicObject!.title}>
-                {subsection}
-            </ToCSubsection>)
+    const topics: TopicEntryProps[] = []
+    props.structure.topicGroups.forEach((topicGroup) => {
+        topicGroup.topics.forEach((topicCode) => {
+            const topic = structure.getTopic(topicCode)!
+            topics.push({
+                code: topicCode,
+                title: topic.title,
+                groupTitle: topicGroup.single ? undefined : topicGroup.title,
+                description: topic.description,
+                articles: topic.contents.map((articleCode) => {
+                    const article = structure.getExistArticle(articleCode)
+                    return {
+                        code: article.coming ? undefined : article.code,
+                        title: article.title
+                    }
+                })
+            })
         })
-        const title = topicGroup.single ? structure.getTopicTitle(topicGroup.topics[0]) : topicGroup.title;
-        sections.push(<ToCSection key={i} title={title} expand={expand}
-            toggleExpand={() => { setExpand(!expand) }}>
-            {toC}
-        </ToCSection>)
     })
+
 
     return (<Layout title="主題目錄" gaId={props.gaId}>
         <ContentBody>
@@ -73,20 +92,11 @@ export default function Pages({ props }: InferGetStaticPropsType<typeof getStati
                 主題目錄
             </H1Title>
 
-            <div className="flex justify-start">
-                <ToCButton text="全部展開" icon={faPlus} onClick={() => {
-                    for (const setExpand of expandSetter) {
-                        setExpand(true);
-                    }
-                }} />
-                <ToCButton text="全部收合" icon={faMinus} onClick={() => {
-                    for (const setExpand of expandSetter) {
-                        setExpand(false);
-                    }
-                }} />
+            <div className="md:flex md:flex-row md:flex-wrap">
+                {
+                    topics.map((topic) => <TopicEntry key={topic.code} {...topic} />)
+                }
             </div>
-
-            {sections}
 
         </ContentBody>
     </Layout>);

@@ -44,7 +44,8 @@ export class Structure {
     }
 
     public getChapterTitle(code: string | undefined): string {
-        return this.getChapter(code)?.title ?? "Chapter ???"
+        const chapter = this.getChapter(code)
+        return chapter ? `Chapter ${chapter.number}. ${chapter.title}` : "Chapter ???"
     }
 
     public getArticleChapterTitle(code: string): string {

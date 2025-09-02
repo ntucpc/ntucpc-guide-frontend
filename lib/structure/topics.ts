@@ -41,7 +41,8 @@ const [topics, topicGroups]: [Topic[], TopicGroup[]] = (() => {
                 title: topicConfig["title"],
                 contents: (topicConfig["contents"] as string[]).map((content) => {
                     return `${topic}/${content}`
-                })
+                }),
+                description: topicConfig["description"] ?? "????"
             })
         }
     }

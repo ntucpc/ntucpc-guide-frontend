@@ -36,6 +36,9 @@ const articles = (() => {
             if (!existsSync(configPath)) continue
             const config = readConfig(configPath);
             const chapterObj = findChapter(code)
+            const importance =
+                !config.importance || config.importance === '-' ?
+                    0 : config.importance as number
             articles.push({
                 code: code,
                 article: articleCode,
@@ -46,7 +49,9 @@ const articles = (() => {
                 authors: config.authors ?? [],
                 contributors: config.contributors ?? [],
                 prerequisites: config.prerequisites ?? [],
-                coming: config.coming ?? false
+                description: config.description ?? "????",
+                coming: config.coming ?? false,
+                importance: importance,
             });
         }
     }
