@@ -1,6 +1,5 @@
 import { MarkdownContextType } from "./types";
 import { Problem } from "./problem";
-import { getBasicComponents } from "@/ntucpc-website-common-lib/components/basic";
 import { ContentReference } from "./content-reference";
 import { getCommonLibComponents } from "@/ntucpc-website-common-lib/components";
 

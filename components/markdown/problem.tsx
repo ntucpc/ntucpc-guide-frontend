@@ -1,10 +1,7 @@
-import { MarkdownContextType } from "./types";
-import Submdx from "components/submdx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare, faChevronDown, faChevronUp, faQuestionCircle, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faQuestionCircle, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { BLOCK_MARGIN, HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic";
-import { useState } from "react";
 
 /**
  * Problem attributes:
@@ -16,7 +13,7 @@ import { useState } from "react";
  * - descriptionMdx: description mdx file path, undefined if the file doesn't exist
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
- * - importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
+ * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 type ProblemProps = {
     url: string,
@@ -28,36 +25,23 @@ type ProblemProps = {
     solution: string,
     solutionMdx: string,
     constraintsMdx: string,
-    importMdx: string
 };
 
-export function Problem(context: MarkdownContextType) {
+export function Problem(depthLimit: number, MarkdownComponent: (props: { source: string, depthLimit: number }) => JSX.Element) {
     return (props: ProblemProps) => {
-        // console.log("problem test", props)
-        let descriptionNode = <></>;
-        if (props.descriptionMdx) {
-            const subcontext: MarkdownContextType = {
-                ...context,
-                mdx_path: props.descriptionMdx
-            };
-            descriptionNode = <Submdx context={subcontext} />;
-        }
-        let constraintsNode = <></>;
-        if (props.constraintsMdx) {
-            const subcontext: MarkdownContextType = {
-                ...context,
-                mdx_path: props.constraintsMdx
-            };
-            constraintsNode = <Submdx context={subcontext} />;
-        }
-        let solutionNode: React.ReactNode = <></>;
-        if (props.solutionMdx) {
-            const subcontext: MarkdownContextType = {
-                ...context,
-                mdx_path: props.solutionMdx,
-            };
-            solutionNode = <Submdx context={subcontext} />;
-        }
+        const descriptionNode =
+            props.descriptionMdx ?
+                <MarkdownComponent source={props.descriptionMdx} depthLimit={depthLimit} />
+                : <></>
+        const constraintsNode =
+            props.constraintsMdx ?
+                <MarkdownComponent source={props.constraintsMdx} depthLimit={depthLimit} />
+                : <></>
+        // TODO: solution is not yet refactored and is temporarily removed
+        // const solutionNode =
+        //     props.solutionMdx ?
+        //         <MarkdownComponent source={props.solutionMdx} depthLimit={depthLimit} />
+        //         : <></>
         let stars = <></>;
         if (props.difficulty === "?") {
             stars = <FontAwesomeIcon icon={faQuestionCircle} />
@@ -75,8 +59,6 @@ export function Problem(context: MarkdownContextType) {
         const typeColor = isSample ? "bg-orange-400" : "bg-blue-400";
         const titleColor = isSample ? "bg-orange-200 text-orange-800" : "bg-blue-200 text-blue-800";
         const borderColor = isSample ? "border-orange-500" : "border-blue-500"
-
-        const [showSolution, setShowSolution] = useState(props.expanded === "true")
 
         return (
             <div className={`${BLOCK_MARGIN}`}>
@@ -109,22 +91,6 @@ export function Problem(context: MarkdownContextType) {
                     </div>
 
                 </div>
-                {props.solution &&
-                    <>
-                        <div className="mt-2 py-2 px-5 font-bold text-white bg-green-600 flex justify-between cursor-pointer"
-                            onClick={() => { setShowSolution(!showSolution) }}>
-                            <div className="select-none">
-                                題解
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon={showSolution ? faChevronUp : faChevronDown} />
-                            </div>
-                        </div>
-                        <div className="px-6 py-2 border-l border-r border-b border-green-800" hidden={!showSolution}>
-                            {solutionNode}
-                        </div>
-                    </>
-                }
             </div>
         )
     };

@@ -18,7 +18,7 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
  * - constraintsMdx: constraints mdx file path, undefined if the file doesn't exist
- * - importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
+ * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
     return function(tree: any) {
@@ -62,8 +62,6 @@ export function remarkProblem() {
                 attributes["solutionMdx"] = solutionPath!;
             }
             setAttribute(node, attributes);
-            for (const path of importPath)
-                pushAttribute(node.attributes, "importMdx", path);
         });
     }
 }
