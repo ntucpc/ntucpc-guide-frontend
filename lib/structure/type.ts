@@ -15,7 +15,7 @@ export type Article = {
     authors: string[] // default: []
     contributors: string[] // default: []
     prerequisites: string[] // default: []
-    description: string[] // default: "????"
+    description: string // default: "????"
     coming: boolean // default: false, should the article be shown as coming soon in tables of contents
     importance: number // default: 0
 }
