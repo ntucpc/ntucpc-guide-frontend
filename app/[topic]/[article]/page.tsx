@@ -7,6 +7,8 @@ import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import HightlightJsScript from "@/ntucpc-website-common-lib/scripts/highlightjs"
+import MathJaxJS from "@/ntucpc-website-common-lib/scripts/mathjax"
 import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen, IconDefinition } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactNode } from "react"
@@ -131,9 +133,12 @@ export default function ArticlePage({ params }: ArticleProps) {
     const code = `${params.topic}/${params.article}`
     const mdxSource = getArticleMdxPath(code)
     const article = getArticle(code)
-    return <ContentBody>
+    return <><ContentBody>
         <ArticleHeader article={article} />
         <ArticleMarkdown source={mdxSource} depthLimit={1} />
         <ArticleFooter article={article} />
     </ContentBody>
+    <HightlightJsScript/>
+    <MathJaxJS/>
+    </>
 }
