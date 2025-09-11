@@ -29,7 +29,7 @@ function ChapterSection({ group }: { group: ArticleGroup }) {
         url={`/${group.code}`}
         title={topic.title}
         description={topic.description}
-        articles={topic.contents.map(articleCode => getArticle(articleCode))}
+        articles={group.articles}
     />
 }
 
