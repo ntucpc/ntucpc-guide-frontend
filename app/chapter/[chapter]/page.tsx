@@ -1,4 +1,5 @@
 import { ContentBody } from "@/components/layout";
+import { SimpleMarkdown } from "@/components/markdown/markdown";
 import { SectionEntry } from "@/components/table-of-contents";
 import { getChapterArticleGroups } from "@/lib/structure";
 import { getArticle } from "@/lib/structure/articles";
@@ -44,7 +45,7 @@ export default function ChapterPage({ params }: ChapterProps) {
             {`${chapter.title}`}
         </H1Title>
         <div className="text-gray-500">
-            {chapter.description}
+            <SimpleMarkdown text={chapter.description} />
         </div>
         <div className="mt-6">
             {groups.map(group => <ChapterSection key={group.code} group={group} />)}

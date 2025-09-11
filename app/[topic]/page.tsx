@@ -1,4 +1,5 @@
 import { ContentBody } from "@/components/layout"
+import { SimpleMarkdown } from "@/components/markdown/markdown"
 import { SectionEntry } from "@/components/table-of-contents"
 import { getTopicArticleGroups } from "@/lib/structure"
 import { getChapter } from "@/lib/structure/chapters"
@@ -40,7 +41,7 @@ export default function TopicPage({ params }: TopicProps) {
             {topic.title}
         </H1Title>
         <div className="text-gray-500">
-            {topic.description}
+            <SimpleMarkdown text={topic.description} />
         </div>
         <div className="mt-6">
             {groups.map(group => <TopicSection key={group.code} group={group} />)}

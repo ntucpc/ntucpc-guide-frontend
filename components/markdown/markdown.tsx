@@ -8,7 +8,7 @@ import { remarkProof } from "@/ntucpc-website-common-lib/mdx-parser/proof"
 import remarkBreaks from "remark-breaks"
 import remarkGfm from "remark-gfm"
 import rehypeRewrite from 'rehype-rewrite'
-import { compileMDX } from "next-mdx-remote/rsc"
+import { compileMDX, MDXRemote } from "next-mdx-remote/rsc"
 import { getCommonLibComponents } from "@/ntucpc-website-common-lib/components"
 import { ContentReference } from "./content-reference"
 import { remarkContentReference } from "@/lib/parser/content-reference"
@@ -74,4 +74,8 @@ export async function ArticleMarkdown({ source, depthLimit }: { source: string, 
     return <>
         {content}
     </>
+}
+
+export async function SimpleMarkdown({ text }: {text: string}) {
+    return <MDXRemote source={text} />
 }

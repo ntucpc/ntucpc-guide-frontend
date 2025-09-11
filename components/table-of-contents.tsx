@@ -1,11 +1,7 @@
 import { Article } from "@/lib/structure/type"
-import { H2Title } from "@/ntucpc-website-common-lib/components/basic"
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
-import { IconDefinition, faChevronDown, faChevronUp, faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
-import { ReactNode } from "react"
 import { ComingSoonTag, ImportanceTag } from "./common"
+import { SimpleMarkdown } from "./markdown/markdown"
 
 function ArticleEntry(article: Article) {
     const transitionStyle = "transition duration-200"
@@ -18,7 +14,7 @@ function ArticleEntry(article: Article) {
             </div>
             <div className={`text-sm mt-2 text-gray-500 ${transitionStyle}`}>
                 <ImportanceTag importance={article.importance} />
-                {article.description}
+                <SimpleMarkdown text={article.description}/>
             </div>
         </div>
     }
@@ -31,7 +27,7 @@ function ArticleEntry(article: Article) {
             </div>
             <div className={`text-sm mt-2 text-gray-500 group-hover:text-indigo-500 ${transitionStyle}`}>
                 <ImportanceTag importance={article.importance} />
-                {article.description}
+                <SimpleMarkdown text={article.description}/>
             </div>
         </Link>
     }
@@ -53,7 +49,7 @@ export function SectionEntry({ url, title, description, articles }: SectionEntry
                 </Link> : <div className="text-2xl font-semibold"> {title} </div>
             }
             <div className="text-gray-500 mt-2 text-sm">
-                {description}
+                <SimpleMarkdown text={description}/>
             </div>
         </div>
         <div className="flex-grow relative">
