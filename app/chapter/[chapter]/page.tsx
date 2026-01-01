@@ -11,9 +11,10 @@ import { H1Title } from "@/ntucpc-website-common-lib/components/basic";
 import { Metadata } from "next";
 
 type ChapterProps = {
-    params: { chapter: string }
+    params: Promise<{ chapter: string }>
 }
-export async function generateMetadata({ params }: ChapterProps): Promise<Metadata> {
+export async function generateMetadata(props: ChapterProps): Promise<Metadata> {
+    const params = await props.params;
     const chapter = getChapter(params.chapter)
     return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`)
 }
@@ -34,7 +35,8 @@ function ChapterSection({ group }: { group: ArticleGroup }) {
     />
 }
 
-export default function ChapterPage({ params }: ChapterProps) {
+export default async function ChapterPage(props: ChapterProps) {
+    const params = await props.params;
     const chapter = getChapter(params.chapter)
     const groups = getChapterArticleGroups(chapter)
     return <ContentBody>

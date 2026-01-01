@@ -9,10 +9,11 @@ import { composeMetadata } from "@/lib/util"
 import { H1Title } from "@/ntucpc-website-common-lib/components/basic"
 
 type TopicProps = {
-    params: { topic: string }
+    params: Promise<{ topic: string }>
 }
 
-export async function generateMetadata({ params }: TopicProps) {
+export async function generateMetadata(props: TopicProps) {
+    const params = await props.params;
     const topic = getTopic(params.topic)
     return composeMetadata(topic.title)
 }
@@ -33,7 +34,8 @@ function TopicSection({ group }: { group: ArticleGroup }) {
     />
 }
 
-export default function TopicPage({ params }: TopicProps) {
+export default async function TopicPage(props: TopicProps) {
+    const params = await props.params;
     const topic = getTopic(params.topic)
     const groups = getTopicArticleGroups(topic)
     return <ContentBody>

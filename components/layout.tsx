@@ -1,4 +1,4 @@
-import { Component, ReactNode } from "react";
+import { ReactNode } from "react";
 import { NavBar } from "./navbar";
 import { HyperRefBlank, Paragraph } from "@/ntucpc-website-common-lib/components/basic";
 import Head from "next/head";

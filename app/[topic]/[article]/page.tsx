@@ -14,13 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactNode } from "react"
 
 type ArticleProps = {
-    params: {
+    params: Promise<{
         topic: string,
         article: string
-    }
+    }>
 }
 
-export async function generateMetadata({ params }: ArticleProps) {
+export async function generateMetadata(props: ArticleProps) {
+    const params = await props.params;
     const code = `${params.topic}/${params.article}`
     const article = getArticle(code)
     return composeMetadata(article.title)
@@ -129,7 +130,8 @@ function ArticleFooter({ article }: { article: Article }) {
     </div>
 }
 
-export default function ArticlePage({ params }: ArticleProps) {
+export default async function ArticlePage(props: ArticleProps) {
+    const params = await props.params;
     const code = `${params.topic}/${params.article}`
     const mdxSource = getArticleMdxPath(code)
     const article = getArticle(code)
