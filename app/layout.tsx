@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     siteName: "NTUCPC Guide",
     images: ["https://guide.ntucpc.org/preview.png"],
   },
+  icons: {
+    icon: ["/favicon/favicon-32x32.png", "/favicon/favicon-16x16.png"],
+    shortcut: "/favicon/favicon.ico",
+    apple: "/favicon/apple-touch-icon.png"
+  }
 }
 
 const notoSansTC = Noto_Sans_TC({
