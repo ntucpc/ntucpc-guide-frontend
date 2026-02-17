@@ -1,7 +1,8 @@
 import { getChapterArticleGroups, getTopicArticleGroups } from "@/lib/structure";
 import { getChapter, getChapters } from "@/lib/structure/chapters";
 import { Article, Chapter, Topic } from "@/lib/structure/type";
-import { SidebarCategory, SidebarClient, SidebarGroup, SidebarItem, SidebarSection } from "./sidebar-client";
+import { SidebarCategory, SidebarGroup, SidebarItem, SidebarSection } from "./types";
+import { SidebarClient } from "./sidebar-client";
 import { getTopic, getTopics } from "@/lib/structure/topics";
 
 export function Sidebar() {
