@@ -58,11 +58,11 @@ function ArticleHeader({ article }: { article: Article }) {
             <HyperRefBlank href={`/${prereq}`} key={idx}>
                 {prereqArticle.title}
             </HyperRefBlank> :
-            <span className="text-neutral-500">
+            <span className="text-neutral-500" key={idx}>
                 {prereqArticle.title}
             </span>
     }).reduce<JSX.Element[]>((pre, cur, idx) => {
-        if (idx > 0) pre.push(<>、</>)
+        if (idx > 0) pre.push(<span key={`sep-${idx}`}>、</span>)
         pre.push(cur)
         return pre
     }, [])
