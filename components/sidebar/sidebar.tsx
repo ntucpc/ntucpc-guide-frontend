@@ -21,6 +21,7 @@ export function Sidebar() {
                     id: article.code,
                     title: article.title,
                     url: "/" + article.code,
+                    coming: article.coming
                 })
                 chapterMapping.set(article.code, chapter.code)
             })
@@ -54,6 +55,7 @@ export function Sidebar() {
                     id: article.code,
                     title: article.title,
                     url: "/" + article.code,
+                    coming: article.coming
                 })
             })
             let groupTitle = "未知章節"

@@ -37,8 +37,12 @@ function SidebarGroupComponent({ group, folded, toggleFold, activeArticle }: {
             <ul className={`pl-2 ${folded ? "hidden" : "block"}`}>
                 {group.items.map((item) => (
                     <li key={item.id} className="my-1 select-none">
-                        <Link href={item.url} 
-                                className={`${activeArticle === item.id ? "text-indigo-500" : "text-gray-600"} hover:text-indigo-500 transition duration-200`}>{item.title}</Link>
+                        {
+                            !item.coming ?
+                            <Link href={item.url} className={`${activeArticle === item.id ? "text-indigo-500" : "text-gray-600"} hover:text-indigo-500 transition duration-200`}>{item.title}</Link>
+                            :
+                            <div className="flex justify-between items-center"><span className="text-gray-400">{item.title}</span><span className="ml-3 text-gray-800 text-xs">敬請期待</span></div>
+                        }
                     </li>
                 ))}
             </ul>

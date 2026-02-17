@@ -32,6 +32,7 @@ export type SidebarItem = {
     id: string // article code
     title: string
     url: string
+    coming: boolean
 }
 
 export type SidebarClientProps = {
