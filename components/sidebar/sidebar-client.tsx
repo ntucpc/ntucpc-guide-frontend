@@ -54,17 +54,19 @@ function SidebarSectionComponent({ section, folding, activeArticle }:
         { section: SidebarSection, folding: GroupFoldProps, activeArticle: string }) {
     return (
         <>
-            <div className="text-2xl font-semibold flex-grow-0 flex-shrink-0 select-none">
+            <div className="text-2xl font-semibold flex-grow-0 flex-shrink-0 select-none mb-3">
                 {section.title}
             </div>
             <ScrollSection>
-            {section.groups.map((group) => (
-                <SidebarGroupComponent key={group.id} group={group}
-                    folded={folding.groupFold[section.id]?.has(group.id) || false}
-                    toggleFold={() => folding.toggleGroupFold(section.id, group.id)}
-                    activeArticle={activeArticle}
-                />
-            ))}
+                <div className="mr-1 mb-2">
+                    {section.groups.map((group) => (
+                        <SidebarGroupComponent key={group.id} group={group}
+                            folded={folding.groupFold[section.id]?.has(group.id) || false}
+                            toggleFold={() => folding.toggleGroupFold(section.id, group.id)}
+                            activeArticle={activeArticle}
+                        />
+                    ))}
+                </div>
             </ScrollSection>
         </>
     )
@@ -76,11 +78,11 @@ function SidebarCategorySections({ category, setSelectedSection }: {
         }) {
     return (
         <>
-            <div className="text-2xl font-semibold flex-grow-0 flex-shrink-0 select-none">
+            <div className="text-2xl font-semibold flex-grow-0 flex-shrink-0 select-none mb-3">
                 {category.title}
             </div>
             <ScrollSection>
-                <div className="mt-4 mb-2">
+                <div className="mb-2">
                     {category.sections.map((section) => (
                         <div key={section.id} 
                                 className="text-gray-600 font-semibold my-2 cursor-pointer"
