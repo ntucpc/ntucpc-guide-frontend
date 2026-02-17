@@ -163,14 +163,13 @@ const CATEGORY_TOPIC = 1
  */
 export function SidebarClient(props: SidebarClientProps) {
     const params = useParams()
-    // const activeTopic = params?.topic as string
+    const activeTopic = params?.topic as string
     // activeArticle should be full article code, in the form of topic/article
-    // const activeArticle = activeTopic + "/" + params?.article as string
-    // const activeChapter = props.chapterMapping[activeArticle]
-    const [activeArticle, setActiveArticle] = useState<string>("unknown")
+    const [activeArticle, setActiveArticle] = useState<string>(activeTopic + "/" + params?.article as string)
+    const activeChapter = props.chapterMapping[activeArticle]
     const [category, setCategory] = useState<number>(CATEGORY_CHAPTER)
     const [selectedSection, setSelectedSection] = 
-            useState<(string | null)[]>([null, null])
+            useState<(string | null)[]>([activeChapter, activeTopic])
 
     const [sectionFolded, setSectionFolded] = 
             useState<Record<string, Set<string>>[]>([
@@ -178,7 +177,7 @@ export function SidebarClient(props: SidebarClientProps) {
                 {}
             ])
 
-    const [pageSection, setPageSection] = useState<string[]>(["unknown", "unknown"])
+    const [pageSection, setPageSection] = useState<string[]>([activeChapter, activeTopic])
     useEffect(() => {
         const activeTopic = params?.topic as string
         // activeArticle should be full article code, in the form of topic/article
