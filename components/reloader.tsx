@@ -8,8 +8,12 @@ export function PageReloader() {
     const pathname = usePathname()
 
     useEffect(() => {
-        reloadMathJax()
-        reloadHighlightJs()
+        const reload = () => {
+            reloadMathJax()
+            reloadHighlightJs()
+        }
+        const handle = requestAnimationFrame(reload)
+        return () => cancelAnimationFrame(handle)
     }, [pathname])
 
     return null
