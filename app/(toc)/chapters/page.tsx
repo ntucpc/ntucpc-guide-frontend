@@ -106,10 +106,10 @@ function AllChapters() {
 
 export const metadata = composeMetadata("章節目錄")
 export default function ChaptersPage() {
-    return <ContentBody>
+    return <>
         <H1Title>
             章節目錄
         </H1Title>
         <AllChapters />
-    </ContentBody>
+    </>
 }

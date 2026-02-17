@@ -39,7 +39,7 @@ export default async function ChapterPage(props: ChapterProps) {
     const params = await props.params;
     const chapter = getChapter(params.chapter)
     const groups = getChapterArticleGroups(chapter)
-    return <ContentBody>
+    return <>
         <H1Title>
             <div className="text-xl font-medium text-gray-500">
                 Chapter {`${chapter.number}`}.
@@ -52,5 +52,5 @@ export default async function ChapterPage(props: ChapterProps) {
         <div className="mt-6">
             {groups.map(group => <ChapterSection key={group.code} group={group} />)}
         </div>
-    </ContentBody>
+    </>
 }

@@ -36,9 +36,7 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body className={notoSansTC.className}>
-        <NavBar />
         {children}
-        <PageFooter sidebar={false} />
         <GATag gaId={getGAId()} />
       </body>
     </html>

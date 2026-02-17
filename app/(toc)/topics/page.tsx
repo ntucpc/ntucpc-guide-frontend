@@ -55,10 +55,10 @@ function AllTopics() {
 
 export const metadata = composeMetadata("主題目錄")
 export default function TopicsPage() {
-    return <ContentBody>
+    return <>
         <H1Title>
             主題目錄
         </H1Title>
         <AllTopics />
-    </ContentBody>
+    </>
 }

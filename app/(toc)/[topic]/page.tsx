@@ -38,7 +38,7 @@ export default async function TopicPage(props: TopicProps) {
     const params = await props.params;
     const topic = getTopic(params.topic)
     const groups = getTopicArticleGroups(topic)
-    return <ContentBody>
+    return <>
         <H1Title>
             {topic.title}
         </H1Title>
@@ -48,5 +48,5 @@ export default async function TopicPage(props: TopicProps) {
         <div className="mt-6">
             {groups.map(group => <TopicSection key={group.code} group={group} />)}
         </div>
-    </ContentBody>
+    </>
 }
