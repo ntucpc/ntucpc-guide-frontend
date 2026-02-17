@@ -1,4 +1,5 @@
 import { ContentBody } from "@/components/layout";
+import { PageReloader } from "@/components/reloader";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import HightlightJsScript from "@/ntucpc-website-common-lib/scripts/highlightjs";
 import MathJaxJS from "@/ntucpc-website-common-lib/scripts/mathjax";
@@ -12,6 +13,7 @@ export default function ArticleLayout({children}: {children: ReactNode}) {
                 {children}
             </ContentBody>
         </div>
+        <PageReloader/>
         <HightlightJsScript/>
         <MathJaxJS/>
     </>
