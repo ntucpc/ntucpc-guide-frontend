@@ -4,11 +4,11 @@ import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAngleDown, faAngleRight, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDoubleRight, faAngleDown, faAngleRight, faArrowRightArrowLeft, faCircleMinus, faCirclePlus, faSquareMinus, faSquarePlus } from "@fortawesome/free-solid-svg-icons"
 import { SidebarCategory, SidebarSection, SidebarGroup, SidebarItem, SidebarClientProps } from "./types"
 
 type GroupFoldProps = {
-    groupFold: Record<string, Set<string>>
+    isFolded: (section: string, group: string) => boolean
     toggleGroupFold: (sectionId: string, groupId: string) => void
 }
 
@@ -61,7 +61,7 @@ function SidebarSectionComponent({ section, folding, activeArticle }:
                 <div className="mr-1 mb-2">
                     {section.groups.map((group) => (
                         <SidebarGroupComponent key={group.id} group={group}
-                            folded={folding.groupFold[section.id]?.has(group.id) || false}
+                            folded={folding.isFolded(section.id, group.id)}
                             toggleFold={() => folding.toggleGroupFold(section.id, group.id)}
                             activeArticle={activeArticle}
                         />
@@ -171,11 +171,31 @@ export function SidebarClient(props: SidebarClientProps) {
     const [selectedSection, setSelectedSection] = 
             useState<(string | null)[]>([activeChapter, activeTopic])
 
+    const [defaultFolded, setDefaultFolded] = useState<boolean>(false)
     const [sectionFolded, setSectionFolded] = 
-            useState<Record<string, Set<string>>[]>([
-                {},
-                {}
+            useState<Map<string, Set<string>>[]>([
+                new Map(),
+                new Map(),
             ])
+    const isFolded = (category: number, section: string, group: string) => {
+        if (!sectionFolded[category].has(section)) return defaultFolded
+        return sectionFolded[category].get(section)!.has(group) ? !defaultFolded : defaultFolded
+    }
+    const toggleFolded = (category: number, section: string, group: string) => {
+        const newFolded = new Set(sectionFolded[category].get(section) || [])
+        if (newFolded.has(group)) {
+            newFolded.delete(group)
+        } else {
+            newFolded.add(group)
+        }
+        const newArray = [...sectionFolded]
+        newArray[category].set(section, newFolded)
+        setSectionFolded(newArray)
+    }
+    const updateDefaultFolded = (folded: boolean) => {
+        setSectionFolded([new Map(), new Map()])
+        setDefaultFolded(folded)
+    }
 
     const [pageSection, setPageSection] = useState<string[]>([activeChapter, activeTopic])
     useEffect(() => {
@@ -189,29 +209,27 @@ export function SidebarClient(props: SidebarClientProps) {
         setPageSection(newSelectedSection)
     }, [params])
 
+    const [displaySidebar, setDisplaySidebar] = useState<"default" | boolean>("default")
+
     return <aside className="sticky top-16 w-52 shrink-0 hidden xl:block h-[calc(100vh-64px)] py-8">
+        <div className="flex items-center text-sm mb-2 text-slate-500 font-medium select-none">
+            <div className="mr-3 cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(false)}>
+                <FontAwesomeIcon icon={faCirclePlus}/> <span>展開</span>
+            </div>
+            <div className="cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(true)}>
+                <FontAwesomeIcon icon={faCircleMinus}/> <span>收合</span>
+            </div>
+            <div className="ml-auto cursor-pointer hover:text-indigo-500">
+                <span>隱藏</span> <FontAwesomeIcon icon={faAngleDoubleRight}/>
+            </div>
+        </div>
         <SidebarCategoryComponent
             category={props.categories[category]}
             selectedSection={selectedSection[category]}
             folding={{
-                groupFold: sectionFolded[category],
-                toggleGroupFold: (sectionId, groupId) => {
-                    setSectionFolded((prev) => {
-                        const newFolded = new Set(prev[category][sectionId] || [])
-                        if (newFolded.has(groupId)) {
-                            newFolded.delete(groupId)
-                        } else {
-                            newFolded.add(groupId)
-                        }
-                        return {
-                            ...prev,
-                            [category]: {
-                                ...prev[category],
-                                [sectionId]: newFolded
-                            }
-                        }
-                    })
-                }
+                isFolded: (section, group) => isFolded(category, section, group),
+                toggleGroupFold: (sectionId, groupId) =>
+                    toggleFolded(category, sectionId, groupId)
             }}
             toggleButton={<SidebarCategoryToggleButton 
                 text={props.categories[1 - category].short}
