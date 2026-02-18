@@ -12,7 +12,7 @@ type ContentBodyProps = {
     maxWidth?: string
 }
 export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: ContentBodyProps) {
-    return <div className={`px-4 my-3 max-w-${maxWidth} mx-auto pt-5
+    return <div className={`px-4 max-w-${maxWidth} mx-auto pt-5 pb-3
             ${sidebar ? SIDEBAR_MARGIN : ""}`}>
         {children}
     </div>

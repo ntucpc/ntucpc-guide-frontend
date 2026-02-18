@@ -4,7 +4,7 @@ import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faAngleDoubleRight, faAngleDown, faAngleRight, faArrowRightArrowLeft, faCircleMinus, faCirclePlus, faSquareMinus, faSquarePlus } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDoubleRight, faAngleDown, faAngleRight, faArrowRightArrowLeft, faCircleMinus, faCirclePlus, faCross, faSquareMinus, faSquarePlus, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { SidebarCategory, SidebarSection, SidebarGroup, SidebarItem, SidebarClientProps } from "./types"
 
 type GroupFoldProps = {
@@ -211,40 +211,48 @@ export function SidebarClient(props: SidebarClientProps) {
 
     const [displaySidebar, setDisplaySidebar] = useState<"default" | boolean>("default")
 
-    return <aside className="sticky top-16 w-52 shrink-0 hidden xl:block h-[calc(100vh-64px)] py-8">
-        <div className="flex items-center text-sm mb-2 text-slate-500 font-medium select-none">
-            <div className="mr-3 cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(false)}>
-                <FontAwesomeIcon icon={faCirclePlus}/> <span>展開</span>
-            </div>
-            <div className="cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(true)}>
-                <FontAwesomeIcon icon={faCircleMinus}/> <span>收合</span>
-            </div>
-            <div className="ml-auto cursor-pointer hover:text-indigo-500">
-                <span>隱藏</span> <FontAwesomeIcon icon={faAngleDoubleRight}/>
+    // Not sure why z-[999] is needed. If z-50 is used, MathJax formula will display over these elements.
+    return <>
+        <div className={`fixed bg-white shadow-sm w-full z-[999] select-none cursor-pointer ${displaySidebar === false ? "" : (displaySidebar === true ? "hidden" : "xl:hidden")}`} onClick={() => setDisplaySidebar(true)}>
+            <div className="w-full max-w-4xl mx-auto px-4 py-2 z-50 text-slate-500 font-semibold text-sm">
+                <FontAwesomeIcon icon={faAngleDoubleRight}/> 展開目錄
             </div>
         </div>
-        <SidebarCategoryComponent
-            category={props.categories[category]}
-            selectedSection={selectedSection[category]}
-            folding={{
-                isFolded: (section, group) => isFolded(category, section, group),
-                toggleGroupFold: (sectionId, groupId) =>
-                    toggleFolded(category, sectionId, groupId)
-            }}
-            toggleButton={<SidebarCategoryToggleButton 
-                text={props.categories[1 - category].short}
-                onClick={() => {
-                    setCategory(1 - category)
-                }
-            }/>}
-            setSelectedSection={section => {
-                const newSelectedSection = [...selectedSection]
-                newSelectedSection[category] = section
-                setSelectedSection(newSelectedSection)
-            }}
-            pageSection={pageSection[category]}
-            activeArticle={activeArticle}
-        />
-    </aside>
+        <aside className={`fixed bg-white xl:sticky top-16 max-w-[20rem] w-full shrink-0 z-[999] ${displaySidebar === true ? "" : (displaySidebar === false ? "hidden" : "hidden xl:block")} h-[calc(100vh-64px)] p-2`}>
+            <div className="flex items-center text-sm mb-2 text-slate-500 font-medium select-none">
+                <div className="mr-3 cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(false)}>
+                    <FontAwesomeIcon icon={faCirclePlus}/> <span>展開</span>
+                </div>
+                <div className="cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(true)}>
+                    <FontAwesomeIcon icon={faCircleMinus}/> <span>收合</span>
+                </div>
+                <div className="ml-auto cursor-pointer hover:text-indigo-500" onClick={() => setDisplaySidebar(!displaySidebar)}>
+                    <span>隱藏</span> <FontAwesomeIcon icon={faXmark}/>
+                </div>
+            </div>
+            <SidebarCategoryComponent
+                category={props.categories[category]}
+                selectedSection={selectedSection[category]}
+                folding={{
+                    isFolded: (section, group) => isFolded(category, section, group),
+                    toggleGroupFold: (sectionId, groupId) =>
+                        toggleFolded(category, sectionId, groupId)
+                }}
+                toggleButton={<SidebarCategoryToggleButton 
+                    text={props.categories[1 - category].short}
+                    onClick={() => {
+                        setCategory(1 - category)
+                    }
+                }/>}
+                setSelectedSection={section => {
+                    const newSelectedSection = [...selectedSection]
+                    newSelectedSection[category] = section
+                    setSelectedSection(newSelectedSection)
+                }}
+                pageSection={pageSection[category]}
+                activeArticle={activeArticle}
+            />
+        </aside>
+    </>
 
 }

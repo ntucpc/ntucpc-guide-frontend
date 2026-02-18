@@ -9,12 +9,14 @@ import { ReactNode } from "react";
 export default function ArticleLayout({children}: {children: ReactNode}) {
     return <>
         <NavBar/>
-        <div className="xl:flex justify-center items-start gap-10 max-w-[1200px] mx-auto">
+        <div className="xl:flex relative justify-center items-start gap-10 max-w-[1200px] mx-auto">
             <Sidebar/>
-            <ContentBody>
-                {children}
-                <PageFooter/>
-            </ContentBody>
+            <div className="pt-5"> {/* space for sidebar expand button */}
+                <ContentBody>
+                    {children}
+                    <PageFooter/>
+                </ContentBody>
+            </div>
         </div>
         <PageReloader/>
         <HightlightJsScript/>
