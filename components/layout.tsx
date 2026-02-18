@@ -8,12 +8,10 @@ const SIDEBAR_MARGIN = "lg:ml-80 2xl:mx-auto max-lg:mt-14";
 
 type ContentBodyProps = {
     children: ReactNode
-    sidebar?: boolean
     maxWidth?: string
 }
-export function ContentBody({ children, sidebar = false, maxWidth = "4xl" }: ContentBodyProps) {
-    return <div className={`px-4 max-w-${maxWidth} mx-auto pt-5 pb-3
-            ${sidebar ? SIDEBAR_MARGIN : ""}`}>
+export function ContentBody({ children, maxWidth = "4xl" }: ContentBodyProps) {
+    return <div className={`px-4 max-w-${maxWidth} mx-auto pt-5 pb-3`}>
         {children}
     </div>
 }
