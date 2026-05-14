@@ -4,9 +4,10 @@ import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
 import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { ImportanceTag } from "@/components/common"
 import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
-import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen, IconDefinition, faList } from "@fortawesome/free-solid-svg-icons"
+import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen, IconDefinition, faList, faStar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactNode } from "react"
 import { Section } from "@/lib/parser/section"
@@ -57,57 +58,117 @@ function ArticleHeader({ article }: { article: Article }) {
     const prereqs = article.prerequisites.map((prereq, idx) => {
         const prereqArticle = getArticle(prereq)
         return !prereqArticle.coming ?
-            <HyperRefBlank href={`/${prereq}`} key={idx}>
+            <HyperRefBlank href={`/${prereq}`} key={idx} className="text-indigo-600 hover:text-indigo-800 transition-colors">
                 {prereqArticle.title}
             </HyperRefBlank> :
-            <span className="text-neutral-500" key={idx}>
+            <span className="text-neutral-400" key={idx}>
                 {prereqArticle.title}
             </span>
     }).reduce<JSX.Element[]>((pre, cur, idx) => {
-        if (idx > 0) pre.push(<span key={`sep-${idx}`}>、</span>)
+        if (idx > 0) pre.push(<span key={`sep-${idx}`} className="text-gray-300 mx-1">/</span>)
         pre.push(cur)
         return pre
     }, [])
+
     const chapter = article.chapter ? getChapter(article.chapter) : undefined
     const topic = getTopic(article.topic)
-    return <div className="mb-8">
-        <div className="text-xl">{chapter ? `Chapter ${chapter.number}. ${chapter.title}` : "Unknown Chapter"}</div>
-        <div className="text-2xl text-gray-500 pt-1">{topic.title}</div>
-        <div className="text-5xl mt-1 mb-4">{article.title}</div>
 
-        <InformationItem name="作者" icon={faUserPen}>{article.authors.join("、")}</InformationItem>
-        {
-            article.contributors.length > 0 ?
-                <InformationItem name="協作者" icon={faUserGroup} >{article.contributors.join("、")}</InformationItem>
-                : <></>
-        }
-        {
-            prereqs.length > 0 ?
-                <InformationItem name="先備知識" icon={faBook} >{prereqs} </InformationItem>
-                : <></>
-        }
+    return (
+        <div className="mb-8 pb-8 border-b border-gray-100">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase mb-6">
+                {chapter && (
+                    <>
+                        <WrappedLink href={`/chapter/${chapter.code}`} className="text-gray-400 hover:text-indigo-500 transition-colors">
+                            CH {chapter.number} {chapter.title}
+                        </WrappedLink>
+                        <span className="text-gray-300">/</span>
+                    </>
+                )}
+                <WrappedLink href={`/${topic.code}`} className="text-gray-400 hover:text-indigo-500 transition-colors">
+                    {topic.title}
+                </WrappedLink>
+            </div>
 
-    </div>;
+            {/* Title Section */}
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-8 leading-tight">
+                {article.title}
+            </h1>
+
+            {/* Metadata Section */}
+            <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm">
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 shrink-0">
+                        <FontAwesomeIcon icon={faUserPen} className="text-xs" />
+                    </div>
+                    <div>
+                        <div className="text-[10px] uppercase font-bold text-gray-400 tracking-tighter">作者</div>
+                        <div className="text-gray-700 font-medium">{article.authors.join("、")}</div>
+                    </div>
+                </div>
+
+                {article.contributors.length > 0 && (
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 shrink-0">
+                            <FontAwesomeIcon icon={faUserGroup} className="text-xs" />
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-gray-400 tracking-tighter">協作者</div>
+                            <div className="text-gray-700 font-medium">{article.contributors.join("、")}</div>
+                        </div>
+                    </div>
+                )}
+
+                {article.importance > 0 && (
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 shrink-0">
+                            <FontAwesomeIcon icon={faStar} className="text-xs" />
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-gray-400 tracking-tighter">重要度</div>
+                            <div className="mt-0.5"><ImportanceTag importance={article.importance} /></div>
+                        </div>
+                    </div>
+                )}
+
+                {prereqs.length > 0 && (
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 shrink-0">
+                            <FontAwesomeIcon icon={faBook} className="text-xs" />
+                        </div>
+                        <div>
+                            <div className="text-[10px] uppercase font-bold text-gray-400 tracking-tighter">先備知識</div>
+                            <div className="text-gray-700 font-medium flex flex-wrap">{prereqs}</div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
 function ArticleFooterLink({ code, side }: { code: string | undefined, side: "left" | "right" }) {
-    const article = code ? getArticle(code) : undefined
-    return <div className={`shrink-0 flex sm:w-64 ${side === "left" ? "justify-start" : "justify-end"}`}>
-        {article ?
-            <WrappedLink href={`/${code}`}
-                className="text-indigo-500 block p-3 rounded-xl color-animation hover:text-indigo-700 hover:bg-indigo-100">
-                <div className={`flex items-center ${side === "left" ? "justify-start" : "justify-end"}`}>
-                    {side === "left" ? <FontAwesomeIcon icon={faChevronLeft} className="mr-2 shrink-0" /> : <></>}
-                    <div className="max-sm:hidden">
-                        {getTopic(article.topic).title} /<br /> {article.title}
-                    </div>
-                    {side === "right" ? <FontAwesomeIcon icon={faChevronRight} className="ml-2 shrink-0" /> : <></>}
-                </div>
-            </WrappedLink>
-            : <div className="p-3 text-gray-500">
-                <FontAwesomeIcon icon={side === "left" ? faChevronLeft : faChevronRight} />
-            </div>}
-    </div>
+    if (!code) return <div className="flex-1 hidden sm:block" />;
+    const article = getArticle(code)
+    const topic = getTopic(article.topic)
+
+    return (
+        <WrappedLink 
+            href={`/${code}`}
+            className={`flex-1 group p-6 transition-all duration-300 flex flex-col ${side === "left" ? "items-start" : "items-end text-right"}`}
+        >
+            <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 group-hover:text-indigo-500 transition-colors">
+                {side === "left" && <FontAwesomeIcon icon={faChevronLeft} className="text-[8px]" />}
+                {side === "left" ? "上一篇" : "下一篇"}
+                {side === "right" && <FontAwesomeIcon icon={faChevronRight} className="text-[8px]" />}
+            </div>
+            <div className="text-gray-900 font-bold text-lg mb-1 group-hover:text-indigo-700 transition-colors line-clamp-1">
+                {article.title}
+            </div>
+            <div className="text-gray-400 text-xs font-medium">
+                {topic.title}
+            </div>
+        </WrappedLink>
+    )
 }
 
 function ArticleFooter({ article }: { article: Article }) {
@@ -120,13 +181,17 @@ function ArticleFooter({ article }: { article: Article }) {
         chapter.contents[index - 1] : undefined
     const next = chapter && index + 1 < chapter.contents.length ?
         chapter.contents[index + 1] : undefined
-    return <div className="flex mt-20 justify-between items-center">
-        <ArticleFooterLink side="left" code={previous} />
-        <div className="font-semibold p-3 text-nowrap">
-            {article.title}
+    
+    if (!previous && !next) return null
+
+    return (
+        <div className="mt-24 pt-12 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row gap-6">
+                <ArticleFooterLink side="left" code={previous} />
+                <ArticleFooterLink side="right" code={next} />
+            </div>
         </div>
-        <ArticleFooterLink side="right" code={next} />
-    </div>
+    )
 }
 
 function TableOfContents({ headings }: { headings: Section[] }) {
