@@ -1,4 +1,4 @@
-import { getArticleContent } from "@/components/markdown/markdown"
+import { getArticleContent, SimpleMarkdown } from "@/components/markdown/markdown"
 import { getArticle, getArticleMdxPath } from "@/lib/structure/articles"
 import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"

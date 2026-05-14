@@ -19,8 +19,10 @@ export function remarkSection(sections: Section[]) {
         const currentPath: string[] = []
         visit(tree, 'heading', function (node) {
             let text = ""
-            visit(node, 'text', (textNode: any) => {
-                text += textNode.value
+            visit(node, (n: any) => {
+                if (n.type === 'text' || n.type === 'inlineCode') {
+                    text += n.value
+                }
             })
             
             const depth = node.depth - 1
