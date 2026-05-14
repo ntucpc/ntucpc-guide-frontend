@@ -51,14 +51,14 @@ export default async function ChapterPage(props: ChapterProps) {
                     </div>
                     
                     <div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 mb-2">
                             <span className="text-sm font-bold text-indigo-500 tracking-widest uppercase bg-indigo-50 px-2 py-0.5 rounded">
                                 Chapter {chapter.number}
                             </span>
                         </div>
-                        <H1Title>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
                             {chapter.title}
-                        </H1Title>
+                        </h1>
                     </div>
                 </div>
                 
