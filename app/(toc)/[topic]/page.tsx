@@ -1,4 +1,3 @@
-import { ContentBody } from "@/components/layout"
 import { SimpleMarkdown } from "@/components/markdown/markdown"
 import { SectionEntry } from "@/components/table-of-contents"
 import { getTopicArticleGroups } from "@/lib/structure"
@@ -7,6 +6,8 @@ import { getTopic, getTopics } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { H1Title } from "@/ntucpc-website-common-lib/components/basic"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTag } from "@fortawesome/free-solid-svg-icons"
 
 type TopicProps = {
     params: Promise<{ topic: string }>
@@ -28,8 +29,8 @@ function TopicSection({ group }: { group: ArticleGroup }) {
     const chapter = group.code === "unknown" ? undefined : getChapter(group.code)
     return <SectionEntry
         url={chapter ? `/chapter/${chapter.code}` : ""}
-        title={chapter ? `${chapter.number}. ${chapter.title}` : "沒有章節"}
-        description={chapter ? `${chapter.description}` : "這些文章屬於的章節還沒決定 :("}
+        title={chapter ? `Chapter ${chapter.number}. ${chapter.title}` : "其他文章"}
+        description={chapter ? `${chapter.description}` : "這些文章目前不屬於任何特定的章節。"}
         articles={group.articles}
     />
 }
@@ -38,15 +39,24 @@ export default async function TopicPage(props: TopicProps) {
     const params = await props.params;
     const topic = getTopic(params.topic)
     const groups = getTopicArticleGroups(topic)
-    return <>
-        <H1Title>
-            {topic.title}
-        </H1Title>
-        <div className="text-gray-500">
-            <SimpleMarkdown text={topic.description} />
+    
+    return (
+        <div className="pb-20">
+            {/* Header Section */}
+            <div className="mb-12">
+                <H1Title>
+                    {topic.title}
+                </H1Title>
+                
+                <div className="mt-4 text-gray-500 text-lg max-w-3xl leading-relaxed italic">
+                    <SimpleMarkdown text={topic.description} />
+                </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="space-y-4">
+                {groups.map(group => <TopicSection key={group.code} group={group} />)}
+            </div>
         </div>
-        <div className="mt-6">
-            {groups.map(group => <TopicSection key={group.code} group={group} />)}
-        </div>
-    </>
+    )
 }
