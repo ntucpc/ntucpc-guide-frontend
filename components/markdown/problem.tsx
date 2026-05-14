@@ -27,7 +27,7 @@ type ProblemProps = {
     constraintsMdx: string,
 };
 
-export function Problem(depthLimit: number, MarkdownComponent: (props: { source: string, depthLimit: number }) => JSX.Element) {
+export function Problem(depthLimit: number, MarkdownComponent: (props: { source: string, depthLimit: number }) => Promise<JSX.Element>) {
     return (props: ProblemProps) => {
         const descriptionNode =
             props.descriptionMdx ?
