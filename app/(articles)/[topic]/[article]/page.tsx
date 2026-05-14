@@ -28,10 +28,11 @@ export async function generateStaticParams() {
     const articles: { topic: string, article: string }[] = []
     for (const topic of getTopics()) {
         for (const article of topic.contents) {
-            articles.push({
-                topic: topic.code,
-                article: article.split('/')[1]
-            })
+            if (!getArticle(article).coming)
+                articles.push({
+                    topic: topic.code,
+                    article: article.split('/')[1]
+                })
         }
     }
     return articles
