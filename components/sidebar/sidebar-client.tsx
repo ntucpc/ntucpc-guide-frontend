@@ -218,7 +218,7 @@ export function SidebarClient(props: SidebarClientProps) {
                 <FontAwesomeIcon icon={faAngleDoubleRight}/> 展開目錄
             </div>
         </div>
-        <aside className={`fixed bg-white xl:sticky top-16 max-w-[20rem] w-full shrink-0 z-[999] ${displaySidebar === true ? "" : (displaySidebar === false ? "hidden" : "hidden xl:block")} h-[calc(100vh-64px)] p-2`}>
+        <aside className={`fixed bg-white xl:sticky top-16 w-full max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] ${displaySidebar === true ? "block" : (displaySidebar === false ? "hidden" : "hidden xl:block")} h-[calc(100vh-64px)] p-2`}>
             <div className="flex items-center text-sm mb-2 text-slate-500 font-medium select-none">
                 <div className="mr-3 cursor-pointer hover:text-indigo-500" onClick={() => updateDefaultFolded(false)}>
                     <FontAwesomeIcon icon={faCirclePlus}/> <span>展開</span>

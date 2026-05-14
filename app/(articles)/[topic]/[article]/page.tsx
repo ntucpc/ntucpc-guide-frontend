@@ -1,4 +1,4 @@
-import { ArticleMarkdown } from "@/components/markdown/markdown"
+import { getArticleContent } from "@/components/markdown/markdown"
 import { getArticle, getArticleMdxPath } from "@/lib/structure/articles"
 import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
@@ -6,9 +6,10 @@ import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
 import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
-import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen, IconDefinition } from "@fortawesome/free-solid-svg-icons"
+import { faBook, faChevronLeft, faChevronRight, faUserGroup, faUserPen, IconDefinition, faList } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { ReactNode } from "react"
+import { Section } from "@/lib/parser/section"
 
 type ArticleProps = {
     params: Promise<{
@@ -128,14 +129,52 @@ function ArticleFooter({ article }: { article: Article }) {
     </div>
 }
 
+function TableOfContents({ headings }: { headings: Section[] }) {
+    if (headings.length === 0) return <></>
+
+    return (
+        <aside className="sticky top-24 w-56 h-fit max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+            <div className="flex items-center gap-2 mb-4 text-gray-800 font-bold border-b pb-2">
+                <FontAwesomeIcon icon={faList} />
+                <span>目錄</span>
+            </div>
+            <nav>
+                <ul className="space-y-1 text-sm">
+                    {headings.map((heading, idx) => {
+                        const paddingLeft = `${(heading.depth - 1) * 1}rem`
+                        return (
+                            <li key={idx} style={{ paddingLeft }}>
+                                <a href={`#${heading.code}`} className="block py-1 text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded px-2 transition-colors overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {heading.text}
+                                </a>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </nav>
+        </aside>
+    )
+}
+
 export default async function ArticlePage(props: ArticleProps) {
     const params = await props.params;
     const code = `${params.topic}/${params.article}`
     const mdxSource = getArticleMdxPath(code)
     const article = getArticle(code)
-    return <>
-        <ArticleHeader article={article} />
-        <ArticleMarkdown source={mdxSource} depthLimit={1} />
-        <ArticleFooter article={article} />
-    </>
+    
+    const { content, headings } = await getArticleContent(mdxSource, 1)
+
+    return (
+        <div className="relative">
+            <ArticleHeader article={article} />
+            <div className="prose prose-slate max-w-none">
+                {content}
+            </div>
+            <ArticleFooter article={article} />
+            
+            <div className="hidden xl:block absolute top-0 left-[calc(100%+2.5rem)] h-full">
+                <TableOfContents headings={headings} />
+            </div>
+        </div>
+    )
 }

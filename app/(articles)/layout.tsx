@@ -5,17 +5,19 @@ import { Sidebar } from "@/components/sidebar/sidebar";
 import HightlightJsScript from "@/ntucpc-website-common-lib/scripts/highlightjs";
 import MathJaxJS from "@/ntucpc-website-common-lib/scripts/mathjax";
 import { ReactNode } from "react";
-
 export default function ArticleLayout({children}: {children: ReactNode}) {
     return <>
         <NavBar/>
-        <div className="xl:flex relative justify-center items-start gap-10 mx-auto">
-            <Sidebar/>
-            <div className="pt-5"> {/* space for sidebar expand button */}
-                <ContentBody>
-                    {children}
-                    <PageFooter/>
-                </ContentBody>
+        <div className="flex justify-center w-full">
+            <div className="xl:flex relative items-start gap-10 w-full max-w-[100rem]">
+                <Sidebar/>
+                <div className="flex-grow pt-5">
+                    <ContentBody>
+                        {children}
+                        <PageFooter/>
+                    </ContentBody>
+                </div>
+                <div className="hidden xl:block w-56 shrink-0" />
             </div>
         </div>
         <PageReloader/>

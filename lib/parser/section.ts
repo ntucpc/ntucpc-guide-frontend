@@ -1,8 +1,4 @@
 import { visit } from 'unist-util-visit'
-import { getAttribute, parseDirectiveLabel, pushAttribute, removeDirectiveLabel, setAttribute } from '@/ntucpc-website-common-lib/mdx-parser/util';
-import path from 'path';
-import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
-import { existsSync } from 'fs';
 
 export type Section = {
     text: string,
@@ -11,25 +7,42 @@ export type Section = {
 };
 
 const BASE_DEPTH = 1
+
+/**
+ * A remark plugin to extract headings and assign IDs to them.
+ * 
+ * @param sections An array to store the extracted sections.
+ * @returns 
+ */
 export function remarkSection(sections: Section[]) {
     return function (tree: any) {
-        const currentPath: String[] = []
-        visit(tree, function (node) {
-            if (node.type != "heading") return
-            node.type = "mdxJsxFlowElement"
+        const currentPath: string[] = []
+        visit(tree, 'heading', function (node) {
             let text = ""
-            node.children.forEach((element: any) => {
-                text += element.value
+            visit(node, 'text', (textNode: any) => {
+                text += textNode.value
             })
+            
             const depth = node.depth - 1
-            node.name = `h${depth + 1}`
+            
             while (currentPath.length > depth)
                 currentPath.pop()
             while (currentPath.length < depth)
                 currentPath.push("")
-            currentPath.push(text)
+            
+            currentPath[depth] = text
+            
             const code = currentPath.slice(BASE_DEPTH).join("-")
-            setAttribute(node, { refId: `${code}` })
+            
+            // Assign ID to the heading node for anchor links
+            if (!node.data) node.data = {}
+            if (!node.data.hProperties) node.data.hProperties = {}
+            
+            // Standard id for CSS/HTML anchors
+            node.data.hProperties.id = code
+            // Custom refId for the heading component
+            node.data.hProperties.refId = code
+            
             sections.push({ text: text, depth: depth, code: code })
         })
     }

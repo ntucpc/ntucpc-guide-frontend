@@ -17,8 +17,9 @@ import { Problem } from "./problem"
 import { remarkRefcode } from "@/ntucpc-website-common-lib/mdx-parser/refcode"
 import { getGuideRoot, getPublicRoot } from "@/lib/environment"
 import { remarkFigure } from "@/ntucpc-website-common-lib/mdx-parser/figure"
+import { remarkSection, Section } from "@/lib/parser/section"
 
-export async function ArticleMarkdown({ source, depthLimit }: { source: string, depthLimit: number }) {
+export async function getArticleContent(source: string, depthLimit: number) {
     if (depthLimit < 0) {
         throw new Error("Nested markdown depth limit exceeded")
     }
@@ -34,6 +35,9 @@ export async function ArticleMarkdown({ source, depthLimit }: { source: string, 
     const getFigurePath = (directory: string, name: string) => {
         return path.join("/", directory.replace(getGuideRoot(), getPublicRoot()), "figure", name)
     }
+
+    const headings: Section[] = []
+
     const { content } = await compileMDX({
         source: mdxRaw,
         options: {
@@ -49,6 +53,7 @@ export async function ArticleMarkdown({ source, depthLimit }: { source: string, 
                     remarkGfm,
                     remarkContentReference,
                     remarkProblem,
+                    [remarkSection, headings]
                 ],
                 rehypePlugins: [
                     [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
@@ -71,6 +76,12 @@ export async function ArticleMarkdown({ source, depthLimit }: { source: string, 
             Problem: Problem(depthLimit - 1, ArticleMarkdown)
         }
     })
+
+    return { content, headings }
+}
+
+export async function ArticleMarkdown({ source, depthLimit }: { source: string, depthLimit: number }) {
+    const { content } = await getArticleContent(source, depthLimit)
     return <>
         {content}
     </>
