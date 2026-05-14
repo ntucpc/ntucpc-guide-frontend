@@ -90,9 +90,14 @@ function ArticleHeader({ article }: { article: Article }) {
             </div>
 
             {/* Title Section */}
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-8 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
                 {article.title}
             </h1>
+
+            {/* Description Section */}
+            <div className="text-gray-500 mb-8 leading-relaxed max-w-3xl italic">
+                <SimpleMarkdown text={article.description} />
+            </div>
 
             {/* Metadata Section */}
             <div className="flex flex-wrap gap-x-8 gap-y-4 text-sm">
