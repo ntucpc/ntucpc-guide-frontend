@@ -11,7 +11,7 @@ export default function ArticleLayout({children}: {children: ReactNode}) {
         <div className="flex justify-center w-full">
             <div className="xl:flex relative items-start gap-10 w-full max-w-[100rem]">
                 <Sidebar/>
-                <div className="flex-grow pt-5">
+                <div className="flex-grow min-w-0 pt-5">
                     <ContentBody>
                         {children}
                         <PageFooter/>

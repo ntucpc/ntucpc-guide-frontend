@@ -75,7 +75,7 @@ export function SectionEntry({ url, title, description, articles }: SectionEntry
             </div>
 
             {/* Articles List */}
-            <div className="flex-grow">
+            <div className="flex-grow min-w-0">
                 <div className="relative">
                     {articles.map((article, idx) => (
                         <ArticleEntry key={article.code} {...article} />
