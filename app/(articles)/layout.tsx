@@ -17,7 +17,7 @@ export default function ArticleLayout({children}: {children: ReactNode}) {
                         <PageFooter/>
                     </ContentBody>
                 </div>
-                <div className="hidden xl:block w-56 shrink-0" />
+                <div className="hidden xl:block w-80 shrink-0" />
             </div>
         </div>
         <PageReloader/>
