@@ -173,14 +173,17 @@ function ArticleFooterLink({ code, side }: { code: string | undefined, side: "le
 
 function ArticleFooter({ article }: { article: Article }) {
     const chapter = article.chapter ? getChapter(article.chapter) : undefined
-    const index = !chapter ? -1 :
-        chapter.contents.findIndex(
-            val => val === article.code
-        )
-    const previous = chapter && index > 0 ?
-        chapter.contents[index - 1] : undefined
-    const next = chapter && index + 1 < chapter.contents.length ?
-        chapter.contents[index + 1] : undefined
+    if (!chapter) return null
+
+    const availableArticles = chapter.contents.filter(code => !getArticle(code).coming)
+    
+    const index = availableArticles.findIndex(
+        val => val === article.code
+    )
+    
+    const previous = index > 0 ? availableArticles[index - 1] : undefined
+    const next = index !== -1 && index + 1 < availableArticles.length ? 
+        availableArticles[index + 1] : undefined
     
     if (!previous && !next) return null
 
