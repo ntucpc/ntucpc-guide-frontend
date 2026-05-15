@@ -14,32 +14,43 @@ type TopicProps = {
 }
 
 export async function generateMetadata(props: TopicProps) {
-    const params = await props.params;
+    const params = await props.params
     const topic = getTopic(params.topic)
     return composeMetadata(topic.title)
 }
 
 export async function generateStaticParams() {
-    return getTopics().map(topic => ({
-        topic: topic.code
+    return getTopics().map((topic) => ({
+        topic: topic.code,
     }))
 }
 
 function TopicSection({ group }: { group: ArticleGroup }) {
-    const chapter = group.code === "unknown" ? undefined : getChapter(group.code)
-    return <SectionEntry
-        url={chapter ? `/chapter/${chapter.code}` : ""}
-        title={chapter ? `Chapter ${chapter.number}. ${chapter.title}` : "其他文章"}
-        description={chapter ? `${chapter.description}` : "這些文章目前不屬於任何特定的章節。"}
-        articles={group.articles}
-    />
+    const chapter =
+        group.code === "unknown" ? undefined : getChapter(group.code)
+    return (
+        <SectionEntry
+            url={chapter ? `/chapter/${chapter.code}` : ""}
+            title={
+                chapter
+                    ? `Chapter ${chapter.number}. ${chapter.title}`
+                    : "其他文章"
+            }
+            description={
+                chapter
+                    ? `${chapter.description}`
+                    : "這些文章目前不屬於任何特定的章節。"
+            }
+            articles={group.articles}
+        />
+    )
 }
 
 export default async function TopicPage(props: TopicProps) {
-    const params = await props.params;
+    const params = await props.params
     const topic = getTopic(params.topic)
     const groups = getTopicArticleGroups(topic)
-    
+
     return (
         <div className="pb-20">
             {/* Header Section */}
@@ -47,7 +58,7 @@ export default async function TopicPage(props: TopicProps) {
                 <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
                     {topic.title}
                 </h1>
-                
+
                 <div className="mt-4 text-gray-500 text-lg max-w-3xl leading-relaxed italic">
                     <SimpleMarkdown text={topic.description} />
                 </div>
@@ -55,7 +66,9 @@ export default async function TopicPage(props: TopicProps) {
 
             {/* Content Section */}
             <div className="space-y-4">
-                {groups.map(group => <TopicSection key={group.code} group={group} />)}
+                {groups.map((group) => (
+                    <TopicSection key={group.code} group={group} />
+                ))}
             </div>
         </div>
     )

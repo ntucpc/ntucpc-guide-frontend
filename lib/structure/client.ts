@@ -1,11 +1,11 @@
-import { Article, Chapter, StructureData, Topic, TopicGroup } from "./type";
+import { Article, Chapter, StructureData, Topic, TopicGroup } from "./type"
 
 export class Structure {
-
-    constructor(private articles: Article[],
+    constructor(
+        private articles: Article[],
         private topics: Topic[],
-        private chapters: Chapter[]) { }
-
+        private chapters: Chapter[]
+    ) {}
 
     public getExistArticle(code: string): Article {
         const article = this.getArticle(code)
@@ -30,7 +30,8 @@ export class Structure {
     }
 
     public getArticleChapter(code: string): string | undefined {
-        return this.chapters.find((chapter) => chapter.contents.includes(code))?.code
+        return this.chapters.find((chapter) => chapter.contents.includes(code))
+            ?.code
     }
 
     public getTopicTitle(code: string): string {
@@ -45,7 +46,9 @@ export class Structure {
 
     public getChapterTitle(code: string | undefined): string {
         const chapter = this.getChapter(code)
-        return chapter ? `Chapter ${chapter.number}. ${chapter.title}` : "Chapter ???"
+        return chapter
+            ? `Chapter ${chapter.number}. ${chapter.title}`
+            : "Chapter ???"
     }
 
     public getArticleChapterTitle(code: string): string {
@@ -64,7 +67,6 @@ export class Structure {
         if (!article) return undefined
         return this.getTopic(article.topic)
     }
-
 }
 
 export function parseStructure(data: StructureData): Structure {

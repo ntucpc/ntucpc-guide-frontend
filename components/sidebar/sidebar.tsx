@@ -1,12 +1,16 @@
-import { getChapterArticleGroups, getTopicArticleGroups } from "@/lib/structure";
-import { getChapter, getChapters } from "@/lib/structure/chapters";
-import { Article, Chapter, Topic } from "@/lib/structure/type";
-import { SidebarCategory, SidebarGroup, SidebarItem, SidebarSection } from "./types";
-import { SidebarClient } from "./sidebar-client";
-import { getTopic, getTopics } from "@/lib/structure/topics";
+import { getChapterArticleGroups, getTopicArticleGroups } from "@/lib/structure"
+import { getChapter, getChapters } from "@/lib/structure/chapters"
+import { Article, Chapter, Topic } from "@/lib/structure/type"
+import {
+    SidebarCategory,
+    SidebarGroup,
+    SidebarItem,
+    SidebarSection,
+} from "./types"
+import { SidebarClient } from "./sidebar-client"
+import { getTopic, getTopics } from "@/lib/structure/topics"
 
 export function Sidebar() {
-
     const categories: SidebarCategory[] = []
 
     // Chapters
@@ -21,7 +25,7 @@ export function Sidebar() {
                     id: article.code,
                     title: article.title,
                     url: "/" + article.code,
-                    coming: article.coming
+                    coming: article.coming,
                 })
                 chapterMapping.set(article.code, chapter.code)
             })
@@ -55,7 +59,7 @@ export function Sidebar() {
                     id: article.code,
                     title: article.title,
                     url: "/" + article.code,
-                    coming: article.coming
+                    coming: article.coming,
                 })
             })
             let groupTitle = "未知章節"
@@ -82,10 +86,12 @@ export function Sidebar() {
         sections: topicSections,
     })
 
-
-    return <SidebarClient 
-        categories={categories} 
-        chapterMapping={Object.fromEntries(chapterMapping) as Record<string, string>}
-    />
-
+    return (
+        <SidebarClient
+            categories={categories}
+            chapterMapping={
+                Object.fromEntries(chapterMapping) as Record<string, string>
+            }
+        />
+    )
 }

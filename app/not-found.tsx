@@ -1,15 +1,18 @@
-import { ContentBody, PageFooter } from '@/components/layout';
-import { NavBar } from '@/components/navbar';
-import { WrappedLink } from '@/ntucpc-website-common-lib/components/common';
-import { faHome, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
+import { ContentBody, PageFooter } from "@/components/layout"
+import { NavBar } from "@/components/navbar"
+import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import {
+    faHome,
+    faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Image from "next/image"
 
 export default function NotFound() {
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <NavBar />
-            
+
             <main className="flex-grow flex items-center justify-center py-20">
                 <ContentBody maxWidth="4xl">
                     <div className="flex flex-col items-center text-center">
@@ -28,17 +31,20 @@ export default function NotFound() {
                         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
                             蛤，你怎麼在這裡
                         </h1>
-                        
+
                         <p className="text-gray-500 text-lg mb-12 max-w-md leading-relaxed">
                             看來你來到了一個不存在的地方，或是這份講義還在編寫中。別擔心，你可以先回到首頁。
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <WrappedLink 
+                            <WrappedLink
                                 href="/"
                                 className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-indigo-600 text-white font-bold transition-all duration-300 shadow-sm hover:shadow-md hover:bg-indigo-700 hover:-translate-y-0.5"
                             >
-                                <FontAwesomeIcon icon={faHome} className="text-sm" />
+                                <FontAwesomeIcon
+                                    icon={faHome}
+                                    className="text-sm"
+                                />
                                 回到首頁
                             </WrappedLink>
                         </div>
@@ -48,5 +54,5 @@ export default function NotFound() {
 
             <PageFooter />
         </div>
-    );
+    )
 }

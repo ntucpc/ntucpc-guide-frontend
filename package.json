@@ -2,7 +2,9 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "build:icons": "svgr ./raw-icons --icon --typescript --out-dir ./icons"
+        "build:icons": "svgr ./raw-icons --icon --typescript --out-dir ./icons",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "dependencies": {
         "@emotion/react": "^11.11.3",
@@ -28,6 +30,7 @@
         "tailwind-scrollbar": "^3.1.0"
     },
     "devDependencies": {
+        "prettier": "^2.8.8",
         "@commitlint/cli": "^17.7.1",
         "@commitlint/config-conventional": "^17.7.0",
         "@svgr/cli": "^8.1.0",

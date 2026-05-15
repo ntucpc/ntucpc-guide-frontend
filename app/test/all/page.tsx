@@ -1,9 +1,9 @@
-import { getArticles } from "@/lib/structure/articles";
-import { getChapters } from "@/lib/structure/chapters";
-import { getTopic, getTopicGroups } from "@/lib/structure/topics";
-import { getStructure } from "@/lib/structure";
-import AllTestPageClient from "./AllTestClient";
-import { composeMetadata } from "@/lib/util";
+import { getArticles } from "@/lib/structure/articles"
+import { getChapters } from "@/lib/structure/chapters"
+import { getTopic, getTopicGroups } from "@/lib/structure/topics"
+import { getStructure } from "@/lib/structure"
+import AllTestPageClient from "./AllTestClient"
+import { composeMetadata } from "@/lib/util"
 
 export const metadata = composeMetadata("全部東西")
 
@@ -12,10 +12,14 @@ export default async function AllTestPage() {
         return {
             code: article.code,
             chapterIndex: (() => {
-                const index = getChapters().findIndex((chapter) => chapter.code === article.chapter)
+                const index = getChapters().findIndex(
+                    (chapter) => chapter.code === article.chapter
+                )
                 if (index === -1) return [-1, -1]
                 const chapter = getChapters()[index]
-                const subIndex = chapter.contents.findIndex((content) => content === article.code)
+                const subIndex = chapter.contents.findIndex(
+                    (content) => content === article.code
+                )
                 return [index, subIndex]
             })() as [number, number],
             topicIndex: (() => {
@@ -30,9 +34,11 @@ export default async function AllTestPage() {
                 })
                 if (!ok) return [-1, -1]
                 const topic = getTopic(article.topic)
-                const subIndex = topic.contents.findIndex((content) => content === article.code)
+                const subIndex = topic.contents.findIndex(
+                    (content) => content === article.code
+                )
                 return [index, subIndex]
-            })() as [number, number]
+            })() as [number, number],
         }
     })
 

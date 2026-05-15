@@ -9,12 +9,14 @@ function CustomIcon({ Component, className = "" }: IconProps) {
     return <Component className={`${className}`} />
 }
 
-function getCustomIcon(iconName: string): React.FC<React.SVGProps<SVGSVGElement>> | undefined {
+function getCustomIcon(
+    iconName: string
+): React.FC<React.SVGProps<SVGSVGElement>> | undefined {
     const mapping: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
-        "door": Door,
-        "sprout": Sprout,
-        "stairs": Stairs,
-        "nothing": () => <></>,
+        door: Door,
+        sprout: Sprout,
+        stairs: Stairs,
+        nothing: () => <></>,
     }
     return mapping[iconName]
 }
@@ -25,7 +27,7 @@ type IconWrapperProps = {
 }
 export function IconWrapper({ iconName, className = "" }: IconWrapperProps) {
     const icon = getCustomIcon(iconName)
-    if (icon) return <CustomIcon Component={icon} className={className}></CustomIcon>
+    if (icon)
+        return <CustomIcon Component={icon} className={className}></CustomIcon>
     throw Error(`Icon ${iconName} not found`)
 }
-

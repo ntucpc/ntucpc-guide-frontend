@@ -2,7 +2,14 @@ import { getArticle, getArticles } from "./articles"
 import { getChapters } from "./chapters"
 import { Structure } from "./client"
 import { getTopicGroups, getTopics } from "./topics"
-import { Article, ArticleGroup, Chapter, StructureData, Topic, TopicGroup } from "./type"
+import {
+    Article,
+    ArticleGroup,
+    Chapter,
+    StructureData,
+    Topic,
+    TopicGroup,
+} from "./type"
 
 export function getStructure(): StructureData {
     return {
@@ -40,12 +47,12 @@ export function getTopicArticleGroups(topic: Topic) {
         }
         if (article.chapter !== lastChapter) {
             lastChapter = article.chapter
-            groups.push({ code: lastChapter, articles: []})
+            groups.push({ code: lastChapter, articles: [] })
         }
         groups.at(-1)!.articles.push(article)
     }
     if (unknownChapter.length > 0) {
-        groups.push({code: "unknown", articles: unknownChapter})
+        groups.push({ code: "unknown", articles: unknownChapter })
     }
     return groups
 }

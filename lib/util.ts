@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Metadata } from "next"
 
 export function isDevMode(): boolean {
     return process.env.NODE_ENV === "development"
@@ -11,6 +11,6 @@ export function isDevMode(): boolean {
  */
 export function composeMetadata(title: string): Metadata {
     return {
-        title: `${title} - NTUCPC Guide`
+        title: `${title} - NTUCPC Guide`,
     }
 }

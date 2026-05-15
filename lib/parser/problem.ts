@@ -1,11 +1,17 @@
-import { visit } from 'unist-util-visit'
-import { getAttribute, parseDirectiveLabel, pushAttribute, removeDirectiveLabel, setAttribute } from '@/ntucpc-website-common-lib/mdx-parser/util';
-import path from 'path';
-import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser';
-import { existsSync } from 'fs';
-import { getGuideRoot } from '../environment';
+import { visit } from "unist-util-visit"
+import {
+    getAttribute,
+    parseDirectiveLabel,
+    pushAttribute,
+    removeDirectiveLabel,
+    setAttribute,
+} from "@/ntucpc-website-common-lib/mdx-parser/util"
+import path from "path"
+import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { existsSync } from "fs"
+import { getGuideRoot } from "../environment"
 
-const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
+const PROBLEMS_PATH = path.join(getGuideRoot(), "problems")
 
 /**
  * Problem attributes:
@@ -21,47 +27,52 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
  * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
-    return function(tree: any) {
+    return function (tree: any) {
         visit(tree, function (node) {
-            if (node.name !== "problem") return;
-            
-            const source = getAttribute(node, "src")!;
-            const directory = path.join(PROBLEMS_PATH, source);
-            const difficulty = getAttribute(node, "difficulty") ?? "?";
-            const solution = getAttribute(node, "solution");
+            if (node.name !== "problem") return
 
-            const problemConfig = readConfig(directory);
-            
-            if(!/^([0-5]|\?)$/.test(difficulty)) {
-                throw new Error(`Error parsing problem: illegal difficulty "${difficulty}"`);
+            const source = getAttribute(node, "src")!
+            const directory = path.join(PROBLEMS_PATH, source)
+            const difficulty = getAttribute(node, "difficulty") ?? "?"
+            const solution = getAttribute(node, "solution")
+
+            const problemConfig = readConfig(directory)
+
+            if (!/^([0-5]|\?)$/.test(difficulty)) {
+                throw new Error(
+                    `Error parsing problem: illegal difficulty "${difficulty}"`
+                )
             }
 
-            const expanded = solution === undefined ? false : (difficulty === "0");
-            const importPath: string[] = [];
-            const descriptionPath = path.join(directory, "description.mdx");
-            const constraintsPath = path.join(directory, "constraints.mdx");
-            const solutionPath = solution === undefined ? undefined : path.join(directory, `${solution}.mdx`);
-            const attributes: {[key: string]: string} = {
-                "url": problemConfig["url"] ?? "",
-                "src": problemConfig["source"],
-                "name": problemConfig["name"],
-                "expanded": String(expanded),
-                "difficulty": difficulty,
-            };
-            if(existsSync(descriptionPath)){
-                importPath.push(descriptionPath);
-                attributes["descriptionMdx"] = descriptionPath;
+            const expanded = solution === undefined ? false : difficulty === "0"
+            const importPath: string[] = []
+            const descriptionPath = path.join(directory, "description.mdx")
+            const constraintsPath = path.join(directory, "constraints.mdx")
+            const solutionPath =
+                solution === undefined
+                    ? undefined
+                    : path.join(directory, `${solution}.mdx`)
+            const attributes: { [key: string]: string } = {
+                url: problemConfig["url"] ?? "",
+                src: problemConfig["source"],
+                name: problemConfig["name"],
+                expanded: String(expanded),
+                difficulty: difficulty,
             }
-            if(existsSync(constraintsPath)){
-                importPath.push(constraintsPath);
-                attributes["constraintsMdx"] = constraintsPath;
+            if (existsSync(descriptionPath)) {
+                importPath.push(descriptionPath)
+                attributes["descriptionMdx"] = descriptionPath
             }
-            if(solution !== undefined && existsSync(solutionPath!)){
-                importPath.push(solutionPath!);
-                attributes["solution"] = solution;
-                attributes["solutionMdx"] = solutionPath!;
+            if (existsSync(constraintsPath)) {
+                importPath.push(constraintsPath)
+                attributes["constraintsMdx"] = constraintsPath
             }
-            setAttribute(node, attributes);
-        });
+            if (solution !== undefined && existsSync(solutionPath!)) {
+                importPath.push(solutionPath!)
+                attributes["solution"] = solution
+                attributes["solutionMdx"] = solutionPath!
+            }
+            setAttribute(node, attributes)
+        })
     }
 }

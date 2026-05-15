@@ -7,7 +7,7 @@ import { remarkTheorem } from "@/ntucpc-website-common-lib/mdx-parser/theorem"
 import { remarkProof } from "@/ntucpc-website-common-lib/mdx-parser/proof"
 import remarkBreaks from "remark-breaks"
 import remarkGfm from "remark-gfm"
-import rehypeRewrite from 'rehype-rewrite'
+import rehypeRewrite from "rehype-rewrite"
 import { compileMDX, MDXRemote } from "next-mdx-remote/rsc"
 import { getCommonLibComponents } from "@/ntucpc-website-common-lib/components"
 import { ContentReference } from "./content-reference"
@@ -33,7 +33,12 @@ export async function getArticleContent(source: string, depthLimit: number) {
 
     mdxRaw = escapeMathMode(mdxRaw)
     const getFigurePath = (directory: string, name: string) => {
-        return path.join("/", directory.replace(getGuideRoot(), getPublicRoot()), "figure", name)
+        return path.join(
+            "/",
+            directory.replace(getGuideRoot(), getPublicRoot()),
+            "figure",
+            name
+        )
     }
 
     const headings: Section[] = []
@@ -48,45 +53,67 @@ export async function getArticleContent(source: string, depthLimit: number) {
                     remarkTheorem,
                     remarkProof,
                     remarkBreaks,
-                    [remarkRefcode, directory, source, {refcodeIndent: 4, refcodeIndentWarning: true}],
+                    [
+                        remarkRefcode,
+                        directory,
+                        source,
+                        { refcodeIndent: 4, refcodeIndentWarning: true },
+                    ],
                     [remarkFigure, directory, getFigurePath],
                     remarkGfm,
                     remarkContentReference,
                     remarkProblem,
-                    [remarkSection, headings]
+                    [remarkSection, headings],
                 ],
                 rehypePlugins: [
-                    [rehypeRewrite, { // Rewrite elements to start from upper case to fit the constraint of React
-                        rewrite: (node: any) => {
-                            if (node.type == 'mdxJsxFlowElement' || node.type == 'mdxJsxTextElement') {
-                                if (['figure', 'problem', 'refcode'].includes(node.name)) {
-                                    const first = node.name[0].toUpperCase()
-                                    node.name = first + node.name.slice(1)
+                    [
+                        rehypeRewrite,
+                        {
+                            // Rewrite elements to start from upper case to fit the constraint of React
+                            rewrite: (node: any) => {
+                                if (
+                                    node.type == "mdxJsxFlowElement" ||
+                                    node.type == "mdxJsxTextElement"
+                                ) {
+                                    if (
+                                        [
+                                            "figure",
+                                            "problem",
+                                            "refcode",
+                                        ].includes(node.name)
+                                    ) {
+                                        const first = node.name[0].toUpperCase()
+                                        node.name = first + node.name.slice(1)
+                                    }
                                 }
-                            }
-                        }
-                    }],
+                            },
+                        },
+                    ],
                 ],
-                format: 'mdx',
+                format: "mdx",
             },
         },
         components: {
             ...getCommonLibComponents(),
             ContentReference: ContentReference,
-            Problem: Problem(depthLimit - 1, ArticleMarkdown)
-        }
+            Problem: Problem(depthLimit - 1, ArticleMarkdown),
+        },
     })
 
     return { content, headings }
 }
 
-export async function ArticleMarkdown({ source, depthLimit }: { source: string, depthLimit: number }) {
+export async function ArticleMarkdown({
+    source,
+    depthLimit,
+}: {
+    source: string
+    depthLimit: number
+}) {
     const { content } = await getArticleContent(source, depthLimit)
-    return <>
-        {content}
-    </>
+    return <>{content}</>
 }
 
-export async function SimpleMarkdown({ text }: {text: string}) {
+export async function SimpleMarkdown({ text }: { text: string }) {
     return <MDXRemote source={text} />
 }

@@ -1,6 +1,9 @@
-'use client'
+"use client"
 
-import { reloadHighlightJs, reloadMathJax } from "@/ntucpc-website-common-lib/scripts/reload"
+import {
+    reloadHighlightJs,
+    reloadMathJax,
+} from "@/ntucpc-website-common-lib/scripts/reload"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
