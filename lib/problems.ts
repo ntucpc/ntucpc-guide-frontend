@@ -1,8 +1,14 @@
 import { existsSync, readdirSync } from "fs"
 import path from "path"
 import { getGuideRoot } from "./environment"
-import { parseMdx, readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
-import { getArticle, getArticleMdxPath, getArticles } from "./structure/articles"
+import {
+    parseMdx,
+    readConfig,
+} from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import {
+    getArticleMdxPath,
+    getArticles,
+} from "./structure/articles"
 import { remarkProblemScan } from "./parser/problem-scanner"
 
 export type Problem = {
@@ -19,17 +25,25 @@ export type ProblemOccur = {
     difficulty: string
 }
 
-const PROBLEMS_PATH = path.join(getGuideRoot(), "problems");
+const PROBLEMS_PATH = path.join(getGuideRoot(), "problems")
 
 const problems = (() => {
     const problems: Map<string, Problem> = new Map()
-    readdirSync(PROBLEMS_PATH, { withFileTypes: true }).filter((dir) => dir.isDirectory())
+    readdirSync(PROBLEMS_PATH, { withFileTypes: true })
+        .filter((dir) => dir.isDirectory())
         .forEach((dirent) => {
             const sourceCode = dirent.name
-            readdirSync(path.join(PROBLEMS_PATH, sourceCode), { withFileTypes: true }).filter((dir) => dir.isDirectory)
+            readdirSync(path.join(PROBLEMS_PATH, sourceCode), {
+                withFileTypes: true,
+            })
+                .filter((dir) => dir.isDirectory)
                 .forEach((dirent) => {
                     const problemCode = dirent.name
-                    const directory = path.join(PROBLEMS_PATH, sourceCode, problemCode)
+                    const directory = path.join(
+                        PROBLEMS_PATH,
+                        sourceCode,
+                        problemCode
+                    )
                     const configPath = path.join(directory, "config.json")
                     if (!existsSync(configPath)) return
                     const problemConfig = readConfig(configPath)
@@ -38,14 +52,12 @@ const problems = (() => {
                         code: code,
                         sourceCode: sourceCode,
                         problemCode: problemCode,
-                        ...problemConfig
+                        ...problemConfig,
                     })
                 })
         })
     return problems
 })()
-
-const ARTICLE_PATH = path.join(getGuideRoot(), "content");
 
 export function getProblems(): Problem[] {
     return Array.from(problems.values())
@@ -63,8 +75,12 @@ export async function getProblemOccurs(): Promise<Map<string, ProblemOccur[]>> {
     for (const article of getArticles()) {
         if (!article.valid) continue
         const mdxPath = getArticleMdxPath(article.code)
-        await parseMdx(mdxPath, 1, [[remarkProblemScan, addOccur, article.code]], {})
+        await parseMdx(
+            mdxPath,
+            1,
+            [[remarkProblemScan, addOccur, article.code]],
+            {}
+        )
     }
     return problemOccurs
 }
-

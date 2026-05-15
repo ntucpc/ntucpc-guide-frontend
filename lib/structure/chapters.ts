@@ -1,11 +1,10 @@
-import path from 'path'
+import path from "path"
 
-import { Dirent, existsSync, readdirSync, readFileSync } from 'fs'
-import { readConfig } from '@/ntucpc-website-common-lib/mdx-parser/mdx-parser'
-import { getGuideRoot } from '../environment'
-import { Chapter } from './type'
+import { existsSync } from "fs"
+import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { getGuideRoot } from "../environment"
+import { Chapter } from "./type"
 
-const ARTICLE_PATH = path.join(getGuideRoot(), "content")
 const CHAPTER_PATH = path.join(getGuideRoot(), "chapters")
 
 const chapters: Chapter[] = (() => {
@@ -23,7 +22,7 @@ const chapters: Chapter[] = (() => {
             icon: "nothing",
             iconColor: "",
             description: "????",
-            ...chapterConfig
+            ...chapterConfig,
         })
     }
     return chapters

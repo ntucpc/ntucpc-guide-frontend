@@ -1,6 +1,6 @@
 /**
  * A data structure representing an article.
- * 
+ *
  * After the coming feature is added, there should not be any non-existing article
  * referred by chapters or topics.
  */
@@ -15,7 +15,7 @@ export type Article = {
     authors: string[] // default: []
     contributors: string[] // default: []
     prerequisites: string[] // default: []
-    description: string[] // default: "????"
+    description: string // default: "????"
     coming: boolean // default: false, should the article be shown as coming soon in tables of contents
     importance: number // default: 0
 }
@@ -48,4 +48,9 @@ export type StructureData = {
     topics: Topic[]
     topicGroups: TopicGroup[]
     chapters: Chapter[]
+}
+
+export type ArticleGroup = {
+    code: string
+    articles: Article[]
 }
