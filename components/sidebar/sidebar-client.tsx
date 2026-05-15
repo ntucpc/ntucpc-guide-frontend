@@ -233,7 +233,7 @@ export function SidebarClient(props: SidebarClientProps) {
 
             {/* Sidebar Main Container */}
             <aside
-                className={`fixed bg-white xl:sticky top-16 w-full max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
+                className={`fixed bg-white xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
                 ${
                     displaySidebar === true
                         ? "block"
