@@ -5,7 +5,6 @@ import { getChapter, getChapters } from "@/lib/structure/chapters"
 import { getTopic } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
-import { H1Title } from "@/ntucpc-website-common-lib/components/basic"
 import { IconWrapper } from "@/components/icon"
 import { Metadata } from "next"
 

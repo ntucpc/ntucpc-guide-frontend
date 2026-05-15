@@ -6,7 +6,6 @@ import {
     readConfig,
 } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
 import {
-    getArticle,
     getArticleMdxPath,
     getArticles,
 } from "./structure/articles"
@@ -59,8 +58,6 @@ const problems = (() => {
         })
     return problems
 })()
-
-const ARTICLE_PATH = path.join(getGuideRoot(), "content")
 
 export function getProblems(): Problem[] {
     return Array.from(problems.values())

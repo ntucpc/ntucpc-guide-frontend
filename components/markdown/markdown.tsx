@@ -70,6 +70,7 @@ export async function getArticleContent(source: string, depthLimit: number) {
                         rehypeRewrite,
                         {
                             // Rewrite elements to start from upper case to fit the constraint of React
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             rewrite: (node: any) => {
                                 if (
                                     node.type == "mdxJsxFlowElement" ||

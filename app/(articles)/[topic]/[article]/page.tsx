@@ -16,12 +16,10 @@ import {
     faChevronRight,
     faUserGroup,
     faUserPen,
-    IconDefinition,
     faList,
     faStar,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { ReactNode } from "react"
 import { Section } from "@/lib/parser/section"
 
 type ArticleProps = {
@@ -50,24 +48,6 @@ export async function generateStaticParams() {
         }
     }
     return articles
-}
-
-type InformatIonItemProps = {
-    name: string
-    icon: IconDefinition
-    children: ReactNode
-}
-function InformationItem({ name, children, icon }: InformatIonItemProps) {
-    return (
-        <div className="flex my-2">
-            <div className="w-7 text-center text-indigo-500 shrink-0">
-                <FontAwesomeIcon icon={icon} />
-            </div>
-            <div className="ml-1">
-                {name}：{children}
-            </div>
-        </div>
-    )
 }
 
 function ArticleHeader({ article }: { article: Article }) {

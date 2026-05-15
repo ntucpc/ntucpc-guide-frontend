@@ -5,9 +5,6 @@ import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
-import { H1Title } from "@/ntucpc-website-common-lib/components/basic"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTag } from "@fortawesome/free-solid-svg-icons"
 
 type TopicProps = {
     params: Promise<{ topic: string }>

@@ -1,9 +1,6 @@
 import { visit } from "unist-util-visit"
 import {
     getAttribute,
-    parseDirectiveLabel,
-    pushAttribute,
-    removeDirectiveLabel,
     setAttribute,
 } from "@/ntucpc-website-common-lib/mdx-parser/util"
 import path from "path"
@@ -27,6 +24,7 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems")
  * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (tree: any) {
         visit(tree, function (node) {
             if (node.name !== "problem") return

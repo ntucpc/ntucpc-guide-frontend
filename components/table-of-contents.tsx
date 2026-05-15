@@ -106,7 +106,7 @@ export function SectionEntry({
             {/* Articles List */}
             <div className="flex-grow min-w-0">
                 <div className="relative">
-                    {articles.map((article, idx) => (
+                    {articles.map((article, _) => (
                         <ArticleEntry key={article.code} {...article} />
                     ))}
                     {/* Final small dot to cap the line */}

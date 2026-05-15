@@ -1,6 +1,5 @@
 import path from "path"
 
-import { Dirent, existsSync, readdirSync, readFileSync } from "fs"
 import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
 import { getGuideRoot } from "./environment"
 

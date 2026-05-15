@@ -42,7 +42,7 @@ export function Problem(
         depthLimit: number
     }) => Promise<JSX.Element>
 ) {
-    return (props: ProblemProps) => {
+    return function ProblemComponent(props: ProblemProps) {
         const descriptionNode = props.descriptionMdx ? (
             <MarkdownComponent
                 source={props.descriptionMdx}

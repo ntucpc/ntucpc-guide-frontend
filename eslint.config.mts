@@ -8,16 +8,23 @@ import unusedImports from "eslint-plugin-unused-imports"
 export default defineConfig([
     {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-        plugins: { 
-          js, 
-          "unused-imports": unusedImports,
-          reactPlugin: pluginReact,
+        plugins: {
+            js,
+            "unused-imports": unusedImports,
+            reactPlugin: pluginReact,
         },
         extends: ["js/recommended"],
         languageOptions: { globals: globals.browser },
         rules: {
-          "unused-imports/no-unused-imports": "error",
-        }
+            "unused-imports/no-unused-imports": "error",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                },
+            ],
+        },
     },
     tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,

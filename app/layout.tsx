@@ -4,8 +4,6 @@ import "@/styles/global.css"
 import "@/styles/hljs-custom.css"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "@/styles/atom-one-dark.css"
-import { NavBar } from "@/components/navbar"
-import { PageFooter } from "@/components/layout"
 import { getGAId } from "@/ntucpc-website-common-lib/lib/environments"
 import { GATag } from "@/ntucpc-website-common-lib/components/analytics"
 

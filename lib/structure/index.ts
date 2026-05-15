@@ -1,14 +1,11 @@
 import { getArticle, getArticles } from "./articles"
 import { getChapters } from "./chapters"
-import { Structure } from "./client"
 import { getTopicGroups, getTopics } from "./topics"
 import {
-    Article,
     ArticleGroup,
     Chapter,
     StructureData,
     Topic,
-    TopicGroup,
 } from "./type"
 
 export function getStructure(): StructureData {

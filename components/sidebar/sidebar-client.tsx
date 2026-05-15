@@ -6,7 +6,6 @@ import { useParams } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faAngleDoubleRight,
-    faAngleDown,
     faAngleRight,
     faCompressArrowsAlt,
     faExpandArrowsAlt,

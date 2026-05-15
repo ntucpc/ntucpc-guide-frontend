@@ -1,18 +1,13 @@
 import { visit } from "unist-util-visit"
 import {
     getAttribute,
-    parseDirectiveLabel,
-    pushAttribute,
-    removeDirectiveLabel,
     setAttribute,
 } from "@/ntucpc-website-common-lib/mdx-parser/util"
-import path from "path"
-import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
-import { existsSync } from "fs"
 import { getTopic } from "../structure/topics"
 import { getArticle } from "../structure/articles"
 
 export function remarkContentReference() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (tree: any) {
         visit(tree, function (node) {
             if (

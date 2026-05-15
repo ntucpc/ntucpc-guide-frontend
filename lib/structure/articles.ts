@@ -1,13 +1,12 @@
 import path from "path"
 
-import { Dirent, existsSync, readdirSync, readFileSync } from "fs"
+import { existsSync, readdirSync } from "fs"
 import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
 import { getGuideRoot } from "../environment"
 import { findChapter } from "./chapters"
 import { Article } from "./type"
 
 const ARTICLE_PATH = path.join(getGuideRoot(), "content")
-const CHAPTER_PATH = path.join(getGuideRoot(), "chapters")
 
 export function getArticleDirectory(code: string): string {
     const [topic, article] = code.split("/")
@@ -17,7 +16,7 @@ export function getArticleConfigPath(code: string): string {
     return path.join(getArticleDirectory(code), "config.json")
 }
 export function getArticleMdxPath(code: string): string {
-    const [topic, article] = code.split("/")
+    const [_, article] = code.split("/")
     return path.join(getArticleDirectory(code), `${article}.mdx`)
 }
 

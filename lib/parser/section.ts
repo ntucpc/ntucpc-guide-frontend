@@ -15,10 +15,12 @@ const BASE_DEPTH = 1
  * @returns
  */
 export function remarkSection(sections: Section[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (tree: any) {
         const currentPath: string[] = []
         visit(tree, "heading", function (node) {
             let text = ""
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             visit(node, (n: any) => {
                 if (n.type === "text" || n.type === "inlineCode") {
                     text += n.value

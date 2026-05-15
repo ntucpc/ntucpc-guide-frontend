@@ -1,4 +1,4 @@
-import { Article, Chapter, StructureData, Topic, TopicGroup } from "./type"
+import { Article, Chapter, StructureData, Topic } from "./type"
 
 export class Structure {
     constructor(

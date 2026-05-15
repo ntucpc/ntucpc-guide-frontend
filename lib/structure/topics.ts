@@ -1,12 +1,11 @@
 import path from "path"
 
-import { Dirent, existsSync, readdirSync, readFileSync } from "fs"
+import { existsSync } from "fs"
 import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
 import { getGuideRoot } from "../environment"
 import { Topic, TopicGroup } from "./type"
 
 const ARTICLE_PATH = path.join(getGuideRoot(), "content")
-const CHAPTER_PATH = path.join(getGuideRoot(), "chapters")
 
 const [topics, topicGroups]: [Topic[], TopicGroup[]] = (() => {
     const config = readConfig(path.join(ARTICLE_PATH, "topics.json"))
