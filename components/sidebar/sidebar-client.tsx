@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
     faAngleDoubleRight,
     faAngleRight,
-    faCompressArrowsAlt,
-    faExpandArrowsAlt,
+    faDownLeftAndUpRightToCenter,
+    faUpRightAndDownLeftFromCenter,
     faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 import {
@@ -271,7 +271,7 @@ export function SidebarClient(props: SidebarClientProps) {
                             className="hover:text-indigo-500 transition-colors"
                         >
                             <FontAwesomeIcon
-                                icon={faExpandArrowsAlt}
+                                icon={faUpRightAndDownLeftFromCenter}
                                 className="text-sm"
                             />
                         </button>
@@ -281,7 +281,7 @@ export function SidebarClient(props: SidebarClientProps) {
                             className="hover:text-indigo-500 transition-colors"
                         >
                             <FontAwesomeIcon
-                                icon={faCompressArrowsAlt}
+                                icon={faDownLeftAndUpRightToCenter}
                                 className="text-sm"
                             />
                         </button>
