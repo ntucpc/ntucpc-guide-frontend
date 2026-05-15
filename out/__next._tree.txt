@@ -1,0 +1,11 @@
+:HL["/_next/static/chunks/92c9b5650a0af8ef.css","style"]
+:HL["/_next/static/chunks/0b8958ef8607734c.css","style"]
+:HL["/_next/static/chunks/583d8ac60eec60bd.css","style"]
+:HL["/_next/static/media/fb4edce8a3cbfef3-s.p.179b8591.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/files/contributors/photos/wiwiho.png","image"]
+:HL["/files/contributors/photos/baluteshih.png","image"]
+:HL["/files/contributors/photos/8e7.png","image"]
+:HL["/files/contributors/photos/rabhunter.png","image"]
+:HL["/files/contributors/photos/nathanlee726.png","image"]
+:HL["/files/contributors/photos/abc864197532.png","image"]
+0:{"buildId":"O6IJxE4b7EKe5OSeumz9T","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
