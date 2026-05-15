@@ -29,7 +29,7 @@ jobs:
                   echo "GA_ID=${{ secrets.GA_ID }}" >> .env
             - name: npm install
               run: |
-                  npm install
+                  npm install --legacy-peer-deps
             - name: Build
               run: |
                   python3 build_public.py guide
