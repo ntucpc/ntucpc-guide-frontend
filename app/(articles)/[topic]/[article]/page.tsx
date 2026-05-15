@@ -38,9 +38,10 @@ export async function generateMetadata(props: ArticleProps) {
 
 export async function generateStaticParams() {
     const articles: { topic: string; article: string }[] = []
+    const isDev = process.env.NODE_ENV === "development"
     for (const topic of getTopics()) {
         for (const article of topic.contents) {
-            if (!getArticle(article).coming)
+            if (isDev || !getArticle(article).coming)
                 articles.push({
                     topic: topic.code,
                     article: article.split("/")[1],
