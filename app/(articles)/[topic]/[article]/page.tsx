@@ -201,14 +201,14 @@ function ArticleFooterLink({
     code: string | undefined
     side: "left" | "right"
 }) {
-    if (!code) return <div className="flex-1 hidden sm:block" />
+    if (!code) return <div className="flex-auto sm:flex-1 hidden sm:block" />
     const article = getArticle(code)
     const topic = getTopic(article.topic)
 
     return (
         <WrappedLink
             href={`/${code}`}
-            className={`flex-1 group p-6 transition-all duration-300 flex flex-col ${
+            className={`flex-auto sm:flex-1 group p-3 transition-all duration-300 flex flex-col ${
                 side === "left" ? "items-start" : "items-end text-right"
             }`}
         >
@@ -257,7 +257,7 @@ function ArticleFooter({ article }: { article: Article }) {
 
     return (
         <div className="mt-24 pt-12 border-t border-gray-100">
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex flex-wrap sm:flex-nowrap gap-6">
                 <ArticleFooterLink side="left" code={previous} />
                 <ArticleFooterLink side="right" code={next} />
             </div>

@@ -200,6 +200,10 @@ export function SidebarClient(props: SidebarClientProps) {
         "default"
     )
 
+    useEffect(() => {
+        setDisplaySidebar("default")
+    }, [params])
+
     const curCategory = props.categories[category]
     const curSelectedSection = selectedSection[category]
 
