@@ -104,7 +104,7 @@ function SidebarSectionComponent({
     activeArticle: string
 }) {
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-[calc(100vh-180px)]">
             <ScrollSection>
                 {section.groups.map((group) => (
                     <SidebarGroupComponent
@@ -245,7 +245,7 @@ export function SidebarClient(props: SidebarClientProps) {
                         ? "hidden"
                         : "hidden xl:block"
                 } 
-                h-[calc(100vh-64px)] flex flex-col border-r border-gray-100 p-4`}
+                h-[calc(100vh-64px)] border-r border-gray-100 p-4`}
             >
                 {/* Top Action Bar */}
                 <div className="flex items-center justify-between mb-4">
