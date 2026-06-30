@@ -19,6 +19,7 @@ import {
     faList,
     faStar,
 } from "@fortawesome/free-solid-svg-icons"
+import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Section } from "@/lib/parser/section"
 
@@ -160,7 +161,18 @@ function ArticleHeader({ article }: { article: Article }) {
                         </div>
                         <div>
                             <div className="text-[10px] uppercase font-bold text-gray-400 tracking-tighter">
-                                重要度
+                                <WrappedLink
+                                    href="/Guide/importance"
+                                    className="hover:text-indigo-500 transition-colors flex gap-1 items-center"
+                                    title="文章重要等級"
+                                    target="_blank"
+                                >
+                                    重要度
+                                    <FontAwesomeIcon
+                                        icon={faCircleQuestion}
+                                        className="text-[10px]"
+                                    />
+                                </WrappedLink>
                             </div>
                             <div className="mt-0.5">
                                 <ImportanceTag
