@@ -1,3 +1,5 @@
 export { default as Door } from "./Door"
+export { default as Earth } from "./Earth"
+export { default as Puzzle } from "./Puzzle"
 export { default as Sprout } from "./Sprout"
 export { default as Stairs } from "./Stairs"
