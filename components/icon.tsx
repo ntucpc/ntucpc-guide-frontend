@@ -1,4 +1,4 @@
-import { Door, Sprout, Stairs } from "@/icons"
+import { Door, Earth, Puzzle, Sprout, Stairs } from "@/icons"
 
 type IconProps = {
     Component: React.FC<React.SVGProps<SVGSVGElement>>
@@ -16,6 +16,8 @@ function getCustomIcon(
         door: Door,
         sprout: Sprout,
         stairs: Stairs,
+        puzzle: Puzzle,
+        earth: Earth,
         nothing: () => <></>,
     }
     return mapping[iconName]
