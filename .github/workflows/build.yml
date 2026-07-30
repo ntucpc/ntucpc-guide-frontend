@@ -1,7 +1,6 @@
 name: Build NTUCPC Guide
 on:
     push:
-        branches: ["master", "build-test"]
     workflow_dispatch:
 jobs:
     build:
@@ -29,23 +28,27 @@ jobs:
                   echo "GA_ID=${{ secrets.GA_ID }}" >> .env
             - name: npm install
               run: |
-                  npm install --legacy-peer-deps
+                  npm install
             - name: Build
               run: |
                   python3 build_public.py guide
                   npm run build
                   cp -r out/ ../out
             - name: Checkout build
+              if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/build-test'
               uses: actions/checkout@v4
               with:
                   ref: build
             - name: Copy out
+              if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/build-test'
               run: |
                   rm -rf out
                   cp -r ../out out
             - name: Set safe directory
+              if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/build-test'
               run: git config --global --add safe.directory $GITHUB_WORKSPACE
             - name: Commit
+              if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/build-test'
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   commit_message: build from ${{ github.ref_name }} - ${{ github.sha }}
