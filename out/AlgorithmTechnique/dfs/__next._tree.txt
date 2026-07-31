@@ -7,4 +7,4 @@
 :HL["/files/content/AlgorithmTechnique/dfs/figure/maze.png","image"]
 :HL["/files/problems/ZeroJudge/i644/figure/board.png","image"]
 :HL["/files/problems/NEOJ/62/figure/ZtaggER.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"AlgorithmTechnique","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"dfs","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"E8QhD5EL-LMKTYNMeL4Gl"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"AlgorithmTechnique","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"dfs","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"7Lqqtw7UQuVmPK5OnXsku"}
