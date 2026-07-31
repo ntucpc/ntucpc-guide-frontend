@@ -18,6 +18,8 @@ import { remarkRefcode } from "@/ntucpc-website-common-lib/mdx-parser/refcode"
 import { getGuideRoot, getPublicRoot } from "@/lib/environment"
 import { remarkFigure } from "@/ntucpc-website-common-lib/mdx-parser/figure"
 import { remarkSection, Section } from "@/lib/parser/section"
+import { remarkThinking } from "@/lib/parser/thinking"
+import { Thinking, ThinkingAnswer } from "./thinking"
 
 export async function getArticleContent(source: string, depthLimit: number) {
     if (depthLimit < 0) {
@@ -64,6 +66,7 @@ export async function getArticleContent(source: string, depthLimit: number) {
                     remarkContentReference,
                     remarkProblem,
                     [remarkSection, headings],
+                    remarkThinking,
                 ],
                 rehypePlugins: [
                     [
@@ -98,6 +101,8 @@ export async function getArticleContent(source: string, depthLimit: number) {
             ...getCommonLibComponents(),
             ContentReference: ContentReference,
             Problem: Problem(depthLimit - 1, ArticleMarkdown),
+            Thinking: Thinking,
+            ThinkingAnswer: ThinkingAnswer,
         },
     })
 
