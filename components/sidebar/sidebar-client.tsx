@@ -128,19 +128,21 @@ function SidebarCategorySections({
     setSelectedSection: (section: string) => void
 }) {
     return (
-        <ScrollSection>
-            <div className="space-y-1">
-                {category.sections.map((section) => (
-                    <div
-                        key={section.id}
-                        className="px-3 py-2 text-sm text-gray-600 font-medium rounded-md hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors"
-                        onClick={() => setSelectedSection(section.id)}
-                    >
-                        {section.title}
-                    </div>
-                ))}
-            </div>
-        </ScrollSection>
+        <div className="flex flex-col h-[calc(100vh-180px)]">
+            <ScrollSection>
+                <div className="space-y-1">
+                    {category.sections.map((section) => (
+                        <div
+                            key={section.id}
+                            className="px-3 py-2 text-sm text-gray-600 font-medium rounded-md hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors"
+                            onClick={() => setSelectedSection(section.id)}
+                        >
+                            {section.title}
+                        </div>
+                    ))}
+                </div>
+            </ScrollSection>
+        </div>
     )
 }
 
