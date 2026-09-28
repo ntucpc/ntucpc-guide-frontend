@@ -2,8 +2,8 @@
 :HL["/_next/static/chunks/2_p2hkznsfs7j.css","style"]
 :HL["/_next/static/chunks/1wy5mi7e4lnl0.css","style"]
 :HL["/_next/static/media/fb4edce8a3cbfef3-s.p.3ep0ejxd-rul1.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/files/content/BasicDynamicProgramming/subproblem/figure/fib_call1.png","image"]
-:HL["/files/content/BasicDynamicProgramming/subproblem/figure/fib_call2.png","image"]
+:HL["/files/content/BasicDynamicProgramming/subproblem/figure/fib_call1.gif","image"]
+:HL["/files/content/BasicDynamicProgramming/subproblem/figure/fib_call2.gif","image"]
 :HL["/files/content/BasicDynamicProgramming/subproblem/figure/len4.png","image"]
 :HL["/files/content/BasicDynamicProgramming/subproblem/figure/len4_split.png","image"]
 :HL["/files/content/BasicDynamicProgramming/subproblem/figure/len4_split_all.png","image"]
@@ -13,4 +13,4 @@
 :HL["/files/problems/ZeroJudge/d054/figure/figure2.jpeg","image"]
 :HL["/files/problems/TIOJ/1476/figure/1476_1.jpg","image"]
 :HL["/files/problems/ZeroJudge/d389/figure/d389.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"BasicDynamicProgramming","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"subproblem","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"mAnHyDPfpT3hiBcXzo43t"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"BasicDynamicProgramming","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"subproblem","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"kyl0Pp3F67cT4KCK5nWWa"}
