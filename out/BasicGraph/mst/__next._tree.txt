@@ -7,4 +7,4 @@
 :HL["/files/content/BasicGraph/mst/figure/cut_prop-01.png","image"]
 :HL["/files/content/BasicGraph/mst/figure/kruskal-01.png","image"]
 :HL["/files/content/BasicGraph/mst/figure/prim-01.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"BasicGraph","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"mst","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"KUV3BRQTwZLJIiQSA8F-5"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"BasicGraph","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"mst","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"_GRH0P5I63SjDqll7Lizw"}
