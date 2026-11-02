@@ -7,19 +7,6 @@ const config: Config = {
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
-    safelist: [
-        {
-            pattern:
-                /(bg|text|border)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|purple|fuchsia|pink|rose|violet)-\d{2,3}/,
-            variants: ["hover", "group-hover"],
-        },
-        {
-            pattern: /[mp][lrbtxy]-\d+/,
-        },
-        {
-            pattern: /max-w-(\dxl|fit)/,
-        },
-    ],
     theme: {
         fontFamily: {
             sans: [
