@@ -34,7 +34,7 @@ function ButtonLink({ text, url, primary = false, icon }: ButtonLinkProps) {
             href={url}
             className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 ${
                 primary
-                    ? "bg-accent-600 text-white hover:bg-accent-700"
+                    ? "bg-accent-600 text-white hover:bg-accent-700 dark:bg-accent-400 dark:hover:bg-accent-300"
                     : "bg-surface text-accent-600 border border-accent-100 hover:bg-accent-50"
             }`}
         >
@@ -132,22 +132,36 @@ export default function HomePage() {
             <NavBar />
 
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-100 pt-16 pb-24 md:pt-24 md:pb-32 border-b border-line-subtle">
+            <div className="relative overflow-hidden bg-slate-100 dark:bg-gray-900 pt-16 pb-24 md:pt-24 md:pb-32 border-b border-line-subtle">
                 {/* Background Image Overlay */}
-                <div className="absolute inset-0 z-0 bg-home bg-cover bg-center" />
+                <div className="absolute inset-0 z-0 bg-home bg-cover bg-center dark:opacity-[0.06]" />
 
                 {/* Decorative Blobs */}
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
                 <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
 
                 <div className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col items-center text-center">
-                    <div className="mb-12">
+                    {/*
+                     * banner2.png has black text; guide_banner.png is the same design in white,
+                     * but with different transparent padding. At the same height and left-aligned,
+                     * their contents line up, so banner2.png keeps the layout in dark mode (invisible)
+                     * and guide_banner.png is laid over it.
+                     */}
+                    <div className="relative mb-12">
                         <Image
                             src="/banner2.png"
                             alt="NTUCPC Guide Banner"
                             width={600}
                             height={200}
-                            className="w-full max-w-xl h-auto"
+                            className="w-full max-w-xl h-auto dark:invisible"
+                            priority
+                        />
+                        <Image
+                            src="/guide_banner.png"
+                            alt="NTUCPC Guide Banner"
+                            width={1000}
+                            height={241}
+                            className="absolute top-0 left-0 h-full w-auto max-w-none hidden dark:block"
                             priority
                         />
                     </div>
@@ -276,7 +290,7 @@ export default function HomePage() {
                 {isDev && (
                     <div className="mt-20 pt-12 border-t border-line">
                         <div className="flex flex-col items-center gap-6">
-                            <div className="px-4 py-2 rounded-lg bg-orange-50 border border-orange-100 text-orange-700 text-sm font-medium">
+                            <div className="px-4 py-2 rounded-lg bg-orange-50 border border-orange-100 text-orange-700 dark:bg-orange-950/40 dark:border-orange-900/60 dark:text-orange-300 text-sm font-medium">
                                 🛠️ You are in development mode! （Production
                                 不會有這區塊）
                             </div>
