@@ -5,7 +5,7 @@ import { getChapter, getChapters } from "@/lib/structure/chapters"
 import { getTopic } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
-import { IconWrapper } from "@/components/icon"
+import { getIconColor, IconWrapper } from "@/components/icon"
 import { Metadata } from "next"
 
 type ChapterProps = {
@@ -48,9 +48,8 @@ export default async function ChapterPage(props: ChapterProps) {
                 <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
                     {/* Chapter Icon */}
                     <div
-                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-3xl bg-gray-50 text-6xl text-${
-                            chapter.iconColor || "indigo-500"
-                        } shadow-sm border border-gray-100`}
+                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-3xl bg-gray-50 text-6xl shadow-sm border border-gray-100`}
+                        style={{ color: getIconColor(chapter.iconColor) }}
                     >
                         <IconWrapper iconName={chapter.icon} />
                     </div>

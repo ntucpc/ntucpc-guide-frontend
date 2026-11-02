@@ -1,4 +1,4 @@
-import { IconWrapper } from "@/components/icon"
+import { getIconColor, IconWrapper } from "@/components/icon"
 import { getChapterArticleGroups } from "@/lib/structure"
 import { getChapters } from "@/lib/structure/chapters"
 import { getTopic } from "@/lib/structure/topics"
@@ -21,9 +21,8 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                 >
                     {/* Icon Section */}
                     <div
-                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-2xl bg-gray-50 text-6xl transition-all duration-300 group-hover/header:bg-indigo-50 text-${
-                            chapter.iconColor || "indigo-500"
-                        }`}
+                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-2xl bg-gray-50 text-6xl transition-all duration-300 group-hover/header:bg-indigo-50`}
+                        style={{ color: getIconColor(chapter.iconColor) }}
                     >
                         <IconWrapper iconName={chapter.icon} />
                     </div>
