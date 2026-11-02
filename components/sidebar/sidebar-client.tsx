@@ -23,7 +23,7 @@ function ScrollSection({ children }: { children: ReactNode }) {
         <div
             className={`flex-grow overflow-y-auto mt-2 pr-2
                         scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin 
-                        scrollbar-thumb-zinc-200 scrollbar-track-transparent`}
+                        scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent`}
         >
             {children}
         </div>
@@ -44,19 +44,19 @@ function SidebarGroupComponent({
     return (
         <div className="mb-1">
             <div
-                className="flex items-center gap-2 py-1.5 px-2 text-sm font-bold text-gray-700 select-none cursor-pointer hover:bg-gray-100 rounded-md transition-colors"
+                className="flex items-center gap-2 py-1.5 px-2 text-sm font-bold text-fg-secondary select-none cursor-pointer hover:bg-surface-muted rounded-md transition-colors"
                 onClick={toggleFold}
             >
                 <FontAwesomeIcon
                     icon={faAngleRight}
-                    className={`text-[10px] text-gray-400 transition-transform duration-200 ${
+                    className={`text-[10px] text-fg-subtle transition-transform duration-200 ${
                         folded ? "" : "rotate-90"
                     }`}
                 />
                 <div className="truncate">{group.title}</div>
             </div>
             <ul
-                className={`pl-4 space-y-0.5 mt-0.5 border-l border-gray-100 ml-3.5 ${
+                className={`pl-4 space-y-0.5 mt-0.5 border-l border-line ml-3.5 ${
                     folded ? "hidden" : "block"
                 }`}
             >
@@ -69,16 +69,16 @@ function SidebarGroupComponent({
                                     href={item.url}
                                     className={`block py-1.5 px-3 text-sm rounded-md transition-all duration-200 ${
                                         isActive
-                                            ? "text-indigo-600 bg-indigo-50 font-medium border-l-2 border-indigo-600 -ml-[1px]"
-                                            : "text-gray-500 hover:text-indigo-500 hover:bg-gray-50"
+                                            ? "text-accent-600 bg-accent-50 font-medium border-l-2 border-accent-600 -ml-[1px]"
+                                            : "text-fg-muted hover:text-accent-500 hover:bg-surface-subtle"
                                     }`}
                                 >
                                     {item.title}
                                 </Link>
                             ) : (
-                                <div className="flex justify-between items-center py-1.5 px-3 text-sm text-gray-300">
+                                <div className="flex justify-between items-center py-1.5 px-3 text-sm text-fg-subtle">
                                     <span>{item.title}</span>
-                                    <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">
+                                    <span className="text-[10px] bg-surface-muted text-fg-muted px-1.5 py-0.5 rounded-full">
                                         待續
                                     </span>
                                 </div>
@@ -134,7 +134,7 @@ function SidebarCategorySections({
                     {category.sections.map((section) => (
                         <div
                             key={section.id}
-                            className="px-3 py-2 text-sm text-gray-600 font-medium rounded-md hover:bg-gray-50 hover:text-indigo-600 cursor-pointer transition-colors"
+                            className="px-3 py-2 text-sm text-fg-tertiary font-medium rounded-md hover:bg-surface-subtle hover:text-accent-600 cursor-pointer transition-colors"
                             onClick={() => setSelectedSection(section.id)}
                         >
                             {section.title}
@@ -213,7 +213,7 @@ export function SidebarClient(props: SidebarClientProps) {
         <>
             {/* Toggle Bar - Shown when sidebar is manually hidden or on mobile by default */}
             <div
-                className={`fixed bg-white shadow-sm w-full z-[999] select-none cursor-pointer border-b 
+                className={`fixed bg-page shadow-sm w-full z-[999] select-none cursor-pointer border-b 
                 ${
                     displaySidebar === true
                         ? "hidden"
@@ -226,7 +226,7 @@ export function SidebarClient(props: SidebarClientProps) {
                 <div className="flex justify-center w-full">
                     <div className="xl:flex items-start gap-10 w-full max-w-[100rem]">
                         <div className="flex-grow">
-                            <div className="w-full max-w-4xl px-4 py-3 text-indigo-600 font-bold text-sm flex items-center gap-2">
+                            <div className="w-full max-w-4xl px-4 py-3 text-accent-600 font-bold text-sm flex items-center gap-2">
                                 <FontAwesomeIcon icon={faAngleDoubleRight} />{" "}
                                 展開目錄
                             </div>
@@ -239,7 +239,7 @@ export function SidebarClient(props: SidebarClientProps) {
 
             {/* Sidebar Main Container */}
             <aside
-                className={`fixed bg-white xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
+                className={`fixed bg-page xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
                 ${
                     displaySidebar === true
                         ? "block"
@@ -247,11 +247,11 @@ export function SidebarClient(props: SidebarClientProps) {
                         ? "hidden"
                         : "hidden xl:block"
                 } 
-                h-[calc(100vh-64px)] border-r border-gray-100 p-4`}
+                h-[calc(100vh-64px)] p-4`}
             >
                 {/* Top Action Bar */}
                 <div className="flex items-center justify-between mb-4">
-                    <div className="flex bg-gray-100 p-1 rounded-lg w-fit">
+                    <div className="flex bg-surface-muted p-1 rounded-lg w-fit">
                         {[
                             { id: CATEGORY_CHAPTER, label: "章節" },
                             { id: CATEGORY_TOPIC, label: "主題" },
@@ -261,8 +261,8 @@ export function SidebarClient(props: SidebarClientProps) {
                                 onClick={() => setCategory(tab.id)}
                                 className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${
                                     category === tab.id
-                                        ? "bg-white text-indigo-600 shadow-sm"
-                                        : "text-gray-500 hover:text-gray-700"
+                                        ? "bg-surface text-accent-600 shadow-sm"
+                                        : "text-fg-muted hover:text-fg-secondary"
                                 }`}
                             >
                                 {tab.label}
@@ -270,11 +270,11 @@ export function SidebarClient(props: SidebarClientProps) {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-3 text-gray-400">
+                    <div className="flex items-center gap-3 text-fg-subtle">
                         <button
                             onClick={() => updateDefaultFolded(false)}
                             title="全部展開"
-                            className="hover:text-indigo-500 transition-colors"
+                            className="hover:text-accent-500 transition-colors"
                         >
                             <FontAwesomeIcon
                                 icon={faUpRightAndDownLeftFromCenter}
@@ -284,7 +284,7 @@ export function SidebarClient(props: SidebarClientProps) {
                         <button
                             onClick={() => updateDefaultFolded(true)}
                             title="全部收合"
-                            className="hover:text-indigo-500 transition-colors"
+                            className="hover:text-accent-500 transition-colors"
                         >
                             <FontAwesomeIcon
                                 icon={faDownLeftAndUpRightToCenter}
@@ -305,10 +305,10 @@ export function SidebarClient(props: SidebarClientProps) {
                 </div>
 
                 {/* Breadcrumb / Category Title */}
-                <div className="flex items-center gap-2 text-xs font-bold text-gray-400 mb-2 px-1">
+                <div className="flex items-center gap-2 text-xs font-bold text-fg-subtle mb-2 px-1">
                     {curSelectedSection ? (
                         <div
-                            className="flex items-center gap-1 cursor-pointer hover:text-indigo-600 transition-colors"
+                            className="flex items-center gap-1 cursor-pointer hover:text-accent-600 transition-colors"
                             onClick={() => {
                                 const newSelected = [...selectedSection]
                                 newSelected[category] = null
@@ -320,7 +320,7 @@ export function SidebarClient(props: SidebarClientProps) {
                                 icon={faAngleRight}
                                 className="text-[8px]"
                             />
-                            <span className="text-gray-800">
+                            <span className="text-fg">
                                 {
                                     curCategory.sections.find(
                                         (s) => s.id === curSelectedSection
@@ -329,9 +329,7 @@ export function SidebarClient(props: SidebarClientProps) {
                             </span>
                         </div>
                     ) : (
-                        <span className="text-gray-800">
-                            {curCategory.title}
-                        </span>
+                        <span className="text-fg">{curCategory.title}</span>
                     )}
                 </div>
 

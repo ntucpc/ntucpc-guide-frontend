@@ -7,10 +7,8 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons"
-import {
-    BLOCK_MARGIN,
-    HyperRefBlank,
-} from "@/ntucpc-website-common-lib/components/basic"
+import { HyperRefBlank } from "@/components/basic"
+import { Block, BlockHeader } from "./block"
 
 /**
  * Problem attributes:
@@ -22,7 +20,6 @@ import {
  * - descriptionMdx: description mdx file path, undefined if the file doesn't exist
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
- * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 type ProblemProps = {
     url: string
@@ -34,6 +31,22 @@ type ProblemProps = {
     solution: string
     solutionMdx: string
     constraintsMdx: string
+}
+
+// Class names must be written out in full so that Tailwind can detect them
+const PROBLEM_THEMES = {
+    sample: {
+        label: "例題",
+        header: "bg-indigo-50/30 dark:bg-indigo-950/30",
+        badge: "bg-indigo-500 dark:bg-indigo-600",
+        star: "text-indigo-500 dark:text-indigo-400",
+    },
+    exercise: {
+        label: "習題",
+        header: "bg-emerald-50/30 dark:bg-emerald-950/30",
+        badge: "bg-emerald-500 dark:bg-emerald-600",
+        star: "text-emerald-500 dark:text-emerald-400",
+    },
 }
 
 export function Problem(
@@ -62,15 +75,13 @@ export function Problem(
         )
 
         const isSample = props.difficulty === "0"
-        const theme = isSample
-            ? { base: "indigo", label: "例題" }
-            : { base: "emerald", label: "習題" }
+        const theme = isSample ? PROBLEM_THEMES.sample : PROBLEM_THEMES.exercise
 
         let difficultyDisplay = null
         if (props.difficulty === "?") {
             difficultyDisplay = (
                 <div
-                    className="flex items-center gap-1 text-gray-400"
+                    className="flex items-center gap-1 text-fg-subtle"
                     title="難度未知"
                 >
                     <FontAwesomeIcon
@@ -92,9 +103,7 @@ export function Problem(
                                 key={index}
                                 icon={active ? faStar : faEmptyStar}
                                 className={`text-[10px] ${
-                                    active
-                                        ? `text-${theme.base}-500`
-                                        : "text-gray-200"
+                                    active ? theme.star : "text-fg-ghost"
                                 }`}
                             />
                         )
@@ -104,35 +113,32 @@ export function Problem(
         }
 
         return (
-            <div
-                className={`${BLOCK_MARGIN} rounded-xl border border-gray-100 overflow-hidden shadow-sm bg-white`}
-            >
-                {/* Header */}
-                <div
-                    className={`flex items-center justify-between px-5 py-3 border-b border-gray-50 bg-${theme.base}-50/30`}
+            <Block className="border-line">
+                <BlockHeader
+                    className={`justify-between border-b border-line-subtle ${theme.header}`}
                 >
                     <div className="flex items-center gap-4">
                         <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-${theme.base}-500 text-white`}
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${theme.badge} text-white`}
                         >
                             {theme.label}
                         </span>
-                        <h4 className="font-bold text-gray-900">
+                        <h4 className="font-bold text-fg-strong">
                             {props.name}
                         </h4>
                     </div>
                     {difficultyDisplay}
-                </div>
+                </BlockHeader>
 
                 {/* Content */}
                 <div className="px-6 py-4">
                     {/* Source Info */}
-                    <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-gray-400 tracking-wider">
+                    <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-fg-subtle tracking-wider">
                         <span>Source:</span>
                         {props.url ? (
                             <HyperRefBlank
                                 href={props.url}
-                                className="text-indigo-500 hover:text-indigo-700 transition-colors flex items-center gap-1.5"
+                                className="text-accent-500 hover:text-accent-700 transition-colors flex items-center gap-1.5"
                             >
                                 {props.src}
                                 <FontAwesomeIcon
@@ -146,27 +152,27 @@ export function Problem(
                     </div>
 
                     {/* Description */}
-                    <div className="prose-sm prose-slate max-w-none mb-4 leading-relaxed">
+                    <div className="mb-4 leading-relaxed">
                         {descriptionNode}
                     </div>
 
                     {/* Constraints */}
                     {props.constraintsMdx && (
-                        <details className="group border border-gray-100 rounded-lg overflow-hidden">
-                            <summary className="list-none cursor-pointer px-4 py-2 text-xs font-bold text-gray-500 bg-gray-50/50 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                        <details className="group border border-line rounded-lg overflow-hidden">
+                            <summary className="list-none cursor-pointer px-4 py-2 text-xs font-bold text-fg-muted bg-surface-subtle/50 hover:bg-surface-subtle transition-colors flex items-center justify-between">
                                 <span>條件限制</span>
                                 <FontAwesomeIcon
                                     icon={faChevronRight}
                                     className="text-[10px] group-open:rotate-90 transition-transform"
                                 />
                             </summary>
-                            <div className="px-4 py-3 text-sm text-gray-600 border-t border-gray-100 bg-white">
+                            <div className="px-4 py-3 text-sm text-fg-tertiary border-t border-line bg-surface">
                                 {constraintsNode}
                             </div>
                         </details>
                     )}
                 </div>
-            </div>
+            </Block>
         )
     }
 }

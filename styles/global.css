@@ -2,8 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-    .color-animation {
-        @apply transition duration-200;
+/*
+ * Semantic color tokens, used through the Tailwind theme (see tailwind.config.ts).
+ * Values are space-separated RGB channels so that opacity modifiers like `bg-surface/50` work.
+ */
+@layer base {
+    :root {
+        /* Backgrounds */
+        --color-page: 255 255 255; /* white */
+        --color-surface: 255 255 255; /* white */
+        --color-surface-subtle: 249 250 251; /* gray-50 */
+        --color-surface-muted: 243 244 246; /* gray-100 */
+        --color-surface-strong: 229 231 235; /* gray-200 */
+
+        /* Text */
+        --color-fg-strong: 17 24 39; /* gray-900 */
+        --color-fg: 31 41 55; /* gray-800 */
+        --color-fg-secondary: 55 65 81; /* gray-700 */
+        --color-fg-tertiary: 75 85 99; /* gray-600 */
+        --color-fg-muted: 107 114 128; /* gray-500 */
+        --color-fg-subtle: 156 163 175; /* gray-400 */
+        --color-fg-faint: 209 213 219; /* gray-300 */
+        --color-fg-ghost: 229 231 235; /* gray-200 */
+
+        /* Borders and dividers */
+        --color-line-subtle: 249 250 251; /* gray-50 */
+        --color-line: 243 244 246; /* gray-100 */
+        --color-line-strong: 229 231 235; /* gray-200 */
+
+        /* Accent (indigo) */
+        --color-accent-50: 238 242 255;
+        --color-accent-100: 224 231 255;
+        --color-accent-200: 199 210 254;
+        --color-accent-300: 165 180 252;
+        --color-accent-400: 129 140 248;
+        --color-accent-500: 99 102 241;
+        --color-accent-600: 79 70 229;
+        --color-accent-700: 67 56 202;
+        --color-accent-800: 55 48 163;
+        --color-accent-900: 49 46 129;
+    }
+
+    /*
+     * Dark mode values. The scales are inverted so that each token keeps its role:
+     * e.g. `fg-strong` is still the most prominent text and `accent-50` the faintest accent tint.
+     */
+    :root.dark {
+        color-scheme: dark;
+
+        /* Backgrounds */
+        --color-page: 13 17 23;
+        --color-surface: 22 27 34;
+        --color-surface-subtle: 28 33 40;
+        --color-surface-muted: 33 38 45;
+        --color-surface-strong: 48 54 61;
+
+        /* Text */
+        --color-fg-strong: 243 244 246; /* gray-100 */
+        --color-fg: 229 231 235; /* gray-200 */
+        --color-fg-secondary: 209 213 219; /* gray-300 */
+        --color-fg-tertiary: 175 182 192;
+        --color-fg-muted: 156 163 175; /* gray-400 */
+        --color-fg-subtle: 107 114 128; /* gray-500 */
+        --color-fg-faint: 75 85 99; /* gray-600 */
+        --color-fg-ghost: 55 65 81; /* gray-700 */
+
+        /* Borders and dividers */
+        --color-line-subtle: 33 38 45;
+        --color-line: 48 54 61;
+        --color-line-strong: 72 79 88;
+
+        /* Accent (indigo, inverted) */
+        --color-accent-50: 30 30 70;
+        --color-accent-100: 49 46 129;
+        --color-accent-200: 55 48 163;
+        --color-accent-300: 67 56 202;
+        --color-accent-400: 79 70 229;
+        --color-accent-500: 99 102 241;
+        --color-accent-600: 129 140 248;
+        --color-accent-700: 165 180 252;
+        --color-accent-800: 199 210 254;
+        --color-accent-900: 224 231 255;
+    }
+
+    body {
+        background-color: rgb(var(--color-page));
     }
 }

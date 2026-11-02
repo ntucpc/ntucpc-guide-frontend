@@ -1,7 +1,5 @@
 import { visit } from "unist-util-visit"
-import {
-    getAttribute,
-} from "@/ntucpc-website-common-lib/mdx-parser/util"
+import { getAttribute } from "@/lib/parser/util"
 import { ProblemOccur, getProblem } from "../problems"
 
 /**

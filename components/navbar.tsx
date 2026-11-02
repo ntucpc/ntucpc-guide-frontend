@@ -1,6 +1,6 @@
 "use client"
 
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { WrappedLink } from "@/components/common"
 import {
     faBars,
     faXmark,
@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { useState } from "react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 type NavbarItemProps = {
     text: string
@@ -33,7 +34,7 @@ export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
                 )}
             </WrappedLink>
             {/* Animated Underline */}
-            <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+            <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-accent-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
         </div>
     )
 }
@@ -47,7 +48,7 @@ export function ExpandedNavbarItem({
         <div className="px-6 py-3 border-b border-slate-800 last:border-none">
             <WrappedLink
                 href={url}
-                className="text-slate-300 hover:text-indigo-400 font-medium flex justify-between items-center"
+                className="text-slate-300 hover:text-accent-400 font-medium flex justify-between items-center"
                 target={blank ? "_blank" : "_self"}
             >
                 {text}
@@ -62,11 +63,16 @@ export function ExpandedNavbarItem({
     )
 }
 
+// Light: slate-900 at 95% opacity over white, which is how the navbar used to look in light mode
+const NAVBAR_BG = "bg-[#1b2335] dark:bg-slate-900"
+
 export function NavBar() {
     const [showMenu, setShowMenu] = useState(false)
 
     return (
-        <nav className="bg-slate-900/95 backdrop-blur-md text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm">
+        <nav
+            className={`${NAVBAR_BG} text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
+        >
             <div className="mx-auto w-full max-w-[100rem] flex items-center justify-between px-6 h-16">
                 {/* Logo Section */}
                 <div className="flex items-center gap-8 h-full">
@@ -98,6 +104,9 @@ export function NavBar() {
                     </div>
                 </div>
 
+                {/* Theme Toggle (desktop) */}
+                <ThemeToggle className="max-sm:hidden" />
+
                 {/* Mobile Menu Toggle */}
                 <div className="sm:hidden">
                     <button
@@ -115,7 +124,7 @@ export function NavBar() {
             {/* Mobile Menu Dropdown */}
             <div
                 className={`
-                absolute top-full left-0 w-full bg-slate-900 shadow-2xl sm:hidden border-b border-slate-800
+                absolute top-full left-0 w-full ${NAVBAR_BG} shadow-2xl sm:hidden border-b border-slate-800
                 transition-all duration-300 ease-in-out origin-top
                 ${
                     showMenu
@@ -137,6 +146,11 @@ export function NavBar() {
                         url="https://ntucpc.org/"
                         blank={true}
                     />
+                </div>
+
+                {/* Theme Toggle (mobile) */}
+                <div className="flex justify-end px-4 py-2 border-t border-slate-800">
+                    <ThemeToggle />
                 </div>
             </div>
         </nav>

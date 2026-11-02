@@ -1,6 +1,3 @@
 [submodule "public/guide"]
 	path = guide
 	url = git@github.com:ntucpc/ntucpc-guide.git
-[submodule "ntucpc-website-common-lib"]
-	path = ntucpc-website-common-lib
-	url = git@github.com:ntucpc/ntucpc-website-common-lib.git

@@ -1,7 +1,7 @@
 import path from "path"
 
 import { existsSync, readdirSync } from "fs"
-import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { readConfig } from "@/lib/config"
 import { getGuideRoot } from "../environment"
 import { findChapter } from "./chapters"
 import { Article } from "./type"

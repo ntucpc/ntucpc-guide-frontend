@@ -1,10 +1,7 @@
 import { visit } from "unist-util-visit"
-import {
-    getAttribute,
-    setAttribute,
-} from "@/ntucpc-website-common-lib/mdx-parser/util"
+import { getAttribute, setAttribute } from "@/lib/parser/util"
 import path from "path"
-import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { readConfig } from "@/lib/config"
 import { existsSync } from "fs"
 import { getGuideRoot } from "../environment"
 
@@ -21,7 +18,6 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems")
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
  * - constraintsMdx: constraints mdx file path, undefined if the file doesn't exist
- * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

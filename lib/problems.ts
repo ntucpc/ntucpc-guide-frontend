@@ -1,14 +1,15 @@
 import { existsSync, readdirSync } from "fs"
+import { readFile } from "fs/promises"
 import path from "path"
 import { getGuideRoot } from "./environment"
-import {
-    parseMdx,
-    readConfig,
-} from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
-import {
-    getArticleMdxPath,
-    getArticles,
-} from "./structure/articles"
+import { readConfig } from "./config"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkMdx from "remark-mdx"
+import remarkDirective from "remark-directive"
+import remarkGfm from "remark-gfm"
+import { preprocessMdx } from "./parser/util"
+import { getArticleMdxPath, getArticles } from "./structure/articles"
 import { remarkProblemScan } from "./parser/problem-scanner"
 
 export type Problem = {
@@ -75,12 +76,17 @@ export async function getProblemOccurs(): Promise<Map<string, ProblemOccur[]>> {
     for (const article of getArticles()) {
         if (!article.valid) continue
         const mdxPath = getArticleMdxPath(article.code)
-        await parseMdx(
-            mdxPath,
-            1,
-            [[remarkProblemScan, addOccur, article.code]],
-            {}
+        const source = preprocessMdx(
+            await readFile(mdxPath, { encoding: "utf-8" })
         )
+        // Only the syntax tree is needed here, so parse without compiling
+        const processor = unified()
+            .use(remarkParse)
+            .use(remarkMdx)
+            .use(remarkDirective)
+            .use(remarkGfm)
+            .use(remarkProblemScan, addOccur, article.code)
+        await processor.run(processor.parse(source))
     }
     return problemOccurs
 }

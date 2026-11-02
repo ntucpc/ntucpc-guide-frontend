@@ -2,6 +2,5 @@ node_modules
 .next
 out
 guide
-ntucpc-website-common-lib
 package-lock.json
 README.md

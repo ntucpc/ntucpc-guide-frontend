@@ -11,7 +11,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-} from "@/ntucpc-website-common-lib/components/basic"
+} from "@/components/basic"
 import { useState } from "react"
 
 type ArticleProps = {

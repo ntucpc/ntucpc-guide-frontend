@@ -4,8 +4,7 @@ function getEnvironmentVariable(
     defaultValue: string | undefined = undefined
 ): string {
     const value = process.env[name]
-    // console.log(process.env)
-    if (!value && !defaultValue) {
+    if (!value && defaultValue === undefined) {
         throw new Error(`Missing required environment variable "${name}"`)
     }
     if (!value) return defaultValue!
@@ -21,4 +20,8 @@ export function getPublicRoot(): string {
         "PUBLIC_ROOT",
         getGuideRoot().replace(new RegExp("^public/"), "")
     )
+}
+
+export function getGAId(): string {
+    return getEnvironmentVariable("GA_ID", "")
 }
