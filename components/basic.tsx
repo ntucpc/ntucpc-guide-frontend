@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Anchor, WrappedLink } from "@/components/common"
 
-export const PARAGRAPH_SEP_LEN = 6
 export const PARAGRAPH_SEP = `my-5`
-export const BLOCK_PADDING_X = 6
-export const BLOCK_PADDING_Y = 4
-export const BLOCK_PADDING = `px-${BLOCK_PADDING_X} py-${BLOCK_PADDING_Y}`
 export const BLOCK_MARGIN = `my-10`
 export const LIST_PADDING_LEFT = `pl-8`
 export const TITLE_PADDING_TOP = `mt-12`

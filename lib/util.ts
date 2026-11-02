@@ -1,9 +1,5 @@
 import { Metadata } from "next"
 
-export function isDevMode(): boolean {
-    return process.env.NODE_ENV === "development"
-}
-
 /**
  * Generate customized metadata according to individual page information.
  * Note that omitted fields will be inherited from @/app/layout.tsx.
