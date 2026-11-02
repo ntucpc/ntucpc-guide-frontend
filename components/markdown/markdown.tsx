@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises"
 import path from "path"
-import { escapeMathMode } from "@/lib/parser/util"
+import { preprocessMdx } from "@/lib/parser/util"
 import remarkDirective from "remark-directive"
 import { remarkNormalDirective } from "@/lib/parser/directive"
 import { remarkTheorem } from "@/lib/parser/theorem"
@@ -30,15 +30,8 @@ export async function getArticleContent(source: string, depthLimit: number) {
     if (depthLimit < 0) {
         throw new Error("Nested markdown depth limit exceeded")
     }
-    let mdxRaw = await readFile(source, { encoding: "utf-8" })
-
-    // remove HTML comment prior to mdx process since mdx happens to not support it
-    // https://github.com/stevemao/html-comment-regex
-    const HTMLCommentRegex = /<!--([\s\S]*?)-->/g
-    mdxRaw = mdxRaw.replaceAll(HTMLCommentRegex, "")
+    const mdxRaw = preprocessMdx(await readFile(source, { encoding: "utf-8" }))
     const directory = path.dirname(source)
-
-    mdxRaw = escapeMathMode(mdxRaw)
     const getFigurePath = (directory: string, name: string) => {
         return path.join(
             "/",

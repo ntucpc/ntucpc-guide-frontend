@@ -18,7 +18,6 @@ const PROBLEMS_PATH = path.join(getGuideRoot(), "problems")
  * - solution: solution name, defined in the problem tag
  * - solutionMdx: solution mdx file path, undefined if no solutoin
  * - constraintsMdx: constraints mdx file path, undefined if the file doesn't exist
- * - (deprecated) importMdx (many): descriptionMdx and solutionMdx, for import mdx, used by remarkImport
  */
 export function remarkProblem() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

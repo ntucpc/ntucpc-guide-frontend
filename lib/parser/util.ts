@@ -1,4 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * Preprocess raw MDX source before handing it to the MDX parser:
+ * strip HTML comments (MDX does not support them) and escape math mode.
+ */
+export function preprocessMdx(content: string) {
+    // https://github.com/stevemao/html-comment-regex
+    const HTMLCommentRegex = /<!--([\s\S]*?)-->/g
+    return escapeMathMode(content.replaceAll(HTMLCommentRegex, ""))
+}
+
 export function escapeMathMode(content: string) {
     enum math {
         none,
@@ -109,17 +119,6 @@ export function getAttribute(node: any, key: string): string | undefined {
         }
     })
     return found
-}
-
-export function getAllAttribute(node: any, key: string): string[] {
-    const list: string[] = []
-    node.attributes.forEach((attribute: any) => {
-        if (attribute.name === key) {
-            list.push(attribute.value)
-            return
-        }
-    })
-    return list
 }
 
 export function pushAttribute(

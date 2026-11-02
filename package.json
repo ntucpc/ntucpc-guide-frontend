@@ -29,7 +29,10 @@
         "remark-directive": "^3.0.0",
         "remark-gfm": "^4.0.0",
         "remark-math": "^5.1.1",
+        "remark-mdx": "^3.1.1",
+        "remark-parse": "^11.0.0",
         "tailwind-scrollbar": "^3.1.0",
+        "unified": "^11.0.5",
         "unist-util-visit": "^4.1.2"
     },
     "devDependencies": {
