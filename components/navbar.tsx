@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
 import { useState } from "react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 type NavbarItemProps = {
     text: string
@@ -98,6 +99,9 @@ export function NavBar() {
                     </div>
                 </div>
 
+                {/* Theme Toggle (desktop) */}
+                <ThemeToggle className="max-sm:hidden" />
+
                 {/* Mobile Menu Toggle */}
                 <div className="sm:hidden">
                     <button
@@ -137,6 +141,11 @@ export function NavBar() {
                         url="https://ntucpc.org/"
                         blank={true}
                     />
+                </div>
+
+                {/* Theme Toggle (mobile) */}
+                <div className="flex justify-end px-4 py-2 border-t border-slate-800">
+                    <ThemeToggle />
                 </div>
             </div>
         </nav>

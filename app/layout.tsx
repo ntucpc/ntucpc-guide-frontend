@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css"
 import "@/styles/atom-one-dark.css"
 import { getGAId } from "@/lib/environment"
 import { GATag } from "@/components/analytics"
+import { themeInitScript } from "@/lib/theme"
 
 export const metadata: Metadata = {
     title: "NTUCPC Guide",
@@ -59,7 +60,11 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="zh-TW">
+        // suppressHydrationWarning: the theme script adds the `dark` class before hydration
+        <html lang="zh-TW" suppressHydrationWarning>
+            <head>
+                <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+            </head>
             <body className={notoSansTC.className}>
                 {children}
                 <GATag gaId={getGAId()} />

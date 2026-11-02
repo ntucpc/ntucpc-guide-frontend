@@ -5,6 +5,8 @@ const colors = require("tailwindcss/colors")
 const token = (name: string) => `rgb(var(--color-${name}) / <alpha-value>)`
 
 const config: Config = {
+    // Dark mode is toggled by the `dark` class on <html> (see lib/theme.ts)
+    darkMode: "class",
     content: [
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",

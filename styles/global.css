@@ -43,6 +43,10 @@
         --color-accent-900: 49 46 129;
     }
 
+    :root.dark {
+        color-scheme: dark;
+    }
+
     body {
         background-color: rgb(var(--color-page));
     }
