@@ -17,7 +17,7 @@ export default function NotFound() {
                     <div className="flex flex-col items-center text-center">
                         {/* Visual element */}
                         <div className="relative mb-12 animate-bounce duration-[2000ms]">
-                            <div className="w-32 h-32 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-6xl shadow-sm border border-rose-100">
+                            <div className="w-32 h-32 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-6xl shadow-sm border border-rose-100 dark:bg-rose-950/40 dark:border-rose-900/60 dark:text-rose-400">
                                 <FontAwesomeIcon icon={faTriangleExclamation} />
                             </div>
                             <div className="absolute -bottom-2 -right-2 bg-surface rounded-full p-2 shadow-md">
@@ -38,7 +38,7 @@ export default function NotFound() {
                         <div className="flex flex-col sm:flex-row gap-4">
                             <WrappedLink
                                 href="/"
-                                className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent-600 text-white font-bold transition-all duration-300 shadow-sm hover:shadow-md hover:bg-accent-700 hover:-translate-y-0.5"
+                                className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent-600 text-white font-bold transition-all duration-300 shadow-sm hover:shadow-md hover:bg-accent-700 dark:bg-accent-400 dark:hover:bg-accent-300 hover:-translate-y-0.5"
                             >
                                 <FontAwesomeIcon
                                     icon={faHome}
