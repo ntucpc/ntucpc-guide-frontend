@@ -51,6 +51,10 @@ const config: Config = {
                     )
                 ),
             },
+            // Default for `border` without a color (Tailwind's default is gray-200, same as line-strong in light mode)
+            borderColor: {
+                DEFAULT: token("line-strong"),
+            },
             backgroundImage: {
                 home: "url('/background.png')",
             },
