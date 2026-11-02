@@ -213,7 +213,7 @@ export function SidebarClient(props: SidebarClientProps) {
         <>
             {/* Toggle Bar - Shown when sidebar is manually hidden or on mobile by default */}
             <div
-                className={`fixed bg-surface shadow-sm w-full z-[999] select-none cursor-pointer border-b 
+                className={`fixed bg-page shadow-sm w-full z-[999] select-none cursor-pointer border-b 
                 ${
                     displaySidebar === true
                         ? "hidden"
@@ -239,7 +239,7 @@ export function SidebarClient(props: SidebarClientProps) {
 
             {/* Sidebar Main Container */}
             <aside
-                className={`fixed bg-surface xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
+                className={`fixed bg-page xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
                 ${
                     displaySidebar === true
                         ? "block"
@@ -247,7 +247,7 @@ export function SidebarClient(props: SidebarClientProps) {
                         ? "hidden"
                         : "hidden xl:block"
                 } 
-                h-[calc(100vh-64px)] border-r border-line p-4`}
+                h-[calc(100vh-64px)] p-4`}
             >
                 {/* Top Action Bar */}
                 <div className="flex items-center justify-between mb-4">
