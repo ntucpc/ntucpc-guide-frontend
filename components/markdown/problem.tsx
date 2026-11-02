@@ -7,7 +7,8 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons"
-import { BLOCK_MARGIN, HyperRefBlank } from "@/components/basic"
+import { HyperRefBlank } from "@/components/basic"
+import { Block, BlockHeader } from "./block"
 
 /**
  * Problem attributes:
@@ -112,12 +113,9 @@ export function Problem(
         }
 
         return (
-            <div
-                className={`${BLOCK_MARGIN} rounded-xl border border-line overflow-hidden shadow-sm bg-surface`}
-            >
-                {/* Header */}
-                <div
-                    className={`flex items-center justify-between px-5 py-3 border-b border-line-subtle ${theme.header}`}
+            <Block className="border-line">
+                <BlockHeader
+                    className={`justify-between border-b border-line-subtle ${theme.header}`}
                 >
                     <div className="flex items-center gap-4">
                         <span
@@ -130,7 +128,7 @@ export function Problem(
                         </h4>
                     </div>
                     {difficultyDisplay}
-                </div>
+                </BlockHeader>
 
                 {/* Content */}
                 <div className="px-6 py-4">
@@ -174,7 +172,7 @@ export function Problem(
                         </details>
                     )}
                 </div>
-            </div>
+            </Block>
         )
     }
 }

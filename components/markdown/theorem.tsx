@@ -7,9 +7,10 @@ import {
     faSquare,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { BLOCK_MARGIN, HyperRef } from "@/components/basic"
+import { HyperRef } from "@/components/basic"
 import { ReactNode, useState } from "react"
 import { Anchor } from "@/components/common"
+import { Block, BlockHeader } from "./block"
 
 const THEOREM_NAME: { [type: string]: string } = {
     theorem: "Theorem",
@@ -95,22 +96,18 @@ export function Theorem(props: TheoremProps) {
     const { name, classes } = config
 
     return (
-        <div
-            className={`${BLOCK_MARGIN} rounded-xl border ${classes.border} overflow-hidden shadow-sm bg-surface`}
-        >
+        <Block className={classes.border}>
             <Anchor refId={`${props.type}-${props.refId}`} />
-            <div
-                className={`flex items-center gap-3 px-5 py-3 border-b ${classes.header}`}
-            >
+            <BlockHeader className={`gap-3 border-b ${classes.header}`}>
                 <span
                     className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${classes.badge} text-white`}
                 >
                     {name} {props.number}
                 </span>
                 <h4 className={`font-bold ${classes.title}`}>{props.title}</h4>
-            </div>
+            </BlockHeader>
             <div className="px-6 py-2 leading-relaxed">{props.children}</div>
-        </div>
+        </Block>
     )
 }
 
@@ -118,11 +115,9 @@ export function Theorem(props: TheoremProps) {
 export function Proof(props: any) {
     const [expand, setExpand] = useState(props.expanded === "true")
     return (
-        <div
-            className={`${BLOCK_MARGIN} border border-accent-100 rounded-xl overflow-hidden bg-surface shadow-sm transition-all duration-300`}
-        >
-            <div
-                className="flex justify-between items-center px-5 py-3 cursor-pointer select-none bg-accent-50/30 hover:bg-accent-50 transition-colors"
+        <Block className="border-accent-100 transition-all duration-300">
+            <BlockHeader
+                className="justify-between cursor-pointer select-none bg-accent-50/30 hover:bg-accent-50 transition-colors"
                 onClick={() => setExpand(!expand)}
             >
                 <div className="flex items-center gap-2 text-accent-600 font-bold text-sm">
@@ -135,7 +130,7 @@ export function Proof(props: any) {
                         expand ? "" : "rotate-0"
                     }`}
                 />
-            </div>
+            </BlockHeader>
             <div
                 className={`px-6 py-2 border-t border-accent-50 relative ${
                     expand ? "" : "hidden"
@@ -146,7 +141,7 @@ export function Proof(props: any) {
                     <FontAwesomeIcon icon={faSquare} className="text-[0.8em]" />
                 </div>
             </div>
-        </div>
+        </Block>
     )
 }
 
