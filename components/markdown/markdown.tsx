@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm"
 import rehypeRewrite from "rehype-rewrite"
 import { compileMDX, MDXRemote } from "next-mdx-remote/rsc"
 import { getBasicComponents } from "@/components/basic"
+import type { JSX, ReactElement } from "react"
 import { Info } from "./info"
 import { Spoiler } from "./spoiler"
 import { Proof, Theorem, TheoremReference } from "./theorem"
@@ -26,7 +27,10 @@ import { remarkSection, Section } from "@/lib/parser/section"
 import { remarkThinking } from "@/lib/parser/thinking"
 import { Thinking, ThinkingAnswer } from "./thinking"
 
-export async function getArticleContent(source: string, depthLimit: number) {
+export async function getArticleContent(
+    source: string,
+    depthLimit: number
+): Promise<{ content: ReactElement; headings: Section[] }> {
     if (depthLimit < 0) {
         throw new Error("Nested markdown depth limit exceeded")
     }
@@ -120,7 +124,7 @@ export async function ArticleMarkdown({
 }: {
     source: string
     depthLimit: number
-}) {
+}): Promise<JSX.Element> {
     const { content } = await getArticleContent(source, depthLimit)
     return <>{content}</>
 }
