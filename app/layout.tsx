@@ -46,7 +46,11 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-    themeColor: "#ffffff",
+    // Follows the system preference; the page color tokens are in styles/global.css
+    themeColor: [
+        { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+        { media: "(prefers-color-scheme: dark)", color: "#0d1117" },
+    ],
 }
 
 const notoSansTC = Noto_Sans_TC({
