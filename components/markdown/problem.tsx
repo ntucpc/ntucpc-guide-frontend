@@ -37,15 +37,15 @@ type ProblemProps = {
 const PROBLEM_THEMES = {
     sample: {
         label: "例題",
-        header: "bg-indigo-50/30",
-        badge: "bg-indigo-500",
-        star: "text-indigo-500",
+        header: "bg-indigo-50/30 dark:bg-indigo-950/30",
+        badge: "bg-indigo-500 dark:bg-indigo-600",
+        star: "text-indigo-500 dark:text-indigo-400",
     },
     exercise: {
         label: "習題",
-        header: "bg-emerald-50/30",
-        badge: "bg-emerald-500",
-        star: "text-emerald-500",
+        header: "bg-emerald-50/30 dark:bg-emerald-950/30",
+        badge: "bg-emerald-500 dark:bg-emerald-600",
+        star: "text-emerald-500 dark:text-emerald-400",
     },
 }
 
