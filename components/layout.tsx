@@ -2,13 +2,23 @@ import { ReactNode } from "react"
 import { HyperRefBlank } from "@/components/basic"
 import Image from "next/image"
 
+// Class names must be written out in full so that Tailwind can detect them
+const MAX_WIDTH_CLASSES = {
+    "4xl": "max-w-4xl",
+    "5xl": "max-w-5xl",
+    "6xl": "max-w-6xl",
+    fit: "max-w-fit",
+}
+
 type ContentBodyProps = {
     children: ReactNode
-    maxWidth?: string
+    maxWidth?: keyof typeof MAX_WIDTH_CLASSES
 }
 export function ContentBody({ children, maxWidth = "4xl" }: ContentBodyProps) {
     return (
-        <div className={`px-4 max-w-${maxWidth} mx-auto pt-8 pb-3`}>
+        <div
+            className={`px-4 ${MAX_WIDTH_CLASSES[maxWidth]} mx-auto pt-8 pb-3`}
+        >
             {children}
         </div>
     )

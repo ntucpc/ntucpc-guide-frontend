@@ -20,6 +20,69 @@ const THEOREM_NAME: { [type: string]: string } = {
     tips: "Tips",
 }
 
+type TheoremConfig = {
+    name: string
+    classes: { border: string; header: string; badge: string; title: string }
+}
+
+// Class names must be written out in full so that Tailwind can detect them
+const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
+    theorem: {
+        name: "Theorem",
+        classes: {
+            border: "border-indigo-100",
+            header: "border-indigo-50 bg-indigo-50/30",
+            badge: "bg-indigo-500",
+            title: "text-indigo-900",
+        },
+    },
+    definition: {
+        name: "Definition",
+        classes: {
+            border: "border-cyan-100",
+            header: "border-cyan-50 bg-cyan-50/30",
+            badge: "bg-cyan-500",
+            title: "text-cyan-900",
+        },
+    },
+    lemma: {
+        name: "Lemma",
+        classes: {
+            border: "border-emerald-100",
+            header: "border-emerald-50 bg-emerald-50/30",
+            badge: "bg-emerald-500",
+            title: "text-emerald-900",
+        },
+    },
+    corollary: {
+        name: "Corollary",
+        classes: {
+            border: "border-orange-100",
+            header: "border-orange-50 bg-orange-50/30",
+            badge: "bg-orange-500",
+            title: "text-orange-900",
+        },
+    },
+    observation: {
+        name: "Observation",
+        classes: {
+            border: "border-rose-100",
+            header: "border-rose-50 bg-rose-50/30",
+            badge: "bg-rose-500",
+            title: "text-rose-900",
+        },
+    },
+    tips: {
+        name: "Tips",
+        classes: {
+            border: "border-violet-100",
+            header: "border-violet-50 bg-violet-50/30",
+            badge: "bg-violet-500",
+            title: "text-violet-900",
+        },
+    },
+}
+
 type TheoremProps = {
     type: string
     number: string
@@ -28,32 +91,23 @@ type TheoremProps = {
     children: ReactNode
 }
 export function Theorem(props: TheoremProps) {
-    const configs: { [type: string]: { name: string; color: string } } = {
-        theorem: { name: "Theorem", color: "indigo" },
-        definition: { name: "Definition", color: "cyan" },
-        lemma: { name: "Lemma", color: "emerald" },
-        corollary: { name: "Corollary", color: "orange" },
-        observation: { name: "Observation", color: "rose" },
-        tips: { name: "Tips", color: "violet" },
-    }
-
-    const config = configs[props.type] || configs.theorem
-    const { name, color } = config
+    const config = THEOREM_CONFIGS[props.type] || THEOREM_CONFIGS.theorem
+    const { name, classes } = config
 
     return (
         <div
-            className={`${BLOCK_MARGIN} rounded-xl border border-${color}-100 overflow-hidden shadow-sm bg-white`}
+            className={`${BLOCK_MARGIN} rounded-xl border ${classes.border} overflow-hidden shadow-sm bg-white`}
         >
             <Anchor refId={`${props.type}-${props.refId}`} />
             <div
-                className={`flex items-center gap-3 px-5 py-3 border-b border-${color}-50 bg-${color}-50/30`}
+                className={`flex items-center gap-3 px-5 py-3 border-b ${classes.header}`}
             >
                 <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-${color}-500 text-white`}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${classes.badge} text-white`}
                 >
                     {name} {props.number}
                 </span>
-                <h4 className={`font-bold text-${color}-900`}>{props.title}</h4>
+                <h4 className={`font-bold ${classes.title}`}>{props.title}</h4>
             </div>
             <div className="px-6 py-2 leading-relaxed">{props.children}</div>
         </div>

@@ -32,6 +32,22 @@ type ProblemProps = {
     constraintsMdx: string
 }
 
+// Class names must be written out in full so that Tailwind can detect them
+const PROBLEM_THEMES = {
+    sample: {
+        label: "例題",
+        header: "bg-indigo-50/30",
+        badge: "bg-indigo-500",
+        star: "text-indigo-500",
+    },
+    exercise: {
+        label: "習題",
+        header: "bg-emerald-50/30",
+        badge: "bg-emerald-500",
+        star: "text-emerald-500",
+    },
+}
+
 export function Problem(
     depthLimit: number,
     MarkdownComponent: (props: {
@@ -58,9 +74,7 @@ export function Problem(
         )
 
         const isSample = props.difficulty === "0"
-        const theme = isSample
-            ? { base: "indigo", label: "例題" }
-            : { base: "emerald", label: "習題" }
+        const theme = isSample ? PROBLEM_THEMES.sample : PROBLEM_THEMES.exercise
 
         let difficultyDisplay = null
         if (props.difficulty === "?") {
@@ -88,9 +102,7 @@ export function Problem(
                                 key={index}
                                 icon={active ? faStar : faEmptyStar}
                                 className={`text-[10px] ${
-                                    active
-                                        ? `text-${theme.base}-500`
-                                        : "text-gray-200"
+                                    active ? theme.star : "text-gray-200"
                                 }`}
                             />
                         )
@@ -105,11 +117,11 @@ export function Problem(
             >
                 {/* Header */}
                 <div
-                    className={`flex items-center justify-between px-5 py-3 border-b border-gray-50 bg-${theme.base}-50/30`}
+                    className={`flex items-center justify-between px-5 py-3 border-b border-gray-50 ${theme.header}`}
                 >
                     <div className="flex items-center gap-4">
                         <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-${theme.base}-500 text-white`}
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${theme.badge} text-white`}
                         >
                             {theme.label}
                         </span>
