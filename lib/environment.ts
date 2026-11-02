@@ -4,7 +4,6 @@ function getEnvironmentVariable(
     defaultValue: string | undefined = undefined
 ): string {
     const value = process.env[name]
-    // console.log(process.env)
     if (!value && defaultValue === undefined) {
         throw new Error(`Missing required environment variable "${name}"`)
     }

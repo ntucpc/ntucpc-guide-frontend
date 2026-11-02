@@ -83,8 +83,6 @@ export function escapeMathMode(content: string) {
                 i += 1
         }
     }
-    // console.log(result);
-    // console.log(content);
     return result
 }
 

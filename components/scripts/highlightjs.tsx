@@ -46,15 +46,5 @@ export default function HightlightJsScript() {
     })();
     `
 
-    return isClient ? (
-        <>
-            {/* <link
-                rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-            /> */}
-            <Script>{script}</Script>
-        </>
-    ) : (
-        <></>
-    )
+    return isClient ? <Script>{script}</Script> : <></>
 }
