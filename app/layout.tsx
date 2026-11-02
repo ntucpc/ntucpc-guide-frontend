@@ -4,8 +4,8 @@ import "@/styles/global.css"
 import "@/styles/hljs-custom.css"
 import "@fortawesome/fontawesome-svg-core/styles.css"
 import "@/styles/atom-one-dark.css"
-import { getGAId } from "@/ntucpc-website-common-lib/lib/environments"
-import { GATag } from "@/ntucpc-website-common-lib/components/analytics"
+import { getGAId } from "@/lib/environment"
+import { GATag } from "@/components/analytics"
 
 export const metadata: Metadata = {
     title: "NTUCPC Guide",

@@ -1,6 +1,6 @@
 "use client"
 
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { WrappedLink } from "@/components/common"
 import {
     faBars,
     faXmark,

@@ -1,10 +1,7 @@
 import { visit } from "unist-util-visit"
-import {
-    getAttribute,
-    setAttribute,
-} from "@/ntucpc-website-common-lib/mdx-parser/util"
+import { getAttribute, setAttribute } from "@/lib/parser/util"
 import path from "path"
-import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { readConfig } from "@/lib/config"
 import { existsSync } from "fs"
 import { getGuideRoot } from "../environment"
 

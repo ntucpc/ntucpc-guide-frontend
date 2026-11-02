@@ -1,6 +1,6 @@
 import path from "path"
 
-import { readConfig } from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
+import { readConfig } from "@/lib/config"
 import { getGuideRoot } from "./environment"
 
 const CONTRIBUTORS_PATH = path.join(getGuideRoot(), "contributors")

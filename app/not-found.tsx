@@ -1,6 +1,6 @@
 import { ContentBody, PageFooter } from "@/components/layout"
 import { NavBar } from "@/components/navbar"
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { WrappedLink } from "@/components/common"
 import {
     faHome,
     faTriangleExclamation,

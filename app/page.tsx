@@ -5,10 +5,8 @@ import {
     getContributors,
     getSpecialThanks,
 } from "@/lib/contributors"
-import {
-    HyperRefBlank,
-} from "@/ntucpc-website-common-lib/components/basic"
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { HyperRefBlank } from "@/components/basic"
+import { WrappedLink } from "@/components/common"
 import {
     faHeart,
     faUsers,
@@ -46,7 +44,13 @@ function ButtonLink({ text, url, primary = false, icon }: ButtonLinkProps) {
     )
 }
 
-function SectionTitle({ children, icon }: { children: ReactNode; icon: IconDefinition }) {
+function SectionTitle({
+    children,
+    icon,
+}: {
+    children: ReactNode
+    icon: IconDefinition
+}) {
     return (
         <div className="flex flex-col items-center gap-3 mb-12 mt-20">
             <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-xl shadow-sm">

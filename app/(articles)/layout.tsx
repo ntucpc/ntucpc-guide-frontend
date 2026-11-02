@@ -2,8 +2,8 @@ import { ContentBody, PageFooter } from "@/components/layout"
 import { NavBar } from "@/components/navbar"
 import { PageReloader } from "@/components/reloader"
 import { Sidebar } from "@/components/sidebar/sidebar"
-import HightlightJsScript from "@/ntucpc-website-common-lib/scripts/highlightjs"
-import MathJaxJS from "@/ntucpc-website-common-lib/scripts/mathjax"
+import HightlightJsScript from "@/components/scripts/highlightjs"
+import MathJaxJS from "@/components/scripts/mathjax"
 import { ReactNode } from "react"
 export default function ArticleLayout({ children }: { children: ReactNode }) {
     return (

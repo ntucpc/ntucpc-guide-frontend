@@ -7,10 +7,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons"
-import {
-    BLOCK_MARGIN,
-    HyperRefBlank,
-} from "@/ntucpc-website-common-lib/components/basic"
+import { BLOCK_MARGIN, HyperRefBlank } from "@/components/basic"
 
 /**
  * Problem attributes:

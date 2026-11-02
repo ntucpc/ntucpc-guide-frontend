@@ -1,8 +1,8 @@
 import { ReactNode } from "react"
 import { NavBar } from "./navbar"
-import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
+import { HyperRefBlank } from "@/components/basic"
 import Head from "next/head"
-import { GATag } from "@/ntucpc-website-common-lib/components/analytics"
+import { GATag } from "@/components/analytics"
 import Image from "next/image"
 
 type ContentBodyProps = {

@@ -9,8 +9,8 @@ import { getTopic, getTopics } from "@/lib/structure/topics"
 import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { ImportanceTag } from "@/components/common"
-import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
-import { WrappedLink } from "@/ntucpc-website-common-lib/components/common"
+import { HyperRefBlank } from "@/components/basic"
+import { WrappedLink } from "@/components/common"
 import {
     faBook,
     faChevronLeft,

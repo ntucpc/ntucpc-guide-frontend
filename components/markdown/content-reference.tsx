@@ -1,4 +1,4 @@
-import { HyperRefBlank } from "@/ntucpc-website-common-lib/components/basic"
+import { HyperRefBlank } from "@/components/basic"
 
 type ContentReferenceProps = {
     type: string

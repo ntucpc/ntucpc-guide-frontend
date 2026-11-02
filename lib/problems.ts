@@ -1,14 +1,9 @@
 import { existsSync, readdirSync } from "fs"
 import path from "path"
 import { getGuideRoot } from "./environment"
-import {
-    parseMdx,
-    readConfig,
-} from "@/ntucpc-website-common-lib/mdx-parser/mdx-parser"
-import {
-    getArticleMdxPath,
-    getArticles,
-} from "./structure/articles"
+import { readConfig } from "./config"
+import { parseMdx } from "./parser/mdx-parser"
+import { getArticleMdxPath, getArticles } from "./structure/articles"
 import { remarkProblemScan } from "./parser/problem-scanner"
 
 export type Problem = {
