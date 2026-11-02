@@ -1,10 +1,3 @@
-import {
-    IconDefinition,
-    faCircleInfo,
-    faTriangleExclamation,
-    faBan,
-    faCircleCheck,
-} from "@fortawesome/free-solid-svg-icons"
 import { BLOCK_MARGIN } from "@/components/basic"
 import { ReactNode } from "react"
 
@@ -14,17 +7,13 @@ type InfoProps = {
 }
 
 export function Info(props: InfoProps) {
-    const configs: { [type: string]: { color: string; icon: IconDefinition } } =
-        {
-            info: { color: "indigo", icon: faCircleInfo },
-            warning: { color: "amber", icon: faTriangleExclamation },
-            danger: { color: "rose", icon: faBan },
-            success: { color: "emerald", icon: faCircleCheck },
-        }
-
-    const config = configs[props.type] || configs.info
-    const { color } = config
-    // I don't know how to make a good positioning for icons...
+    const colors: { [type: string]: string } = {
+        info: "indigo",
+        warning: "amber",
+        danger: "rose",
+        success: "emerald",
+    }
+    const color = colors[props.type] || colors.info
 
     return (
         <div
