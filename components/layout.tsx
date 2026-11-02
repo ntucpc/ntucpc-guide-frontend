@@ -55,10 +55,7 @@ export function PageFooter() {
                     <div className="text-sm text-fg-muted leading-relaxed">
                         This work is licensed under{" "}
                         <br className="hidden md:block" />
-                        <HyperRefBlank
-                            href="https://creativecommons.org/licenses/by-sa/4.0/"
-                            className="text-accent-600 hover:text-accent-800 font-medium underline decoration-accent-200 underline-offset-4 decoration-1 hover:decoration-accent-600 transition-all"
-                        >
+                        <HyperRefBlank href="https://creativecommons.org/licenses/by-sa/4.0/">
                             CC BY-SA 4.0
                         </HyperRefBlank>
                     </div>

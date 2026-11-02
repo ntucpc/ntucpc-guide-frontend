@@ -12,15 +12,6 @@ import { ReactNode, useState } from "react"
 import { Anchor } from "@/components/common"
 import { Block, BlockHeader } from "./block"
 
-const THEOREM_NAME: { [type: string]: string } = {
-    theorem: "Theorem",
-    definition: "Definition",
-    lemma: "Lemma",
-    corollary: "Corollary",
-    observation: "Observation",
-    tips: "Tips",
-}
-
 type TheoremConfig = {
     name: string
     classes: { border: string; header: string; badge: string; title: string }
@@ -84,6 +75,10 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
     },
 }
 
+function getTheoremConfig(type: string): TheoremConfig {
+    return THEOREM_CONFIGS[type] || THEOREM_CONFIGS.theorem
+}
+
 type TheoremProps = {
     type: string
     number: string
@@ -92,8 +87,7 @@ type TheoremProps = {
     children: ReactNode
 }
 export function Theorem(props: TheoremProps) {
-    const config = THEOREM_CONFIGS[props.type] || THEOREM_CONFIGS.theorem
-    const { name, classes } = config
+    const { name, classes } = getTheoremConfig(props.type)
 
     return (
         <Block className={classes.border}>
@@ -153,24 +147,18 @@ type TheoremReferenceProps = {
     refId: string
 }
 export function TheoremReference(props: TheoremReferenceProps) {
+    const { name } = getTheoremConfig(props.type)
     let text
     switch (props.mode) {
         case "default":
         case "number":
-            text = `${THEOREM_NAME[props.type]} ${props.number}.`
+            text = `${name} ${props.number}.`
             break
         case "title":
             text = `${props.title}`
             break
         case "full":
-            text = `${THEOREM_NAME[props.type]} ${props.number}. ${props.title}`
+            text = `${name} ${props.number}. ${props.title}`
     }
-    return (
-        <HyperRef
-            href={`#${props.type}-${props.refId}`}
-            className="text-accent-600 hover:text-accent-800 font-medium underline decoration-accent-200 underline-offset-4 decoration-2 hover:decoration-accent-600 transition-all"
-        >
-            {text}
-        </HyperRef>
-    )
+    return <HyperRef href={`#${props.type}-${props.refId}`}>{text}</HyperRef>
 }
