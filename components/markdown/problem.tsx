@@ -142,7 +142,7 @@ export function Problem(
                     </div>
 
                     {/* Description */}
-                    <div className="prose-sm prose-slate max-w-none mb-4 leading-relaxed">
+                    <div className="mb-4 leading-relaxed">
                         {descriptionNode}
                     </div>
 

@@ -14,9 +14,7 @@ export function Thinking({ children }: { children: ReactNode }) {
                     動動腦
                 </span>
             </div>
-            <div className="px-6 pb-6 prose-sm prose-slate max-w-none leading-relaxed">
-                {children}
-            </div>
+            <div className="px-6 pb-6 leading-relaxed">{children}</div>
         </div>
     )
 }
@@ -31,7 +29,7 @@ export function ThinkingAnswer({ children }: { children: ReactNode }) {
                     className="text-[10px] text-amber-500 group-open:rotate-90 transition-transform"
                 />
             </summary>
-            <div className="px-4 py-3 border-t border-amber-100 prose-sm prose-slate max-w-none leading-relaxed">
+            <div className="px-4 py-3 border-t border-amber-100 leading-relaxed">
                 {children}
             </div>
         </details>

@@ -19,9 +19,7 @@ export function Info(props: InfoProps) {
         <div
             className={`${BLOCK_MARGIN} flex gap-4 px-5 py-3 rounded-xl border-l-4 bg-${color}-50/50 border-${color}-500/50 text-${color}-900 shadow-sm`}
         >
-            <div className="flex-grow prose-sm prose-slate leading-relaxed">
-                {props.children}
-            </div>
+            <div className="flex-grow leading-relaxed">{props.children}</div>
         </div>
     )
 }

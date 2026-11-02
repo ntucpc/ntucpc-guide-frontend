@@ -319,7 +319,7 @@ export default async function ArticlePage(props: ArticleProps) {
     return (
         <div className="relative">
             <ArticleHeader article={article} />
-            <div className="prose prose-slate max-w-none">{content}</div>
+            <div>{content}</div>
             <ArticleFooter article={article} />
 
             <div className="hidden xl:block absolute top-0 left-[calc(100%+2.5rem)] h-full">

@@ -27,7 +27,7 @@ export function Spoiler(props: SpoilerProps) {
                     className="text-[10px] text-gray-400 group-open:rotate-90 transition-transform duration-300"
                 />
             </summary>
-            <div className="px-6 py-3 border-t border-gray-100 prose-sm prose-slate max-w-none leading-relaxed bg-white">
+            <div className="px-6 py-3 border-t border-gray-100 leading-relaxed bg-white">
                 {props.children}
             </div>
         </details>

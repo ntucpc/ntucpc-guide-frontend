@@ -55,9 +55,7 @@ export function Theorem(props: TheoremProps) {
                 </span>
                 <h4 className={`font-bold text-${color}-900`}>{props.title}</h4>
             </div>
-            <div className="px-6 py-2 prose-sm prose-slate max-w-none leading-relaxed">
-                {props.children}
-            </div>
+            <div className="px-6 py-2 leading-relaxed">{props.children}</div>
         </div>
     )
 }
@@ -89,9 +87,7 @@ export function Proof(props: any) {
                     expand ? "" : "hidden"
                 }`}
             >
-                <div className="prose-sm prose-slate max-w-none leading-relaxed">
-                    {props.children}
-                </div>
+                <div className="leading-relaxed">{props.children}</div>
                 <div className="flex justify-end mt-4 text-indigo-200">
                     <FontAwesomeIcon icon={faSquare} className="text-[0.8em]" />
                 </div>
