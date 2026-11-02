@@ -81,7 +81,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                                                 {article.title}
                                             </Link>
                                         ) : (
-                                            <span className="text-sm text-fg-faint">
+                                            <span className="text-sm text-fg-subtle">
                                                 {article.title}
                                             </span>
                                         )}

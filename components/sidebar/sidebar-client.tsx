@@ -76,7 +76,7 @@ function SidebarGroupComponent({
                                     {item.title}
                                 </Link>
                             ) : (
-                                <div className="flex justify-between items-center py-1.5 px-3 text-sm text-fg-faint">
+                                <div className="flex justify-between items-center py-1.5 px-3 text-sm text-fg-subtle">
                                     <span>{item.title}</span>
                                     <span className="text-[10px] bg-surface-muted text-fg-muted px-1.5 py-0.5 rounded-full">
                                         待續

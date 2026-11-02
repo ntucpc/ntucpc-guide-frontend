@@ -66,7 +66,7 @@ function ArticleHeader({ article }: { article: Article }) {
                     {prereqArticle.title}
                 </HyperRefBlank>
             ) : (
-                <span className="text-fg-faint" key={idx}>
+                <span className="text-fg-subtle" key={idx}>
                     {prereqArticle.title}
                 </span>
             )
