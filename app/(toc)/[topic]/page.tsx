@@ -52,11 +52,11 @@ export default async function TopicPage(props: TopicProps) {
         <div className="pb-20">
             {/* Header Section */}
             <div className="mb-12">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-fg-strong tracking-tight">
                     {topic.title}
                 </h1>
 
-                <div className="mt-4 text-gray-500 text-lg max-w-3xl leading-relaxed italic">
+                <div className="mt-4 text-fg-muted text-lg max-w-3xl leading-relaxed italic">
                     <SimpleMarkdown text={topic.description} />
                 </div>
             </div>

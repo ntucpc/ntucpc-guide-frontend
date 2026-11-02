@@ -31,7 +31,7 @@ export function ImportanceTag({ importance }: ImportanceTagProps) {
 
 export function ComingSoonTag() {
     return (
-        <span className="bg-gray-100 text-gray-400 px-2 rounded text-[10px] font-bold tracking-wider uppercase inline-flex items-center">
+        <span className="bg-surface-muted text-fg-subtle px-2 rounded text-[10px] font-bold tracking-wider uppercase inline-flex items-center">
             敬請期待
         </span>
     )

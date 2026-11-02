@@ -12,20 +12,20 @@ function ArticleEntry(article: Article) {
         <div className="relative pl-8 group pb-8">
             {/* Timeline Line */}
             <div
-                className={`absolute left-[5px] top-0 bottom-0 w-[2px] bg-gray-100 group-hover:bg-indigo-100 ${transitionStyle}`}
+                className={`absolute left-[5px] top-0 bottom-0 w-[2px] bg-line group-hover:bg-accent-100 ${transitionStyle}`}
             />
 
             {/* Timeline Dot */}
             <div
-                className={`absolute left-0 top-2 w-[12px] h-[12px] rounded-full border-2 border-white ring-2 ring-gray-200 bg-white z-10 group-hover:ring-indigo-400 group-hover:bg-indigo-500 ${transitionStyle}`}
+                className={`absolute left-0 top-2 w-[12px] h-[12px] rounded-full border-2 border-page ring-2 ring-line-strong bg-surface z-10 group-hover:ring-accent-400 group-hover:bg-accent-500 ${transitionStyle}`}
             />
 
             <div className="flex flex-col">
                 <div
                     className={`text-xl font-bold ${
                         article.coming
-                            ? "text-gray-400"
-                            : "text-gray-900 group-hover:text-indigo-600"
+                            ? "text-fg-subtle"
+                            : "text-fg-strong group-hover:text-accent-600"
                     } ${transitionStyle}`}
                 >
                     {article.title}
@@ -37,8 +37,8 @@ function ArticleEntry(article: Article) {
                 </div>
 
                 <div
-                    className={`mt-2 text-sm text-gray-500 leading-relaxed ${
-                        !article.coming && "group-hover:text-gray-600"
+                    className={`mt-2 text-sm text-fg-muted leading-relaxed ${
+                        !article.coming && "group-hover:text-fg-tertiary"
                     } ${transitionStyle}`}
                 >
                     <div className="flex items-center flex-wrap gap-2 mb-1">
@@ -84,20 +84,20 @@ export function SectionEntry({
                             href={url}
                             className="group/link inline-flex items-center gap-2"
                         >
-                            <h3 className="text-xl font-extrabold text-gray-900 group-hover/link:text-indigo-600 transition-colors">
+                            <h3 className="text-xl font-extrabold text-fg-strong group-hover/link:text-accent-600 transition-colors">
                                 {title}
                             </h3>
                             <FontAwesomeIcon
                                 icon={faChevronRight}
-                                className="text-xs text-gray-300 group-hover/link:text-indigo-500 transition-transform group-hover/link:translate-x-1"
+                                className="text-xs text-fg-faint group-hover/link:text-accent-500 transition-transform group-hover/link:translate-x-1"
                             />
                         </Link>
                     ) : (
-                        <h3 className="text-xl font-extrabold text-gray-900">
+                        <h3 className="text-xl font-extrabold text-fg-strong">
                             {title}
                         </h3>
                     )}
-                    <div className="mt-2 text-sm text-gray-500 leading-relaxed italic">
+                    <div className="mt-2 text-sm text-fg-muted leading-relaxed italic">
                         <SimpleMarkdown text={description} />
                     </div>
                 </div>
@@ -110,7 +110,7 @@ export function SectionEntry({
                         <ArticleEntry key={article.code} {...article} />
                     ))}
                     {/* Final small dot to cap the line */}
-                    <div className="absolute left-[3px] bottom-8 w-[6px] h-[6px] rounded-full bg-gray-100" />
+                    <div className="absolute left-[3px] bottom-8 w-[6px] h-[6px] rounded-full bg-line" />
                 </div>
             </div>
         </div>

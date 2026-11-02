@@ -7,7 +7,7 @@ export const LIST_PADDING_LEFT = `pl-8`
 export const TITLE_PADDING_TOP = `mt-12`
 export const TITLE_PADDING_TOP_BIG = `mt-16`
 export const TITLE_PADDING_BOTTOM = `mb-6`
-export const TITLE_FONT = `font-bold text-gray-900 tracking-tight`
+export const TITLE_FONT = `font-bold text-fg-strong tracking-tight`
 export const SCROLL = `overflow-x-auto overflow-y-hidden`
 
 // props: sectionId
@@ -24,7 +24,7 @@ export function H2Title(props: any) {
         <div className={TITLE_PADDING_TOP_BIG}>
             <Anchor refId={props.refId} />
             <h2 className={`text-3xl mb-3 ${TITLE_FONT}`}>{props.children}</h2>
-            <div className="h-1 w-20 bg-indigo-500 rounded-full mb-8" />
+            <div className="h-1 w-20 bg-accent-500 rounded-full mb-8" />
         </div>
     )
 }
@@ -64,7 +64,7 @@ export function H6Title(props: any) {
 export function Paragraph(props: any) {
     return (
         <p
-            className={`${PARAGRAPH_SEP} text-gray-800 leading-relaxed text-justify ${SCROLL}`}
+            className={`${PARAGRAPH_SEP} text-fg leading-relaxed text-justify ${SCROLL}`}
             {...props}
         />
     )
@@ -73,7 +73,7 @@ export function Paragraph(props: any) {
 export function Quote(props: any) {
     return (
         <blockquote
-            className={`border-l-4 pl-6 py-2 italic text-gray-500 border-indigo-200 bg-indigo-50/30 rounded-r-lg ${PARAGRAPH_SEP}`}
+            className={`border-l-4 pl-6 py-2 italic text-fg-muted border-accent-200 bg-accent-50/30 rounded-r-lg ${PARAGRAPH_SEP}`}
             {...props}
         />
     )
@@ -82,7 +82,7 @@ export function Quote(props: any) {
 export function UnorderedList(props: any) {
     return (
         <ul
-            className={`list-disc ${LIST_PADDING_LEFT} ${SCROLL} text-gray-700 space-y-2 my-6`}
+            className={`list-disc ${LIST_PADDING_LEFT} ${SCROLL} text-fg-secondary space-y-2 my-6`}
             {...props}
         />
     )
@@ -90,7 +90,7 @@ export function UnorderedList(props: any) {
 export function OrderedList(props: any) {
     return (
         <ol
-            className={`list-decimal ${LIST_PADDING_LEFT} ${SCROLL} text-gray-700 space-y-2 my-6`}
+            className={`list-decimal ${LIST_PADDING_LEFT} ${SCROLL} text-fg-secondary space-y-2 my-6`}
             {...props}
         />
     )
@@ -99,7 +99,7 @@ export function OrderedList(props: any) {
 export function HyperRef(props: any) {
     return (
         <WrappedLink
-            className="text-indigo-600 hover:text-indigo-800 font-medium underline decoration-indigo-200 underline-offset-4 decoration-2 hover:decoration-indigo-600 transition-all"
+            className="text-accent-600 hover:text-accent-800 font-medium underline decoration-accent-200 underline-offset-4 decoration-2 hover:decoration-accent-600 transition-all"
             {...props}
         />
     )
@@ -109,14 +109,12 @@ export function HyperRefBlank(props: any) {
 }
 
 export function HorizontalLine() {
-    return <hr className="my-12 border-gray-100" />
+    return <hr className="my-12 border-line" />
 }
 
 export function Table(props: any) {
     return (
-        <div
-            className={`overflow-x-auto my-8 border border-gray-100 rounded-xl`}
-        >
+        <div className={`overflow-x-auto my-8 border border-line rounded-xl`}>
             <table className="w-full text-left border-collapse" {...props} />
         </div>
     )
@@ -124,22 +122,30 @@ export function Table(props: any) {
 
 export function TableHead(props: any) {
     return (
-        <thead className="bg-gray-50/50 border-b border-gray-100" {...props} />
+        <thead
+            className="bg-surface-subtle/50 border-b border-line"
+            {...props}
+        />
     )
 }
 
 export function TableBody(props: any) {
-    return <tbody className="divide-y divide-gray-50" {...props} />
+    return <tbody className="divide-y divide-line-subtle" {...props} />
 }
 
 export function TableRow(props: any) {
-    return <tr className="hover:bg-gray-50/50 transition-colors" {...props} />
+    return (
+        <tr
+            className="hover:bg-surface-subtle/50 transition-colors"
+            {...props}
+        />
+    )
 }
 
 export function TableHeadCell(props: any) {
     return (
         <th
-            className="px-6 py-4 text-sm font-bold text-gray-900 uppercase tracking-wider"
+            className="px-6 py-4 text-sm font-bold text-fg-strong uppercase tracking-wider"
             {...props}
         />
     )
@@ -148,7 +154,7 @@ export function TableHeadCell(props: any) {
 export function TableCell(props: any) {
     return (
         <td
-            className="px-6 py-4 text-sm text-gray-600 leading-relaxed"
+            className="px-6 py-4 text-sm text-fg-tertiary leading-relaxed"
             {...props}
         />
     )

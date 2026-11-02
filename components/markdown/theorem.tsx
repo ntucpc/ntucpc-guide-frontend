@@ -96,7 +96,7 @@ export function Theorem(props: TheoremProps) {
 
     return (
         <div
-            className={`${BLOCK_MARGIN} rounded-xl border ${classes.border} overflow-hidden shadow-sm bg-white`}
+            className={`${BLOCK_MARGIN} rounded-xl border ${classes.border} overflow-hidden shadow-sm bg-surface`}
         >
             <Anchor refId={`${props.type}-${props.refId}`} />
             <div
@@ -119,30 +119,30 @@ export function Proof(props: any) {
     const [expand, setExpand] = useState(props.expanded === "true")
     return (
         <div
-            className={`${BLOCK_MARGIN} border border-indigo-100 rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-300`}
+            className={`${BLOCK_MARGIN} border border-accent-100 rounded-xl overflow-hidden bg-surface shadow-sm transition-all duration-300`}
         >
             <div
-                className="flex justify-between items-center px-5 py-3 cursor-pointer select-none bg-indigo-50/30 hover:bg-indigo-50 transition-colors"
+                className="flex justify-between items-center px-5 py-3 cursor-pointer select-none bg-accent-50/30 hover:bg-accent-50 transition-colors"
                 onClick={() => setExpand(!expand)}
             >
-                <div className="flex items-center gap-2 text-indigo-600 font-bold text-sm">
+                <div className="flex items-center gap-2 text-accent-600 font-bold text-sm">
                     <FontAwesomeIcon icon={faPen} className="text-xs" />
                     證明
                 </div>
                 <FontAwesomeIcon
                     icon={expand ? faChevronUp : faChevronDown}
-                    className={`text-xs text-indigo-400 transition-transform duration-300 ${
+                    className={`text-xs text-accent-400 transition-transform duration-300 ${
                         expand ? "" : "rotate-0"
                     }`}
                 />
             </div>
             <div
-                className={`px-6 py-2 border-t border-indigo-50 relative ${
+                className={`px-6 py-2 border-t border-accent-50 relative ${
                     expand ? "" : "hidden"
                 }`}
             >
                 <div className="leading-relaxed">{props.children}</div>
-                <div className="flex justify-end mt-4 text-indigo-200">
+                <div className="flex justify-end mt-4 text-accent-200">
                     <FontAwesomeIcon icon={faSquare} className="text-[0.8em]" />
                 </div>
             </div>
@@ -173,7 +173,7 @@ export function TheoremReference(props: TheoremReferenceProps) {
     return (
         <HyperRef
             href={`#${props.type}-${props.refId}`}
-            className="text-indigo-600 hover:text-indigo-800 font-medium underline decoration-indigo-200 underline-offset-4 decoration-2 hover:decoration-indigo-600 transition-all"
+            className="text-accent-600 hover:text-accent-800 font-medium underline decoration-accent-200 underline-offset-4 decoration-2 hover:decoration-accent-600 transition-all"
         >
             {text}
         </HyperRef>

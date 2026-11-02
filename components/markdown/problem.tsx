@@ -80,7 +80,7 @@ export function Problem(
         if (props.difficulty === "?") {
             difficultyDisplay = (
                 <div
-                    className="flex items-center gap-1 text-gray-400"
+                    className="flex items-center gap-1 text-fg-subtle"
                     title="難度未知"
                 >
                     <FontAwesomeIcon
@@ -102,7 +102,7 @@ export function Problem(
                                 key={index}
                                 icon={active ? faStar : faEmptyStar}
                                 className={`text-[10px] ${
-                                    active ? theme.star : "text-gray-200"
+                                    active ? theme.star : "text-fg-ghost"
                                 }`}
                             />
                         )
@@ -113,11 +113,11 @@ export function Problem(
 
         return (
             <div
-                className={`${BLOCK_MARGIN} rounded-xl border border-gray-100 overflow-hidden shadow-sm bg-white`}
+                className={`${BLOCK_MARGIN} rounded-xl border border-line overflow-hidden shadow-sm bg-surface`}
             >
                 {/* Header */}
                 <div
-                    className={`flex items-center justify-between px-5 py-3 border-b border-gray-50 ${theme.header}`}
+                    className={`flex items-center justify-between px-5 py-3 border-b border-line-subtle ${theme.header}`}
                 >
                     <div className="flex items-center gap-4">
                         <span
@@ -125,7 +125,7 @@ export function Problem(
                         >
                             {theme.label}
                         </span>
-                        <h4 className="font-bold text-gray-900">
+                        <h4 className="font-bold text-fg-strong">
                             {props.name}
                         </h4>
                     </div>
@@ -135,12 +135,12 @@ export function Problem(
                 {/* Content */}
                 <div className="px-6 py-4">
                     {/* Source Info */}
-                    <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-gray-400 tracking-wider">
+                    <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-fg-subtle tracking-wider">
                         <span>Source:</span>
                         {props.url ? (
                             <HyperRefBlank
                                 href={props.url}
-                                className="text-indigo-500 hover:text-indigo-700 transition-colors flex items-center gap-1.5"
+                                className="text-accent-500 hover:text-accent-700 transition-colors flex items-center gap-1.5"
                             >
                                 {props.src}
                                 <FontAwesomeIcon
@@ -160,15 +160,15 @@ export function Problem(
 
                     {/* Constraints */}
                     {props.constraintsMdx && (
-                        <details className="group border border-gray-100 rounded-lg overflow-hidden">
-                            <summary className="list-none cursor-pointer px-4 py-2 text-xs font-bold text-gray-500 bg-gray-50/50 hover:bg-gray-50 transition-colors flex items-center justify-between">
+                        <details className="group border border-line rounded-lg overflow-hidden">
+                            <summary className="list-none cursor-pointer px-4 py-2 text-xs font-bold text-fg-muted bg-surface-subtle/50 hover:bg-surface-subtle transition-colors flex items-center justify-between">
                                 <span>條件限制</span>
                                 <FontAwesomeIcon
                                     icon={faChevronRight}
                                     className="text-[10px] group-open:rotate-90 transition-transform"
                                 />
                             </summary>
-                            <div className="px-4 py-3 text-sm text-gray-600 border-t border-gray-100 bg-white">
+                            <div className="px-4 py-3 text-sm text-fg-tertiary border-t border-line bg-surface">
                                 {constraintsNode}
                             </div>
                         </details>

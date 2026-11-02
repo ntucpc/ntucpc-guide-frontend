@@ -6,7 +6,7 @@ import { BLOCK_MARGIN } from "@/components/basic"
 export function Thinking({ children }: { children: ReactNode }) {
     return (
         <div
-            className={`${BLOCK_MARGIN} rounded-xl border border-amber-100 overflow-hidden shadow-sm bg-white`}
+            className={`${BLOCK_MARGIN} rounded-xl border border-amber-100 overflow-hidden shadow-sm bg-surface`}
         >
             <div className="flex items-center gap-3 px-5 py-3 border-b border-amber-50 bg-amber-50/30">
                 <span className="flex items-center gap-1.5 px-2 py-0.5 font-bold text-amber-500 text-sm">

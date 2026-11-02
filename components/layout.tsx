@@ -26,7 +26,7 @@ export function ContentBody({ children, maxWidth = "4xl" }: ContentBodyProps) {
 
 export function PageFooter() {
     return (
-        <footer className="w-full max-w-4xl mx-auto px-6 mt-32 mb-16 pt-12 border-t border-gray-100">
+        <footer className="w-full max-w-4xl mx-auto px-6 mt-32 mb-16 pt-12 border-t border-line">
             <div className="flex flex-col md:flex-row justify-between gap-12">
                 {/* Brand Section */}
                 <div className="flex flex-col gap-6">
@@ -40,10 +40,10 @@ export function PageFooter() {
                             />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-extrabold text-gray-900 tracking-tight">
+                            <span className="font-extrabold text-fg-strong tracking-tight">
                                 國立臺灣大學程式解題社
                             </span>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <span className="text-[10px] font-bold text-fg-subtle uppercase tracking-widest">
                                 NTU Competitive Programming Club
                             </span>
                         </div>
@@ -52,12 +52,12 @@ export function PageFooter() {
 
                 {/* Info Section */}
                 <div className="flex flex-col gap-4 md:text-right">
-                    <div className="text-sm text-gray-500 leading-relaxed">
+                    <div className="text-sm text-fg-muted leading-relaxed">
                         This work is licensed under{" "}
                         <br className="hidden md:block" />
                         <HyperRefBlank
                             href="https://creativecommons.org/licenses/by-sa/4.0/"
-                            className="text-indigo-600 hover:text-indigo-800 font-medium underline decoration-indigo-200 underline-offset-4 decoration-1 hover:decoration-indigo-600 transition-all"
+                            className="text-accent-600 hover:text-accent-800 font-medium underline decoration-accent-200 underline-offset-4 decoration-1 hover:decoration-accent-600 transition-all"
                         >
                             CC BY-SA 4.0
                         </HyperRefBlank>

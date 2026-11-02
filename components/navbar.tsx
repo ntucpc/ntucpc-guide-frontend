@@ -33,7 +33,7 @@ export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
                 )}
             </WrappedLink>
             {/* Animated Underline */}
-            <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+            <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-accent-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
         </div>
     )
 }
@@ -47,7 +47,7 @@ export function ExpandedNavbarItem({
         <div className="px-6 py-3 border-b border-slate-800 last:border-none">
             <WrappedLink
                 href={url}
-                className="text-slate-300 hover:text-indigo-400 font-medium flex justify-between items-center"
+                className="text-slate-300 hover:text-accent-400 font-medium flex justify-between items-center"
                 target={blank ? "_blank" : "_self"}
             >
                 {text}

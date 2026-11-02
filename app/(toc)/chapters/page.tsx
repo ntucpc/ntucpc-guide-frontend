@@ -13,7 +13,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
     const groups = getChapterArticleGroups(chapter)
 
     return (
-        <div className="group bg-white overflow-hidden mb-12">
+        <div className="group bg-page overflow-hidden mb-12">
             <div className="flex flex-col sm:flex-row gap-8">
                 <Link
                     href={`/chapter/${chapter.code}`}
@@ -21,7 +21,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                 >
                     {/* Icon Section */}
                     <div
-                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-2xl bg-gray-50 text-6xl transition-all duration-300 group-hover/header:bg-indigo-50`}
+                        className={`flex-shrink-0 flex items-center justify-center w-24 h-24 rounded-2xl bg-surface-subtle text-6xl transition-all duration-300 group-hover/header:bg-accent-50`}
                         style={{ color: getIconColor(chapter.iconColor) }}
                     >
                         <IconWrapper iconName={chapter.icon} />
@@ -30,10 +30,10 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                     {/* Content Header Section */}
                     <div className="flex-grow">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-bold text-indigo-500 tracking-widest uppercase bg-indigo-50 px-2 py-1 rounded">
+                            <span className="text-xs font-bold text-accent-500 tracking-widest uppercase bg-accent-50 px-2 py-1 rounded">
                                 Chapter {chapter.number}
                             </span>
-                            <span className="text-xs font-semibold text-gray-400 group-hover/header:text-indigo-600 flex items-center gap-1 transition-colors">
+                            <span className="text-xs font-semibold text-fg-subtle group-hover/header:text-accent-600 flex items-center gap-1 transition-colors">
                                 查看詳情{" "}
                                 <FontAwesomeIcon
                                     icon={faChevronRight}
@@ -42,11 +42,11 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                             </span>
                         </div>
 
-                        <h2 className="text-3xl font-extrabold text-gray-900 mb-3 group-hover/header:text-indigo-700 transition-colors">
+                        <h2 className="text-3xl font-extrabold text-fg-strong mb-3 group-hover/header:text-accent-700 transition-colors">
                             {chapter.title}
                         </h2>
 
-                        <p className="text-gray-500 text-sm italic">
+                        <p className="text-fg-muted text-sm italic">
                             {chapter.description}
                         </p>
                     </div>
@@ -62,8 +62,8 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                             className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4"
                         >
                             <div className="flex items-center gap-2 min-w-[120px] shrink-0">
-                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-                                <span className="text-sm font-bold text-gray-700">
+                                <div className="w-1.5 h-1.5 rounded-full bg-accent-400" />
+                                <span className="text-sm font-bold text-fg-secondary">
                                     {topic.title}
                                 </span>
                             </div>
@@ -76,12 +76,12 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                                         {!article.coming ? (
                                             <Link
                                                 href={`/${article.code}`}
-                                                className="text-sm text-gray-500 hover:text-indigo-600 transition-colors"
+                                                className="text-sm text-fg-muted hover:text-accent-600 transition-colors"
                                             >
                                                 {article.title}
                                             </Link>
                                         ) : (
-                                            <span className="text-sm text-gray-300">
+                                            <span className="text-sm text-fg-faint">
                                                 {article.title}
                                             </span>
                                         )}
@@ -103,7 +103,7 @@ export default function ChaptersPage() {
 
     return (
         <div className="pb-20">
-            <div className="mb-8 border-b border-gray-100">
+            <div className="mb-8 border-b border-line">
                 <H1Title>章節目錄</H1Title>
             </div>
 
