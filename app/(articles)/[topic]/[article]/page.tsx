@@ -282,7 +282,7 @@ function TableOfContents({ headings }: { headings: Section[] }) {
     if (headings.length === 0) return <></>
 
     return (
-        <aside className="sticky top-24 w-56 h-fit max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+        <aside className="sticky top-24 w-56 h-fit max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
             <div className="flex items-center gap-2 mb-4 text-fg font-bold border-b pb-2">
                 <FontAwesomeIcon icon={faList} />
                 <span>目錄</span>

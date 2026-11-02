@@ -23,7 +23,7 @@ function ScrollSection({ children }: { children: ReactNode }) {
         <div
             className={`flex-grow overflow-y-auto mt-2 pr-2
                         scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin 
-                        scrollbar-thumb-zinc-200 scrollbar-track-transparent`}
+                        scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent`}
         >
             {children}
         </div>
