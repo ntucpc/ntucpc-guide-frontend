@@ -63,11 +63,16 @@ export function ExpandedNavbarItem({
     )
 }
 
+// Light: slate-900 at 95% opacity over white, which is how the navbar used to look in light mode
+const NAVBAR_BG = "bg-[#1b2335] dark:bg-slate-900"
+
 export function NavBar() {
     const [showMenu, setShowMenu] = useState(false)
 
     return (
-        <nav className="bg-slate-900/95 backdrop-blur-md text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm">
+        <nav
+            className={`${NAVBAR_BG} text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
+        >
             <div className="mx-auto w-full max-w-[100rem] flex items-center justify-between px-6 h-16">
                 {/* Logo Section */}
                 <div className="flex items-center gap-8 h-full">
@@ -119,7 +124,7 @@ export function NavBar() {
             {/* Mobile Menu Dropdown */}
             <div
                 className={`
-                absolute top-full left-0 w-full bg-slate-900 shadow-2xl sm:hidden border-b border-slate-800
+                absolute top-full left-0 w-full ${NAVBAR_BG} shadow-2xl sm:hidden border-b border-slate-800
                 transition-all duration-300 ease-in-out origin-top
                 ${
                     showMenu
