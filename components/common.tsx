@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import Link from "next/link"
+
 type ImportanceTagProps = {
     importance: number
 }
@@ -32,4 +35,16 @@ export function ComingSoonTag() {
             敬請期待
         </span>
     )
+}
+
+export function WrappedLink(props: any) {
+    if (props.href.startsWith("/")) return <Link {...props} />
+    else return <a {...props} />
+}
+
+type AnchorProps = {
+    refId: string
+}
+export function Anchor(props: AnchorProps) {
+    return <a id={props.refId} className="block relative -top-[120px]" />
 }
