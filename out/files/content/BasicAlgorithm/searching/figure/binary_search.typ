@@ -41,21 +41,23 @@ cetz.canvas(length: .8cm, {
 
 }
 
-// #draw(0, 14)
-// #{
-//   let l = 0
-//   let r = n + 1
-//   while l + 1 < r {
-//     let mid = int((l + r) / 2)
-//     draw(l, r, mid: mid)
-//     if arr.at(mid) < k {
-//       l = mid
-//     }
-//     else {
-//       r = mid
-//     }
-//     draw(l, r)
-//   }
-// }
-
-#draw(3, 9, mid: 6)
+// `typst compile --input animation=true` exports the animation (one frame per page);
+// otherwise only the static figure is exported
+#if sys.inputs.at("animation", default: "false") == "true" {
+  draw(0, 14)
+  let l = 0
+  let r = n + 1
+  while l + 1 < r {
+    let mid = int((l + r) / 2)
+    draw(l, r, mid: mid)
+    if arr.at(mid) < k {
+      l = mid
+    }
+    else {
+      r = mid
+    }
+    draw(l, r)
+  }
+} else {
+  draw(3, 9, mid: 6)
+}

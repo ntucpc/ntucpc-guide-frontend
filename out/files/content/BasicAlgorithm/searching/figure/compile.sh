@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-
-typst compile $1.typ
-convert -density 300 $1.pdf -background white -alpha remove -alpha off $1.png
-for i in {0..9}; do mv $1-${i}.png $1-0${i}.png; done
-convert -delay 50 -loop 0 $1*.png $1.gif
-rm *.png
-
+# Export each page of $1.typ as a frame of <animation src="$1" />
+rm -rf "$1" && mkdir "$1"
+typst compile --input animation=true "$1.typ" "$1/{p}.svg"
