@@ -41,6 +41,29 @@ $ npm run build
 - `content/<topic>/<article>/figure/<filename>`
 - `problems/<source>/<problem>/figure/<filename>`
 
+`figure` 裡的子目錄（例如動畫的 frames）會整個複製過去。
+
+## 動畫
+
+文章裡的動畫用 `<animation>`，讀者可以暫停、一步一步看、調整速度：
+
+```mdx
+<animation src="dijkstra" delay="500" />
+```
+
+- `src` 是 `figure/` 底下的一個目錄，裡面放 frames `1.svg`、`2.svg`、…、`N.svg`，編號必須從 1 開始連續。
+- `delay` 是一倍速時每個 frame 停留的毫秒數，預設 `500`。
+- `width`（選填）是顯示寬度（px），和 `<figure width="...">` 一樣。frames 寬度不同時以最寬的為準，其他等比例縮放。
+
+frames 可以直接由 Typst 輸出（一頁一個 frame）：
+
+```bash
+$ rm -rf dijkstra && mkdir dijkstra
+$ typst compile dijkstra.typ "dijkstra/{p}.svg"
+```
+
+先清空目錄，以免 frame 變少時留下舊的檔案。沒有指定 `width` 時，顯示大小和用 `--ppi 300` 輸出的 PNG 一樣。
+
 ## 框架
 
 - [next.js](https://nextjs.org/)

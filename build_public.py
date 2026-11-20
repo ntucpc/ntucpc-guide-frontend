@@ -28,7 +28,11 @@ def build_figure(dir, depth, figure_dir = "figure"):
             public_filepath = os.path.join(public_root, os.path.relpath(filepath, guide))
             public_dir = os.path.dirname(public_filepath)
             os.makedirs(public_dir, exist_ok=True)
-            shutil.copy(filepath, public_filepath)
+            if os.path.isdir(filepath):
+                # e.g. the frames of an <animation>
+                shutil.copytree(filepath, public_filepath)
+            else:
+                shutil.copy(filepath, public_filepath)
             print("copy file: ", filepath, "->", public_filepath)
         return
     

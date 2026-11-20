@@ -16,6 +16,7 @@ import { Spoiler } from "./spoiler"
 import { Proof, Theorem, TheoremReference } from "./theorem"
 import { Refcode } from "./refcode"
 import { Figure } from "./figure"
+import { Animation } from "./animation"
 import { ContentReference } from "./content-reference"
 import { remarkContentReference } from "@/lib/parser/content-reference"
 import { remarkProblem } from "@/lib/parser/problem"
@@ -23,6 +24,7 @@ import { Problem } from "./problem"
 import { remarkRefcode } from "@/lib/parser/refcode"
 import { getGuideRoot, getPublicRoot } from "@/lib/environment"
 import { remarkFigure } from "@/lib/parser/figure"
+import { remarkAnimation } from "@/lib/parser/animation"
 import { remarkSection, Section } from "@/lib/parser/section"
 import { remarkThinking } from "@/lib/parser/thinking"
 import { Thinking, ThinkingAnswer } from "./thinking"
@@ -64,6 +66,7 @@ export async function getArticleContent(
                         { refcodeIndent: 4, refcodeIndentWarning: true },
                     ],
                     [remarkFigure, directory, getFigurePath],
+                    [remarkAnimation, directory, getFigurePath],
                     remarkGfm,
                     remarkContentReference,
                     remarkProblem,
@@ -84,6 +87,7 @@ export async function getArticleContent(
                                     if (
                                         [
                                             "figure",
+                                            "animation",
                                             "problem",
                                             "refcode",
                                         ].includes(node.name)
@@ -108,6 +112,7 @@ export async function getArticleContent(
             TheoremReference: TheoremReference,
             Refcode: Refcode,
             Figure: Figure,
+            Animation: Animation,
             ContentReference: ContentReference,
             Problem: Problem(depthLimit - 1, ArticleMarkdown),
             Thinking: Thinking,
