@@ -9,4 +9,4 @@
 :HL["/files/content/Geometry/vector/figure/dot1.png","image"]
 :HL["/files/content/Geometry/vector/figure/cross.png","image"]
 :HL["/files/content/Geometry/vector/figure/cross1.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"Geometry","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"vector","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"98q7SGsyP8qYuPqeI8R-t"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"(articles)","param":null,"prefetchHints":0,"slots":{"children":{"name":"topic","param":{"type":"d","key":"Geometry","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"article","param":{"type":"d","key":"vector","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"SjQ0p-WOCbte6K6GjrJ5s"}
