@@ -38,13 +38,13 @@ const PROBLEM_THEMES = {
     sample: {
         label: "例題",
         header: "bg-indigo-50/30 dark:bg-indigo-950/30",
-        badge: "bg-indigo-500 dark:bg-indigo-600",
+        badge: "bg-indigo-600",
         star: "text-indigo-500 dark:text-indigo-400",
     },
     exercise: {
         label: "習題",
         header: "bg-emerald-50/30 dark:bg-emerald-950/30",
-        badge: "bg-emerald-500 dark:bg-emerald-600",
+        badge: "bg-emerald-700",
         star: "text-emerald-500 dark:text-emerald-400",
     },
 }

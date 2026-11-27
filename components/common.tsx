@@ -13,27 +13,27 @@ export function ImportanceTag({ importance }: ImportanceTagProps) {
     const styles = [
         {
             bg: "bg-slate-100 dark:bg-slate-900/40",
-            text: "text-slate-600 dark:text-slate-300",
+            text: "text-slate-700 dark:text-slate-300",
             label: "博雅",
         },
         {
             bg: "bg-cyan-100 dark:bg-cyan-900/40",
-            text: "text-cyan-600 dark:text-cyan-300",
+            text: "text-cyan-700 dark:text-cyan-300",
             label: "罕見",
         },
         {
             bg: "bg-emerald-100 dark:bg-emerald-900/40",
-            text: "text-emerald-600 dark:text-emerald-300",
+            text: "text-emerald-700 dark:text-emerald-300",
             label: "實用",
         },
         {
             bg: "bg-orange-100 dark:bg-orange-900/40",
-            text: "text-orange-600 dark:text-orange-300",
+            text: "text-orange-700 dark:text-orange-300",
             label: "重要",
         },
         {
             bg: "bg-rose-100 dark:bg-rose-900/40",
-            text: "text-rose-600 dark:text-rose-300",
+            text: "text-rose-700 dark:text-rose-300",
             label: "必學",
         },
     ]

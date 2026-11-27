@@ -23,7 +23,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-indigo-100 dark:border-indigo-900/60",
             header: "border-indigo-50 bg-indigo-50/30 dark:border-indigo-900/40 dark:bg-indigo-950/30",
-            badge: "bg-indigo-500 dark:bg-indigo-600",
+            badge: "bg-indigo-600",
             title: "text-indigo-900 dark:text-indigo-200",
         },
     },
@@ -32,7 +32,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-cyan-100 dark:border-cyan-900/60",
             header: "border-cyan-50 bg-cyan-50/30 dark:border-cyan-900/40 dark:bg-cyan-950/30",
-            badge: "bg-cyan-500 dark:bg-cyan-600",
+            badge: "bg-cyan-700",
             title: "text-cyan-900 dark:text-cyan-200",
         },
     },
@@ -41,7 +41,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-emerald-100 dark:border-emerald-900/60",
             header: "border-emerald-50 bg-emerald-50/30 dark:border-emerald-900/40 dark:bg-emerald-950/30",
-            badge: "bg-emerald-500 dark:bg-emerald-600",
+            badge: "bg-emerald-700",
             title: "text-emerald-900 dark:text-emerald-200",
         },
     },
@@ -50,7 +50,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-orange-100 dark:border-orange-900/60",
             header: "border-orange-50 bg-orange-50/30 dark:border-orange-900/40 dark:bg-orange-950/30",
-            badge: "bg-orange-500 dark:bg-orange-600",
+            badge: "bg-orange-700",
             title: "text-orange-900 dark:text-orange-200",
         },
     },
@@ -59,7 +59,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-rose-100 dark:border-rose-900/60",
             header: "border-rose-50 bg-rose-50/30 dark:border-rose-900/40 dark:bg-rose-950/30",
-            badge: "bg-rose-500 dark:bg-rose-600",
+            badge: "bg-rose-700 dark:bg-rose-600",
             title: "text-rose-900 dark:text-rose-200",
         },
     },
@@ -68,7 +68,7 @@ const THEOREM_CONFIGS: { [type: string]: TheoremConfig } = {
         classes: {
             border: "border-violet-100 dark:border-violet-900/60",
             header: "border-violet-50 bg-violet-50/30 dark:border-violet-900/40 dark:bg-violet-950/30",
-            badge: "bg-violet-500 dark:bg-violet-600",
+            badge: "bg-violet-600",
             title: "text-violet-900 dark:text-violet-200",
         },
     },
