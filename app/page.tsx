@@ -1,4 +1,4 @@
-import { ContentBody, PageFooter } from "@/components/layout"
+import { ContentBody, MAIN_CONTENT_ID, PageFooter } from "@/components/layout"
 import { NavBar } from "@/components/navbar"
 import {
     Contributor,
@@ -141,181 +141,186 @@ export default function HomePage() {
             <JsonLd data={homeStructuredData()} />
             <NavBar />
 
-            {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-100 dark:bg-gray-900 pt-16 pb-24 md:pt-24 md:pb-32 border-b border-line-subtle">
-                {/* Background Image Overlay */}
-                <div className="absolute inset-0 z-0 bg-home bg-cover bg-center dark:opacity-[0.06]" />
+            <main id={MAIN_CONTENT_ID}>
+                {/* Hero Section */}
+                <div className="relative overflow-hidden bg-slate-100 dark:bg-gray-900 pt-16 pb-24 md:pt-24 md:pb-32 border-b border-line-subtle">
+                    {/* Background Image Overlay */}
+                    <div className="absolute inset-0 z-0 bg-home bg-cover bg-center dark:opacity-[0.06]" />
 
-                {/* Decorative Blobs */}
-                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
-                <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
+                    {/* Decorative Blobs */}
+                    <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
+                    <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-accent-200 rounded-full blur-[120px] opacity-40 z-0" />
 
-                <div className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col items-center text-center">
-                    {/*
-                     * banner2.png has black text; guide_banner.png is the same design in white,
-                     * but with different transparent padding. At the same height and left-aligned,
-                     * their contents line up, so banner2.png keeps the layout in dark mode (invisible)
-                     * and guide_banner.png is laid over it.
-                     */}
-                    <div className="relative mb-12">
-                        <Image
-                            src="/banner2.png"
-                            alt="NTUCPC Guide Banner"
-                            width={600}
-                            height={200}
-                            className="w-full max-w-xl h-auto dark:invisible"
-                            priority
-                        />
-                        <Image
-                            src="/guide_banner.png"
-                            alt="NTUCPC Guide Banner"
-                            width={1000}
-                            height={241}
-                            className="absolute top-0 left-0 h-full w-auto max-w-none hidden dark:block"
-                            priority
-                        />
-                    </div>
+                    <div className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col items-center text-center">
+                        {/*
+                         * banner2.png has black text; guide_banner.png is the same design in white,
+                         * but with different transparent padding. At the same height and left-aligned,
+                         * their contents line up, so banner2.png keeps the layout in dark mode (invisible)
+                         * and guide_banner.png is laid over it.
+                         */}
+                        <div className="relative mb-12">
+                            <Image
+                                src="/banner2.png"
+                                alt="NTUCPC Guide Banner"
+                                width={600}
+                                height={200}
+                                className="w-full max-w-xl h-auto dark:invisible"
+                                priority
+                            />
+                            <Image
+                                src="/guide_banner.png"
+                                alt="NTUCPC Guide Banner"
+                                width={1000}
+                                height={241}
+                                className="absolute top-0 left-0 h-full w-auto max-w-none hidden dark:block"
+                                priority
+                            />
+                        </div>
 
-                    <h1 className="text-xl md:text-3xl font-bold text-fg-strong tracking-tight mb-8 max-w-3xl">
-                        由專業選手們撰寫的自學講義，
-                        <br />
-                        <span className="text-accent-600">
-                            帶領新手從零成為程式競賽高手！
-                        </span>
-                    </h1>
+                        <h1 className="text-xl md:text-3xl font-bold text-fg-strong tracking-tight mb-8 max-w-3xl">
+                            由專業選手們撰寫的自學講義，
+                            <br />
+                            <span className="text-accent-600">
+                                帶領新手從零成為程式競賽高手！
+                            </span>
+                        </h1>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <ButtonLink
-                            text="開始閱讀：章節目錄"
-                            url="/chapters"
-                            primary
-                            icon={faBookOpen}
-                        />
-                        <ButtonLink
-                            text="快速瀏覽：主題目錄"
-                            url="/topics"
-                            icon={faCompass}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <ContentBody maxWidth="6xl">
-                {/* Introduction Section */}
-                <SectionTitle icon={faBookOpen}>網站簡介</SectionTitle>
-
-                <div className="max-w-3xl mx-auto text-center">
-                    <p className="text-lg text-fg-tertiary leading-relaxed mb-8">
-                        NTUCPC Guide
-                        是由專業程式競賽選手編寫的講義，提供適合新手自學、由淺入深的程式競賽學習資源。
-                    </p>
-                    <p className="text-fg-muted font-medium mb-12 flex items-center justify-center gap-2">
-                        <span className="w-8 h-px bg-line-strong" />
-                        不知道怎麼開始嗎？看看網站簡介吧！
-                        <span className="w-8 h-px bg-line-strong" />
-                    </p>
-
-                    <div className="flex flex-wrap justify-center gap-3">
-                        {guideContents.map((content, idx) => (
-                            <WrappedLink
-                                key={idx}
-                                href={`/${content.code}`}
-                                className="px-4 py-2 rounded-xl bg-accent-50 text-accent-600 font-bold text-sm hover:bg-accent-100 hover:text-accent-700 transition-all border border-accent-100/50"
-                            >
-                                {content.text}
-                            </WrappedLink>
-                        ))}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <ButtonLink
+                                text="開始閱讀：章節目錄"
+                                url="/chapters"
+                                primary
+                                icon={faBookOpen}
+                            />
+                            <ButtonLink
+                                text="快速瀏覽：主題目錄"
+                                url="/topics"
+                                icon={faCompass}
+                            />
+                        </div>
                     </div>
                 </div>
 
-                {/* Team Section */}
-                <SectionTitle icon={faUsers}>團隊成員</SectionTitle>
+                <ContentBody maxWidth="6xl" asMain={false}>
+                    {/* Introduction Section */}
+                    <SectionTitle icon={faBookOpen}>網站簡介</SectionTitle>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {contributors.map((contributor, index) => (
-                        <ContributorCard
-                            key={index}
-                            contributor={contributor}
-                            publicRoot={publicRoot}
-                        />
-                    ))}
-                </div>
-
-                {/* Acknowledgements Section */}
-                <SectionTitle icon={faHeart}>致謝</SectionTitle>
-
-                <div className="max-w-4xl mx-auto">
-                    <div className="bg-accent-50/50 border border-accent-100 rounded-2xl p-8 text-center mb-12">
-                        <p className="text-fg-secondary leading-relaxed mb-6">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <p className="text-lg text-fg-tertiary leading-relaxed mb-8">
                             NTUCPC Guide
-                            受到來自許多人與其他網站的啟發，特別感謝
-                            <HyperRefBlank
-                                href="https://usaco.guide/"
-                                className="mx-1 text-accent-600 font-bold hover:underline"
-                            >
-                                USACO Guide
-                            </HyperRefBlank>{" "}
-                            和
-                            <HyperRefBlank
-                                href="https://oi-wiki.org/"
-                                className="mx-1 text-accent-600 font-bold hover:underline"
-                            >
-                                OI Wiki
-                            </HyperRefBlank>
-                            給了我們很多啟發，也感謝所有在網路上公開程式競賽資源的人們。
+                            是由專業程式競賽選手編寫的講義，提供適合新手自學、由淺入深的程式競賽學習資源。
+                        </p>
+                        <p className="text-fg-muted font-medium mb-12 flex items-center justify-center gap-2">
+                            <span className="w-8 h-px bg-line-strong" />
+                            不知道怎麼開始嗎？看看網站簡介吧！
+                            <span className="w-8 h-px bg-line-strong" />
                         </p>
 
-                        <div className="space-y-6 pt-6 border-t border-accent-100">
-                            {specialThanks.map((group, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-col gap-3"
+                        <div className="flex flex-wrap justify-center gap-3">
+                            {guideContents.map((content, idx) => (
+                                <WrappedLink
+                                    key={idx}
+                                    href={`/${content.code}`}
+                                    className="px-4 py-2 rounded-xl bg-accent-50 text-accent-600 font-bold text-sm hover:bg-accent-100 hover:text-accent-700 transition-all border border-accent-100/50"
                                 >
-                                    <div className="text-xs font-bold text-fg-subtle uppercase tracking-widest">
-                                        {group.text}
-                                    </div>
-                                    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-                                        {group.members.map(
-                                            ([name, handle], idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className="flex items-baseline gap-1.5"
-                                                >
-                                                    <span className="font-bold text-fg-secondary">
-                                                        {name}
-                                                    </span>
-                                                    <span className="text-xs text-fg-subtle font-medium">
-                                                        @{handle}
-                                                    </span>
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
+                                    {content.text}
+                                </WrappedLink>
                             ))}
                         </div>
                     </div>
-                </div>
 
-                {isDev && (
-                    <div className="mt-20 pt-12 border-t border-line">
-                        <div className="flex flex-col items-center gap-6">
-                            <div className="px-4 py-2 rounded-lg bg-orange-50 border border-orange-100 text-orange-700 dark:bg-orange-950/40 dark:border-orange-900/60 dark:text-orange-300 text-sm font-medium">
-                                🛠️ You are in development mode! （Production
-                                不會有這區塊）
-                            </div>
-                            <div className="flex flex-wrap justify-center gap-4">
-                                <ButtonLink text="全部東西" url="/test/all" />
-                                <ButtonLink
-                                    text="題目清單"
-                                    url="/test/problems"
-                                    primary
-                                />
+                    {/* Team Section */}
+                    <SectionTitle icon={faUsers}>團隊成員</SectionTitle>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {contributors.map((contributor, index) => (
+                            <ContributorCard
+                                key={index}
+                                contributor={contributor}
+                                publicRoot={publicRoot}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Acknowledgements Section */}
+                    <SectionTitle icon={faHeart}>致謝</SectionTitle>
+
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-accent-50/50 border border-accent-100 rounded-2xl p-8 text-center mb-12">
+                            <p className="text-fg-secondary leading-relaxed mb-6">
+                                NTUCPC Guide
+                                受到來自許多人與其他網站的啟發，特別感謝
+                                <HyperRefBlank
+                                    href="https://usaco.guide/"
+                                    className="mx-1 text-accent-600 font-bold hover:underline"
+                                >
+                                    USACO Guide
+                                </HyperRefBlank>{" "}
+                                和
+                                <HyperRefBlank
+                                    href="https://oi-wiki.org/"
+                                    className="mx-1 text-accent-600 font-bold hover:underline"
+                                >
+                                    OI Wiki
+                                </HyperRefBlank>
+                                給了我們很多啟發，也感謝所有在網路上公開程式競賽資源的人們。
+                            </p>
+
+                            <div className="space-y-6 pt-6 border-t border-accent-100">
+                                {specialThanks.map((group, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex flex-col gap-3"
+                                    >
+                                        <div className="text-xs font-bold text-fg-subtle uppercase tracking-widest">
+                                            {group.text}
+                                        </div>
+                                        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                                            {group.members.map(
+                                                ([name, handle], idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className="flex items-baseline gap-1.5"
+                                                    >
+                                                        <span className="font-bold text-fg-secondary">
+                                                            {name}
+                                                        </span>
+                                                        <span className="text-xs text-fg-subtle font-medium">
+                                                            @{handle}
+                                                        </span>
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
-                )}
-            </ContentBody>
+
+                    {isDev && (
+                        <div className="mt-20 pt-12 border-t border-line">
+                            <div className="flex flex-col items-center gap-6">
+                                <div className="px-4 py-2 rounded-lg bg-orange-50 border border-orange-100 text-orange-700 dark:bg-orange-950/40 dark:border-orange-900/60 dark:text-orange-300 text-sm font-medium">
+                                    🛠️ You are in development mode! （Production
+                                    不會有這區塊）
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    <ButtonLink
+                                        text="全部東西"
+                                        url="/test/all"
+                                    />
+                                    <ButtonLink
+                                        text="題目清單"
+                                        url="/test/problems"
+                                        primary
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </ContentBody>
+            </main>
             <PageFooter />
         </div>
     )

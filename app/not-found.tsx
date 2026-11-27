@@ -12,7 +12,7 @@ export default function NotFound() {
         <div className="min-h-screen bg-page flex flex-col">
             <NavBar />
 
-            <main className="flex-grow flex items-center justify-center py-20">
+            <div className="flex-grow flex items-center justify-center py-20">
                 <ContentBody maxWidth="4xl">
                     <div className="flex flex-col items-center text-center">
                         {/* Visual element */}
@@ -49,7 +49,7 @@ export default function NotFound() {
                         </div>
                     </div>
                 </ContentBody>
-            </main>
+            </div>
 
             <PageFooter />
         </div>

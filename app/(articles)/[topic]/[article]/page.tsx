@@ -93,7 +93,7 @@ function ArticleHeader({ article }: { article: Article }) {
     const topic = getTopic(article.topic)
 
     return (
-        <div className="mb-8 pb-8 border-b border-line">
+        <header className="mb-8 pb-8 border-b border-line">
             <div className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase mb-6">
                 {chapter && (
                     <>
@@ -210,7 +210,7 @@ function ArticleHeader({ article }: { article: Article }) {
                     </div>
                 )}
             </div>
-        </div>
+        </header>
     )
 }
 
@@ -324,7 +324,7 @@ export default async function ArticlePage(props: ArticleProps) {
     const { content, headings } = await getArticleContent(mdxSource, 1)
 
     return (
-        <div className="relative">
+        <article className="relative">
             <JsonLd data={articleStructuredData(article)} />
             <ArticleHeader article={article} />
             <div>{content}</div>
@@ -333,6 +333,6 @@ export default async function ArticlePage(props: ArticleProps) {
             <div className="hidden xl:block absolute top-0 left-[calc(100%+2.5rem)] h-full">
                 <TableOfContents headings={headings} />
             </div>
-        </div>
+        </article>
     )
 }
