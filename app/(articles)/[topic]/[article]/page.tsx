@@ -310,7 +310,7 @@ function TableOfContents({ headings }: { headings: Section[] }) {
                             <li key={idx} style={{ paddingLeft }}>
                                 <a
                                     href={`#${heading.code}`}
-                                    className="block py-1 text-fg-tertiary hover:text-accent-600 hover:bg-surface-subtle rounded px-2 transition-colors overflow-hidden text-ellipsis whitespace-nowrap"
+                                    className="block py-1 focus-visible:outline-offset-[-2px] text-fg-tertiary hover:text-accent-600 hover:bg-surface-subtle rounded px-2 transition-colors overflow-hidden text-ellipsis whitespace-nowrap"
                                 >
                                     {heading.text}
                                 </a>

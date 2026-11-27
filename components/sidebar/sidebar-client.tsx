@@ -73,7 +73,7 @@ function SidebarGroupComponent({
                                 <Link
                                     href={item.url}
                                     aria-current={isActive ? "page" : undefined}
-                                    className={`block py-1.5 px-3 text-sm rounded-md transition-all duration-200 ${
+                                    className={`block py-1.5 px-3 text-sm rounded-md focus-visible:outline-offset-[-2px] transition-all duration-200 ${
                                         isActive
                                             ? "text-accent-600 bg-accent-50 font-medium border-l-2 border-accent-600 -ml-[1px]"
                                             : "text-fg-muted hover:text-accent-500 hover:bg-surface-subtle"

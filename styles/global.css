@@ -88,4 +88,16 @@
     body {
         background-color: rgb(var(--color-page));
     }
+
+    /* Clear keyboard focus ring; the navbar overrides the color for its dark background */
+    :focus-visible {
+        outline: 2px solid rgb(var(--color-accent-600));
+        outline-offset: 2px;
+    }
+    /* Drawn inside, so it is not clipped by overflow-hidden blocks and scroll areas */
+    button:focus-visible,
+    summary:focus-visible,
+    select:focus-visible {
+        outline-offset: -2px;
+    }
 }

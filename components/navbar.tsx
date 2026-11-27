@@ -99,7 +99,7 @@ export function NavBar() {
             </a>
             <nav
                 aria-label="主導覽列"
-                className={`${NAVBAR_BG} text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
+                className={`${NAVBAR_BG} [&_:focus-visible]:outline-indigo-300 text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
             >
                 <div className="mx-auto w-full max-w-[100rem] flex items-center justify-between px-6 h-16">
                     {/* Logo Section */}
