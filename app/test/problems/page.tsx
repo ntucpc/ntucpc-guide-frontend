@@ -15,7 +15,9 @@ import {
 import { ReactNode } from "react"
 import { composeMetadata } from "@/lib/util"
 
-export const metadata = composeMetadata("題目")
+export const metadata = composeMetadata("題目", {
+    robots: { index: false, follow: false },
+})
 
 export default async function ProblemsTestPage() {
     const problemOccurs = await getProblemOccurs()
