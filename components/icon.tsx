@@ -31,7 +31,8 @@ type IconProps = {
 }
 
 function CustomIcon({ Component, className = "" }: IconProps) {
-    return <Component className={`${className}`} />
+    // Chapter icons are decorative; the chapter title is next to them
+    return <Component className={`${className}`} aria-hidden="true" />
 }
 
 function getCustomIcon(

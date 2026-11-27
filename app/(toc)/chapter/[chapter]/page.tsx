@@ -5,6 +5,7 @@ import { getChapter, getChapters } from "@/lib/structure/chapters"
 import { getTopic } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { chapterDescription, chapterPageTitle } from "@/lib/page-info"
 import { getIconColor, IconWrapper } from "@/components/icon"
 import { Metadata } from "next"
 
@@ -15,7 +16,10 @@ type ChapterProps = {
 export async function generateMetadata(props: ChapterProps): Promise<Metadata> {
     const params = await props.params
     const chapter = getChapter(params.chapter)
-    return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`)
+    return composeMetadata(chapterPageTitle(chapter), {
+        description: chapterDescription(chapter),
+        path: `/chapter/${chapter.code}`,
+    })
 }
 
 export async function generateStaticParams() {
@@ -56,7 +60,7 @@ export default async function ChapterPage(props: ChapterProps) {
 
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="text-sm font-bold text-accent-500 tracking-widest uppercase bg-accent-50 px-2 py-0.5 rounded">
+                            <span className="text-sm font-bold text-accent-600 tracking-widest uppercase bg-accent-50 px-2 py-0.5 rounded">
                                 Chapter {chapter.number}
                             </span>
                         </div>

@@ -37,15 +37,17 @@ export function Refcode(props: RefcodeProps) {
                 <div className="flex items-center gap-2">
                     <FontAwesomeIcon
                         icon={faCode}
-                        className="text-gray-500 text-xs"
+                        className="text-gray-400 text-xs"
                     />
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                         {lang}
                     </span>
                 </div>
                 <button
+                    type="button"
+                    aria-label="複製程式碼"
                     onClick={copyToClipboard}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-gray-700/50 transition-all text-gray-500 hover:text-gray-300"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-gray-700/50 transition-all text-gray-400 hover:text-gray-300"
                 >
                     <FontAwesomeIcon
                         icon={copied ? faCheck : faCopy}
@@ -55,6 +57,9 @@ export function Refcode(props: RefcodeProps) {
                         {copied ? "Copied" : "Copy"}
                     </span>
                 </button>
+                <span className="sr-only" aria-live="polite">
+                    {copied ? "已複製程式碼" : ""}
+                </span>
             </div>
 
             {/* Code Body */}

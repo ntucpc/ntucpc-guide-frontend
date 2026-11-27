@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Anchor, WrappedLink } from "@/components/common"
+import { NewTabHint, WrappedLink } from "@/components/common"
 
 export const PARAGRAPH_SEP = `my-5`
 export const BLOCK_MARGIN = `my-10`
@@ -9,21 +9,31 @@ export const TITLE_PADDING_TOP_BIG = `mt-16`
 export const TITLE_PADDING_BOTTOM = `mb-6`
 export const TITLE_FONT = `font-bold text-fg-strong tracking-tight`
 export const SCROLL = `overflow-x-auto overflow-y-hidden`
+/** Keep anchor targets clear of the sticky navbar when jumping to them */
+export const ANCHOR_OFFSET = `scroll-mt-[120px]`
 
 // props: sectionId
 export function H1Title(props: any) {
     return (
         <div className={`${TITLE_PADDING_TOP_BIG} ${TITLE_PADDING_BOTTOM}`}>
-            <Anchor refId={props.refId} />
-            <h1 className={`text-5xl ${TITLE_FONT}`}>{props.children}</h1>
+            <h1
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-5xl ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h1>
         </div>
     )
 }
 export function H2Title(props: any) {
     return (
         <div className={TITLE_PADDING_TOP_BIG}>
-            <Anchor refId={props.refId} />
-            <h2 className={`text-3xl mb-3 ${TITLE_FONT}`}>{props.children}</h2>
+            <h2
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-3xl mb-3 ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h2>
             <div className="h-1 w-20 bg-accent-500 rounded-full mb-8" />
         </div>
     )
@@ -31,32 +41,48 @@ export function H2Title(props: any) {
 export function H3Title(props: any) {
     return (
         <div className={`${TITLE_PADDING_TOP} ${TITLE_PADDING_BOTTOM}`}>
-            <Anchor refId={props.refId} />
-            <h3 className={`text-2xl ${TITLE_FONT}`}>{props.children}</h3>
+            <h3
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-2xl ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h3>
         </div>
     )
 }
 export function H4Title(props: any) {
     return (
         <div className={`${TITLE_PADDING_TOP} ${TITLE_PADDING_BOTTOM}`}>
-            <Anchor refId={props.refId} />
-            <h4 className={`text-xl ${TITLE_FONT}`}>{props.children}</h4>
+            <h4
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-xl ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h4>
         </div>
     )
 }
 export function H5Title(props: any) {
     return (
         <div className={`${TITLE_PADDING_TOP} ${TITLE_PADDING_BOTTOM}`}>
-            <Anchor refId={props.refId} />
-            <h5 className={`text-lg ${TITLE_FONT}`}>{props.children}</h5>
+            <h5
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-lg ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h5>
         </div>
     )
 }
 export function H6Title(props: any) {
     return (
         <div className={`${TITLE_PADDING_TOP} ${TITLE_PADDING_BOTTOM}`}>
-            <Anchor refId={props.refId} />
-            <h6 className={`text-base ${TITLE_FONT}`}>{props.children}</h6>
+            <h6
+                id={props.refId}
+                className={`${ANCHOR_OFFSET} text-base ${TITLE_FONT}`}
+            >
+                {props.children}
+            </h6>
         </div>
     )
 }
@@ -104,8 +130,27 @@ export function HyperRef(props: any) {
         />
     )
 }
-export function HyperRefBlank(props: any) {
-    return <HyperRef target="_blank" {...props} />
+export function HyperRefBlank({ children, ...props }: any) {
+    return (
+        <HyperRef target="_blank" rel="noopener noreferrer" {...props}>
+            {children}
+            <NewTabHint />
+        </HyperRef>
+    )
+}
+
+/** Whether a link leaves the site, e.g. "https://...", "//host/..." or "mailto:..." */
+export function isExternalLink(href: unknown): boolean {
+    return typeof href === "string" && /^([a-z][a-z0-9+.-]*:|\/\/)/i.test(href)
+}
+
+/** Opens external links in a new tab and keeps links within the site in the same tab */
+export function AutoHyperRef(props: any) {
+    return isExternalLink(props.href) ? (
+        <HyperRefBlank {...props} />
+    ) : (
+        <HyperRef {...props} />
+    )
 }
 
 export function HorizontalLine() {
@@ -172,7 +217,7 @@ export function getBasicComponents() {
         blockquote: Quote,
         ul: UnorderedList,
         ol: OrderedList,
-        a: HyperRefBlank,
+        a: AutoHyperRef,
         hr: HorizontalLine,
         table: Table,
         thead: TableHead,

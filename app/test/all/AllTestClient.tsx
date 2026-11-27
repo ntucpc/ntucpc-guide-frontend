@@ -10,6 +10,7 @@ import {
     TableBody,
     TableCell,
     TableHead,
+    TableHeadCell,
     TableRow,
 } from "@/components/basic"
 import { useState } from "react"
@@ -55,8 +56,9 @@ export default function AllTestPage({
                 <H1Title>全部東西</H1Title>
 
                 <div className="mb-4">
-                    排序模式：
+                    <label htmlFor="sort-mode">排序模式：</label>
                     <select
+                        id="sort-mode"
                         value={sortBy}
                         onChange={(event) => {
                             setSortBy(event.target.value)
@@ -72,10 +74,19 @@ export default function AllTestPage({
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell> # </TableCell>
-                                <TableCell> 章節 </TableCell>
-                                <TableCell> 主題 </TableCell>
-                                <TableCell> 標題 </TableCell>
+                                <TableHeadCell scope="col"> # </TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    {" "}
+                                    章節{" "}
+                                </TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    {" "}
+                                    主題{" "}
+                                </TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    {" "}
+                                    標題{" "}
+                                </TableHeadCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

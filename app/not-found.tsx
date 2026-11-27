@@ -6,17 +6,21 @@ import {
     faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { composeMetadata } from "@/lib/util"
+
+// Next.js adds noindex to this page by itself
+export const metadata = composeMetadata("找不到頁面")
 
 export default function NotFound() {
     return (
         <div className="min-h-screen bg-page flex flex-col">
             <NavBar />
 
-            <main className="flex-grow flex items-center justify-center py-20">
+            <div className="flex-grow flex items-center justify-center py-20">
                 <ContentBody maxWidth="4xl">
                     <div className="flex flex-col items-center text-center">
                         {/* Visual element */}
-                        <div className="relative mb-12 animate-bounce duration-[2000ms]">
+                        <div className="relative mb-12 animate-bounce motion-reduce:animate-none duration-[2000ms]">
                             <div className="w-32 h-32 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 text-6xl shadow-sm border border-rose-100 dark:bg-rose-950/40 dark:border-rose-900/60 dark:text-rose-400">
                                 <FontAwesomeIcon icon={faTriangleExclamation} />
                             </div>
@@ -49,7 +53,7 @@ export default function NotFound() {
                         </div>
                     </div>
                 </ContentBody>
-            </main>
+            </div>
 
             <PageFooter />
         </div>

@@ -10,17 +10,30 @@ const MAX_WIDTH_CLASSES = {
     fit: "max-w-fit",
 }
 
+export const MAIN_CONTENT_ID = "main-content"
+
 type ContentBodyProps = {
     children: ReactNode
     maxWidth?: keyof typeof MAX_WIDTH_CLASSES
+    /**
+     * Render as the page's <main> landmark. Set to false when the page wraps
+     * a larger region (including this) in its own <main>.
+     */
+    asMain?: boolean
 }
-export function ContentBody({ children, maxWidth = "4xl" }: ContentBodyProps) {
+export function ContentBody({
+    children,
+    maxWidth = "4xl",
+    asMain = true,
+}: ContentBodyProps) {
+    const Tag = asMain ? "main" : "div"
     return (
-        <div
+        <Tag
+            id={asMain ? MAIN_CONTENT_ID : undefined}
             className={`px-4 ${MAX_WIDTH_CLASSES[maxWidth]} mx-auto pt-8 pb-3`}
         >
             {children}
-        </div>
+        </Tag>
     )
 }
 

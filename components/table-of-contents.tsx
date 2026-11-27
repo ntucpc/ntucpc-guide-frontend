@@ -84,18 +84,18 @@ export function SectionEntry({
                             href={url}
                             className="group/link inline-flex items-center gap-2"
                         >
-                            <h3 className="text-xl font-extrabold text-fg-strong group-hover/link:text-accent-600 transition-colors">
+                            <h2 className="text-xl font-extrabold text-fg-strong group-hover/link:text-accent-600 transition-colors">
                                 {title}
-                            </h3>
+                            </h2>
                             <FontAwesomeIcon
                                 icon={faChevronRight}
                                 className="text-xs text-fg-faint group-hover/link:text-accent-500 transition-transform group-hover/link:translate-x-1"
                             />
                         </Link>
                     ) : (
-                        <h3 className="text-xl font-extrabold text-fg-strong">
+                        <h2 className="text-xl font-extrabold text-fg-strong">
                             {title}
-                        </h3>
+                        </h2>
                     )}
                     <div className="mt-2 text-sm text-fg-muted leading-relaxed italic">
                         <SimpleMarkdown text={description} />
