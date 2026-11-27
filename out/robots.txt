@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /test/
+
+Sitemap: https://guide.ntucpc.org/sitemap.xml
