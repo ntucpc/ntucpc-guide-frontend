@@ -62,7 +62,10 @@ export const viewport: Viewport = {
 
 const notoSansTC = Noto_Sans_TC({
     subsets: ["latin"],
-    weight: ["100", "200", "300", "400", "500", "600", "700", "900"],
+    // Only the weights in use: normal, medium, semibold, bold, and black for extrabold
+    // (800 has never been loaded, so font-extrabold renders with 900)
+    weight: ["400", "500", "600", "700", "900"],
+    variable: "--noto-sans-tc",
 })
 
 export default function RootLayout({
@@ -72,7 +75,11 @@ export default function RootLayout({
 }) {
     return (
         // suppressHydrationWarning: the theme script adds the `dark` class before hydration
-        <html lang="zh-TW" suppressHydrationWarning>
+        <html
+            lang="zh-TW"
+            className={notoSansTC.variable}
+            suppressHydrationWarning
+        >
             <head>
                 <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
             </head>

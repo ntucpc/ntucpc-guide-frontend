@@ -161,15 +161,15 @@ export default function HomePage() {
                         <div className="relative mb-12">
                             <Image
                                 src="/banner2.png"
-                                alt="NTUCPC Guide Banner"
-                                width={600}
-                                height={200}
+                                alt="NTUCPC Guide"
+                                width={1200}
+                                height={304}
                                 className="w-full max-w-xl h-auto dark:invisible"
                                 priority
                             />
                             <Image
                                 src="/guide_banner.png"
-                                alt="NTUCPC Guide Banner"
+                                alt="NTUCPC Guide"
                                 width={1000}
                                 height={241}
                                 className="absolute top-0 left-0 h-full w-auto max-w-none hidden dark:block"
