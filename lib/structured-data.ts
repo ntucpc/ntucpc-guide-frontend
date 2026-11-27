@@ -10,7 +10,7 @@ import {
     SITE_PREVIEW_IMAGE,
     SITE_URL,
 } from "@/lib/site"
-import { plainDescription } from "@/lib/util"
+import { articleDescription } from "@/lib/page-info"
 
 const WEBSITE_ID = `${SITE_URL}/#website`
 const ORGANIZATION_ID = `${SITE_URL}/#organization`
@@ -67,8 +67,7 @@ export function articleStructuredData(article: Article) {
                 url,
                 mainEntityOfPage: url,
                 headline: article.title,
-                description:
-                    plainDescription(article.description) ?? SITE_DESCRIPTION,
+                description: articleDescription(article),
                 author: article.authors.map((name) => ({
                     "@type": "Person",
                     name,

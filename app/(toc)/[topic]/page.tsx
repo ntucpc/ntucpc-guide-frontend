@@ -5,6 +5,7 @@ import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { topicDescription } from "@/lib/page-info"
 
 type TopicProps = {
     params: Promise<{ topic: string }>
@@ -14,7 +15,7 @@ export async function generateMetadata(props: TopicProps) {
     const params = await props.params
     const topic = getTopic(params.topic)
     return composeMetadata(topic.title, {
-        description: topic.description,
+        description: topicDescription(topic),
         path: `/${topic.code}`,
     })
 }

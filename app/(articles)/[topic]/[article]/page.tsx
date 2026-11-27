@@ -8,6 +8,7 @@ import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
 import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { articleDescription, articlePageTitle } from "@/lib/page-info"
 import { ImportanceTag } from "@/components/common"
 import { HyperRef } from "@/components/basic"
 import { WrappedLink } from "@/components/common"
@@ -37,8 +38,8 @@ export async function generateMetadata(props: ArticleProps) {
     const params = await props.params
     const code = `${params.topic}/${params.article}`
     const article = getArticle(code)
-    return composeMetadata(article.title, {
-        description: article.description,
+    return composeMetadata(articlePageTitle(article), {
+        description: articleDescription(article),
         path: `/${article.code}`,
         type: "article",
         authors: article.authors,

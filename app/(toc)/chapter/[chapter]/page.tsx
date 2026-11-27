@@ -5,6 +5,7 @@ import { getChapter, getChapters } from "@/lib/structure/chapters"
 import { getTopic } from "@/lib/structure/topics"
 import { ArticleGroup } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { chapterDescription, chapterPageTitle } from "@/lib/page-info"
 import { getIconColor, IconWrapper } from "@/components/icon"
 import { Metadata } from "next"
 
@@ -15,8 +16,8 @@ type ChapterProps = {
 export async function generateMetadata(props: ChapterProps): Promise<Metadata> {
     const params = await props.params
     const chapter = getChapter(params.chapter)
-    return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`, {
-        description: chapter.description,
+    return composeMetadata(chapterPageTitle(chapter), {
+        description: chapterDescription(chapter),
         path: `/chapter/${chapter.code}`,
     })
 }
