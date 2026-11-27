@@ -13,7 +13,9 @@ type TopicProps = {
 export async function generateMetadata(props: TopicProps) {
     const params = await props.params
     const topic = getTopic(params.topic)
-    return composeMetadata(topic.title)
+    return composeMetadata(topic.title, {
+        description: topic.description,
+    })
 }
 
 export async function generateStaticParams() {

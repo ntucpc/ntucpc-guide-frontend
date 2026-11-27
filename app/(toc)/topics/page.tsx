@@ -78,7 +78,10 @@ function TopicCard({ topic }: { topic: Topic }) {
     )
 }
 
-export const metadata = composeMetadata("主題目錄")
+export const metadata = composeMetadata("主題目錄", {
+    description:
+        "NTUCPC Guide 的主題目錄，依照演算法與資料結構的主題分類，方便快速查找文章。",
+})
 
 export default function TopicsPage() {
     const topics = getTopics()

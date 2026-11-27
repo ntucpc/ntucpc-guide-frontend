@@ -15,7 +15,9 @@ type ChapterProps = {
 export async function generateMetadata(props: ChapterProps): Promise<Metadata> {
     const params = await props.params
     const chapter = getChapter(params.chapter)
-    return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`)
+    return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`, {
+        description: chapter.description,
+    })
 }
 
 export async function generateStaticParams() {
