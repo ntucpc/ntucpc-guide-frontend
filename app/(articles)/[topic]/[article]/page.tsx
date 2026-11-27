@@ -10,7 +10,7 @@ import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { ImportanceTag } from "@/components/common"
 import { HyperRefBlank } from "@/components/basic"
-import { WrappedLink } from "@/components/common"
+import { NewTabHint, WrappedLink } from "@/components/common"
 import {
     faBook,
     faChevronLeft,
@@ -180,8 +180,10 @@ function ArticleHeader({ article }: { article: Article }) {
                                     className="hover:text-accent-500 transition-colors flex gap-1 items-center"
                                     title="文章重要等級"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     重要度
+                                    <NewTabHint />
                                     <FontAwesomeIcon
                                         icon={faCircleQuestion}
                                         className="text-[10px]"

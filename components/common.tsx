@@ -62,9 +62,7 @@ export function WrappedLink(props: any) {
     else return <a {...props} />
 }
 
-type AnchorProps = {
-    refId: string
-}
-export function Anchor(props: AnchorProps) {
-    return <a id={props.refId} className="block relative -top-[120px]" />
+/** Tells screen reader users that a link opens in a new tab */
+export function NewTabHint() {
+    return <span className="sr-only">（另開新分頁）</span>
 }

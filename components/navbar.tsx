@@ -1,6 +1,6 @@
 "use client"
 
-import { WrappedLink } from "@/components/common"
+import { NewTabHint, WrappedLink } from "@/components/common"
 import {
     faBars,
     faXmark,
@@ -26,8 +26,10 @@ export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
                 href={url}
                 className="px-4 py-2 h-full text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
                 target={blank ? "_blank" : "_self"}
+                rel={blank ? "noopener noreferrer" : undefined}
             >
                 {text}
+                {blank && <NewTabHint />}
                 {blank && (
                     <FontAwesomeIcon
                         icon={faExternalLinkAlt}
@@ -54,8 +56,10 @@ export function ExpandedNavbarItem({
                 onClick={onClick}
                 className="text-slate-300 hover:text-accent-400 font-medium flex justify-between items-center"
                 target={blank ? "_blank" : "_self"}
+                rel={blank ? "noopener noreferrer" : undefined}
             >
                 {text}
+                {blank && <NewTabHint />}
                 {blank && (
                     <FontAwesomeIcon
                         icon={faExternalLinkAlt}

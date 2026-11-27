@@ -6,9 +6,8 @@ import {
     faSquare,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { HyperRef } from "@/components/basic"
+import { ANCHOR_OFFSET, HyperRef } from "@/components/basic"
 import { ReactNode } from "react"
-import { Anchor } from "@/components/common"
 import { Block, BlockHeader } from "./block"
 
 type TheoremConfig = {
@@ -89,8 +88,10 @@ export function Theorem(props: TheoremProps) {
     const { name, classes } = getTheoremConfig(props.type)
 
     return (
-        <Block className={classes.border}>
-            <Anchor refId={`${props.type}-${props.refId}`} />
+        <Block
+            id={props.refId ? `${props.type}-${props.refId}` : undefined}
+            className={`${ANCHOR_OFFSET} ${classes.border}`}
+        >
             <BlockHeader className={`gap-3 border-b ${classes.header}`}>
                 <span
                     className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${classes.badge} text-white`}
