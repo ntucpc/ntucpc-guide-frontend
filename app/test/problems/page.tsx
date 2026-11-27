@@ -5,7 +5,7 @@ import { getStructure } from "@/lib/structure"
 import { parseStructure } from "@/lib/structure/client"
 import {
     H1Title,
-    HyperRefBlank,
+    AutoHyperRef,
     Table,
     TableBody,
     TableCell,
@@ -60,7 +60,7 @@ export default async function ProblemsTestPage() {
                                 let index = 0
                                 p.occurs.forEach((occur) => {
                                     occurs.push(
-                                        <HyperRefBlank
+                                        <AutoHyperRef
                                             key={index++}
                                             href={`/${occur.article}`}
                                         >
@@ -68,7 +68,7 @@ export default async function ProblemsTestPage() {
                                                 occur.article
                                             )}
                                             ({occur.difficulty})
-                                        </HyperRefBlank>
+                                        </AutoHyperRef>
                                     )
                                     occurs.push(<span key={index++}>、</span>)
                                 })
@@ -81,11 +81,11 @@ export default async function ProblemsTestPage() {
                                         <TableCell>{problem.name}</TableCell>
                                         <TableCell>
                                             {problem.url ? (
-                                                <HyperRefBlank
+                                                <AutoHyperRef
                                                     href={problem.url}
                                                 >
                                                     {problem.source}
-                                                </HyperRefBlank>
+                                                </AutoHyperRef>
                                             ) : (
                                                 <>{problem.source}</>
                                             )}

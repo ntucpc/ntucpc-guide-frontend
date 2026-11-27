@@ -7,7 +7,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons"
-import { HyperRefBlank } from "@/components/basic"
+import { AutoHyperRef } from "@/components/basic"
 import { Block, BlockHeader } from "./block"
 
 /**
@@ -139,7 +139,7 @@ export function Problem(
                     <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-fg-subtle tracking-wider">
                         <span>Source:</span>
                         {props.url ? (
-                            <HyperRefBlank
+                            <AutoHyperRef
                                 href={props.url}
                                 className="text-accent-500 hover:text-accent-700 transition-colors flex items-center gap-1.5"
                             >
@@ -148,7 +148,7 @@ export function Problem(
                                     icon={faArrowUpRightFromSquare}
                                     className="text-[9px]"
                                 />
-                            </HyperRefBlank>
+                            </AutoHyperRef>
                         ) : (
                             <span>{props.src}</span>
                         )}

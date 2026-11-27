@@ -1,4 +1,4 @@
-import { HyperRefBlank } from "@/components/basic"
+import { HyperRef } from "@/components/basic"
 
 type ContentReferenceProps = {
     type: string
@@ -17,5 +17,5 @@ export function ContentReference(props: ContentReferenceProps) {
         default:
             displayText = `${props.topicTitle} / ${props.articleTitle}`
     }
-    return <HyperRefBlank href={`/${props.code}`}>{displayText}</HyperRefBlank>
+    return <HyperRef href={`/${props.code}`}>{displayText}</HyperRef>
 }

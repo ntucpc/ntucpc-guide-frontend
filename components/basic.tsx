@@ -139,6 +139,20 @@ export function HyperRefBlank({ children, ...props }: any) {
     )
 }
 
+/** Whether a link leaves the site, e.g. "https://...", "//host/..." or "mailto:..." */
+export function isExternalLink(href: unknown): boolean {
+    return typeof href === "string" && /^([a-z][a-z0-9+.-]*:|\/\/)/i.test(href)
+}
+
+/** Opens external links in a new tab and keeps links within the site in the same tab */
+export function AutoHyperRef(props: any) {
+    return isExternalLink(props.href) ? (
+        <HyperRefBlank {...props} />
+    ) : (
+        <HyperRef {...props} />
+    )
+}
+
 export function HorizontalLine() {
     return <hr className="my-12 border-line" />
 }
@@ -203,7 +217,7 @@ export function getBasicComponents() {
         blockquote: Quote,
         ul: UnorderedList,
         ol: OrderedList,
-        a: HyperRefBlank,
+        a: AutoHyperRef,
         hr: HorizontalLine,
         table: Table,
         thead: TableHead,

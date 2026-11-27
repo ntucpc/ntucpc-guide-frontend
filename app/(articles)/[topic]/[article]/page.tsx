@@ -9,8 +9,8 @@ import { getTopic, getTopics } from "@/lib/structure/topics"
 import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
 import { ImportanceTag } from "@/components/common"
-import { HyperRefBlank } from "@/components/basic"
-import { NewTabHint, WrappedLink } from "@/components/common"
+import { HyperRef } from "@/components/basic"
+import { WrappedLink } from "@/components/common"
 import {
     faBook,
     faChevronLeft,
@@ -65,13 +65,13 @@ function ArticleHeader({ article }: { article: Article }) {
         .map((prereq, idx) => {
             const prereqArticle = getArticle(prereq)
             return !prereqArticle.coming ? (
-                <HyperRefBlank
+                <HyperRef
                     href={`/${prereq}`}
                     key={idx}
                     className="text-accent-600 hover:text-accent-800 transition-colors"
                 >
                     {prereqArticle.title}
-                </HyperRefBlank>
+                </HyperRef>
             ) : (
                 <span className="text-fg-subtle" key={idx}>
                     {prereqArticle.title}
@@ -179,11 +179,8 @@ function ArticleHeader({ article }: { article: Article }) {
                                     href="/Guide/importance"
                                     className="hover:text-accent-500 transition-colors flex gap-1 items-center"
                                     title="文章重要等級"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                 >
                                     重要度
-                                    <NewTabHint />
                                     <FontAwesomeIcon
                                         icon={faCircleQuestion}
                                         className="text-[10px]"
