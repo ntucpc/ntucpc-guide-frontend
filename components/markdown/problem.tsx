@@ -45,7 +45,7 @@ const PROBLEM_THEMES = {
         label: "習題",
         header: "bg-emerald-50/30 dark:bg-emerald-950/30",
         badge: "bg-emerald-700",
-        star: "text-emerald-500 dark:text-emerald-400",
+        star: "text-emerald-600 dark:text-emerald-400",
     },
 }
 
@@ -141,7 +141,7 @@ export function Problem(
                         {props.url ? (
                             <AutoHyperRef
                                 href={props.url}
-                                className="text-accent-500 hover:text-accent-700 transition-colors flex items-center gap-1.5"
+                                className="text-accent-600 hover:text-accent-800 transition-colors flex items-center gap-1.5"
                             >
                                 {props.src}
                                 <FontAwesomeIcon

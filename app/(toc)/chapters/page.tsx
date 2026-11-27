@@ -30,7 +30,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
                     {/* Content Header Section */}
                     <div className="flex-grow">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-bold text-accent-500 tracking-widest uppercase bg-accent-50 px-2 py-1 rounded">
+                            <span className="text-xs font-bold text-accent-600 tracking-widest uppercase bg-accent-50 px-2 py-1 rounded">
                                 Chapter {chapter.number}
                             </span>
                             <span className="text-xs font-semibold text-fg-subtle group-hover/header:text-accent-600 flex items-center gap-1 transition-colors">
