@@ -44,6 +44,8 @@ export function Refcode(props: RefcodeProps) {
                     </span>
                 </div>
                 <button
+                    type="button"
+                    aria-label="複製程式碼"
                     onClick={copyToClipboard}
                     className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-gray-700/50 transition-all text-gray-400 hover:text-gray-300"
                 >
@@ -55,6 +57,9 @@ export function Refcode(props: RefcodeProps) {
                         {copied ? "Copied" : "Copy"}
                     </span>
                 </button>
+                <span className="sr-only" aria-live="polite">
+                    {copied ? "已複製程式碼" : ""}
+                </span>
             </div>
 
             {/* Code Body */}

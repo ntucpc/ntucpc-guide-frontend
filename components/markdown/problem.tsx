@@ -95,7 +95,12 @@ export function Problem(
             )
         } else if (!isSample) {
             difficultyDisplay = (
-                <div className="flex items-center gap-0.5">
+                <div
+                    className="flex items-center gap-0.5"
+                    role="img"
+                    aria-label={`難度 ${props.difficulty} / 5 顆星`}
+                    title={`難度 ${props.difficulty} / 5`}
+                >
                     {Array.from({ length: 5 }, (_, index) => {
                         const active = index < parseInt(props.difficulty)
                         return (

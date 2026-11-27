@@ -22,8 +22,10 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
                 setTheme(getCurrentTheme() === "dark" ? "light" : "dark")
             }
             title="切換深色模式"
-            aria-label="切換深色模式"
         >
+            {/* The accessible name follows the theme through CSS too, so it is right before hydration */}
+            <span className="sr-only dark:hidden">切換為深色模式</span>
+            <span className="sr-only hidden dark:inline">切換為淺色模式</span>
             {/* Wrapped in spans since FontAwesome's own CSS sets `display` on the svg */}
             <span className="dark:hidden">
                 <FontAwesomeIcon icon={faSun} className="text-lg" />

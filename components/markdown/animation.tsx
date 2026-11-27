@@ -92,6 +92,7 @@ export function Animation(props: AnimationProps) {
     return (
         <div
             tabIndex={0}
+            role="region"
             onKeyDown={onKeyDown}
             aria-label="動畫（空白鍵播放／暫停，左右方向鍵切換步驟）"
             className="mx-auto my-2 w-fit max-w-full flex flex-col items-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500 focus-visible:outline-offset-4"
