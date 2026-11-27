@@ -23,6 +23,8 @@ import {
 import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Section } from "@/lib/parser/section"
+import { JsonLd } from "@/components/json-ld"
+import { articleStructuredData } from "@/lib/structured-data"
 
 type ArticleProps = {
     params: Promise<{
@@ -37,6 +39,7 @@ export async function generateMetadata(props: ArticleProps) {
     const article = getArticle(code)
     return composeMetadata(article.title, {
         description: article.description,
+        path: `/${article.code}`,
         type: "article",
         authors: article.authors,
     })
@@ -322,6 +325,7 @@ export default async function ArticlePage(props: ArticleProps) {
 
     return (
         <div className="relative">
+            <JsonLd data={articleStructuredData(article)} />
             <ArticleHeader article={article} />
             <div>{content}</div>
             <ArticleFooter article={article} />

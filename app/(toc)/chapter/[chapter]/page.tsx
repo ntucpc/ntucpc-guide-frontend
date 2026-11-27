@@ -17,6 +17,7 @@ export async function generateMetadata(props: ChapterProps): Promise<Metadata> {
     const chapter = getChapter(params.chapter)
     return composeMetadata(`Chapter ${chapter.number}. ${chapter.title}`, {
         description: chapter.description,
+        path: `/chapter/${chapter.code}`,
     })
 }
 

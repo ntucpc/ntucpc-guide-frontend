@@ -99,6 +99,7 @@ function ChapterCard({ chapter }: { chapter: Chapter }) {
 export const metadata = composeMetadata("章節目錄", {
     description:
         "NTUCPC Guide 的章節目錄，依照建議的學習順序排列，帶領新手由淺入深學習程式競賽。",
+    path: "/chapters",
 })
 
 export default function ChaptersPage() {

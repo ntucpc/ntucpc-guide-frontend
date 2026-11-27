@@ -1,9 +1,16 @@
 import { Metadata } from "next"
-import { SITE_DESCRIPTION, SITE_NAME, SITE_PREVIEW_IMAGE } from "@/lib/site"
+import {
+    canonicalPath,
+    SITE_DESCRIPTION,
+    SITE_NAME,
+    SITE_OPEN_GRAPH,
+} from "@/lib/site"
 
 type MetadataOptions = {
     /** Page summary; may contain Markdown / LaTeX, which is stripped */
     description?: string
+    /** Site path of the page, e.g. "/chapters"; used for the canonical URL */
+    path?: string
     /** Open Graph type */
     type?: "website" | "article"
     /** Article authors */
@@ -49,6 +56,8 @@ export function composeMetadata(
         plainDescription(options.description) ?? SITE_DESCRIPTION
     const type = options.type ?? "website"
     const authors = options.authors?.filter((author) => author !== "")
+    const url =
+        options.path !== undefined ? canonicalPath(options.path) : undefined
 
     return {
         title: fullTitle,
@@ -57,9 +66,10 @@ export function composeMetadata(
             ? { authors: authors.map((name) => ({ name })) }
             : {}),
         ...(options.robots ? { robots: options.robots } : {}),
+        ...(url ? { alternates: { canonical: url } } : {}),
         openGraph: {
-            siteName: SITE_NAME,
-            images: [SITE_PREVIEW_IMAGE],
+            ...SITE_OPEN_GRAPH,
+            ...(url ? { url } : {}),
             title: fullTitle,
             description,
             ...(type === "article"

@@ -20,6 +20,15 @@ import { getPublicRoot } from "@/lib/environment"
 import { getTopic } from "@/lib/structure/topics"
 import { getArticle } from "@/lib/structure/articles"
 import Image from "next/image"
+import { Metadata } from "next"
+import { JsonLd } from "@/components/json-ld"
+import { homeStructuredData } from "@/lib/structured-data"
+import { SITE_OPEN_GRAPH } from "@/lib/site"
+
+export const metadata: Metadata = {
+    alternates: { canonical: "/" },
+    openGraph: { ...SITE_OPEN_GRAPH, type: "website", url: "/" },
+}
 
 type ButtonLinkProps = {
     text: string
@@ -129,6 +138,7 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-page">
+            <JsonLd data={homeStructuredData()} />
             <NavBar />
 
             {/* Hero Section */}

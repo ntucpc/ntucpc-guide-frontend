@@ -15,6 +15,7 @@ export async function generateMetadata(props: TopicProps) {
     const topic = getTopic(params.topic)
     return composeMetadata(topic.title, {
         description: topic.description,
+        path: `/${topic.code}`,
     })
 }
 
