@@ -251,6 +251,7 @@ export function SidebarClient(props: SidebarClientProps) {
             {/* Sidebar Main Container */}
             <aside
                 id={sidebarId}
+                aria-label="課程目錄"
                 className={`fixed bg-page xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
                 ${
                     displaySidebar === true

@@ -94,25 +94,31 @@ function ArticleHeader({ article }: { article: Article }) {
 
     return (
         <header className="mb-8 pb-8 border-b border-line">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase mb-6">
-                {chapter && (
-                    <>
+            <nav aria-label="麵包屑" className="mb-6">
+                <ol className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase">
+                    {chapter && (
+                        <li className="flex items-center gap-2">
+                            <WrappedLink
+                                href={`/chapter/${chapter.code}`}
+                                className="text-fg-subtle hover:text-accent-500 transition-colors"
+                            >
+                                CH {chapter.number} {chapter.title}
+                            </WrappedLink>
+                            <span className="text-fg-faint" aria-hidden="true">
+                                /
+                            </span>
+                        </li>
+                    )}
+                    <li>
                         <WrappedLink
-                            href={`/chapter/${chapter.code}`}
+                            href={`/${topic.code}`}
                             className="text-fg-subtle hover:text-accent-500 transition-colors"
                         >
-                            CH {chapter.number} {chapter.title}
+                            {topic.title}
                         </WrappedLink>
-                        <span className="text-fg-faint">/</span>
-                    </>
-                )}
-                <WrappedLink
-                    href={`/${topic.code}`}
-                    className="text-fg-subtle hover:text-accent-500 transition-colors"
-                >
-                    {topic.title}
-                </WrappedLink>
-            </div>
+                    </li>
+                </ol>
+            </nav>
 
             {/* Title Section */}
             <h1 className="text-4xl md:text-5xl font-extrabold text-fg-strong mb-6 leading-tight">
@@ -294,7 +300,7 @@ function TableOfContents({ headings }: { headings: Section[] }) {
                 <FontAwesomeIcon icon={faList} />
                 <span>目錄</span>
             </div>
-            <nav>
+            <nav aria-label="文章大綱">
                 <ul className="space-y-1 text-sm">
                     {headings.map((heading, idx) => {
                         const paddingLeft = `${(heading.depth - 1) * 1}rem`
