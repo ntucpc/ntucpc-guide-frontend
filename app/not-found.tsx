@@ -6,6 +6,10 @@ import {
     faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { composeMetadata } from "@/lib/util"
+
+// Next.js adds noindex to this page by itself
+export const metadata = composeMetadata("找不到頁面")
 
 export default function NotFound() {
     return (
