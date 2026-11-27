@@ -8,13 +8,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 type NavbarItemProps = {
     text: string
     url: string
     blank?: boolean
+    onClick?: () => void
 }
 
 export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
@@ -43,11 +44,13 @@ export function ExpandedNavbarItem({
     text,
     url,
     blank = false,
+    onClick,
 }: NavbarItemProps) {
     return (
         <div className="px-6 py-3 border-b border-slate-800 last:border-none">
             <WrappedLink
                 href={url}
+                onClick={onClick}
                 className="text-slate-300 hover:text-accent-400 font-medium flex justify-between items-center"
                 target={blank ? "_blank" : "_self"}
             >
@@ -68,6 +71,18 @@ const NAVBAR_BG = "bg-[#1b2335] dark:bg-slate-900"
 
 export function NavBar() {
     const [showMenu, setShowMenu] = useState(false)
+    const menuId = useId()
+    const closeMenu = () => setShowMenu(false)
+
+    // Close the mobile menu with Escape
+    useEffect(() => {
+        if (!showMenu) return
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setShowMenu(false)
+        }
+        document.addEventListener("keydown", onKeyDown)
+        return () => document.removeEventListener("keydown", onKeyDown)
+    }, [showMenu])
 
     return (
         <nav
@@ -110,8 +125,12 @@ export function NavBar() {
                 {/* Mobile Menu Toggle */}
                 <div className="sm:hidden">
                     <button
+                        type="button"
                         className="p-2 text-slate-400 hover:text-white transition-colors"
                         onClick={() => setShowMenu(!showMenu)}
+                        aria-label={showMenu ? "關閉選單" : "開啟選單"}
+                        aria-expanded={showMenu}
+                        aria-controls={menuId}
                     >
                         <FontAwesomeIcon
                             icon={showMenu ? faXmark : faBars}
@@ -123,6 +142,7 @@ export function NavBar() {
 
             {/* Mobile Menu Dropdown */}
             <div
+                id={menuId}
                 className={`
                 absolute top-full left-0 w-full ${NAVBAR_BG} shadow-2xl sm:hidden border-b border-slate-800
                 transition-all duration-300 ease-in-out origin-top
@@ -134,17 +154,27 @@ export function NavBar() {
             `}
             >
                 <div className="flex flex-col">
-                    <ExpandedNavbarItem text="章節目錄" url="/chapters" />
-                    <ExpandedNavbarItem text="主題目錄" url="/topics" />
+                    <ExpandedNavbarItem
+                        text="章節目錄"
+                        url="/chapters"
+                        onClick={closeMenu}
+                    />
+                    <ExpandedNavbarItem
+                        text="主題目錄"
+                        url="/topics"
+                        onClick={closeMenu}
+                    />
                     <ExpandedNavbarItem
                         text="NCOJ"
                         url="https://oj.ntucpc.org/"
                         blank={true}
+                        onClick={closeMenu}
                     />
                     <ExpandedNavbarItem
                         text="程式解題社"
                         url="https://ntucpc.org/"
                         blank={true}
+                        onClick={closeMenu}
                     />
                 </div>
 

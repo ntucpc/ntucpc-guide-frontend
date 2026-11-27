@@ -6,6 +6,8 @@ type BlockProps = {
     as?: "div" | "details"
     /** Border color and any extra classes */
     className?: string
+    /** Initial open state of a <details> Block */
+    open?: boolean
     children: ReactNode
 }
 
@@ -13,10 +15,12 @@ type BlockProps = {
 export function Block({
     as: Tag = "div",
     className = "",
+    open,
     children,
 }: BlockProps) {
     return (
         <Tag
+            open={Tag === "details" ? open : undefined}
             className={`${BLOCK_MARGIN} rounded-xl border overflow-hidden bg-surface shadow-sm ${className}`}
         >
             {children}

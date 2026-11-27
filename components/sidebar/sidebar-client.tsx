@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect, useId, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -41,11 +41,15 @@ function SidebarGroupComponent({
     toggleFold: () => void
     activeArticle: string
 }) {
+    const listId = useId()
     return (
         <div className="mb-1">
-            <div
-                className="flex items-center gap-2 py-1.5 px-2 text-sm font-bold text-fg-secondary select-none cursor-pointer hover:bg-surface-muted rounded-md transition-colors"
+            <button
+                type="button"
+                className="w-full text-left flex items-center gap-2 py-1.5 px-2 text-sm font-bold text-fg-secondary select-none cursor-pointer hover:bg-surface-muted rounded-md transition-colors"
                 onClick={toggleFold}
+                aria-expanded={!folded}
+                aria-controls={listId}
             >
                 <FontAwesomeIcon
                     icon={faAngleRight}
@@ -53,9 +57,10 @@ function SidebarGroupComponent({
                         folded ? "" : "rotate-90"
                     }`}
                 />
-                <div className="truncate">{group.title}</div>
-            </div>
+                <span className="truncate">{group.title}</span>
+            </button>
             <ul
+                id={listId}
                 className={`pl-4 space-y-0.5 mt-0.5 border-l border-line ml-3.5 ${
                     folded ? "hidden" : "block"
                 }`}
@@ -67,6 +72,7 @@ function SidebarGroupComponent({
                             {!item.coming ? (
                                 <Link
                                     href={item.url}
+                                    aria-current={isActive ? "page" : undefined}
                                     className={`block py-1.5 px-3 text-sm rounded-md transition-all duration-200 ${
                                         isActive
                                             ? "text-accent-600 bg-accent-50 font-medium border-l-2 border-accent-600 -ml-[1px]"
@@ -132,13 +138,14 @@ function SidebarCategorySections({
             <ScrollSection>
                 <div className="space-y-1">
                     {category.sections.map((section) => (
-                        <div
+                        <button
+                            type="button"
                             key={section.id}
-                            className="px-3 py-2 text-sm text-fg-tertiary font-medium rounded-md hover:bg-surface-subtle hover:text-accent-600 cursor-pointer transition-colors"
+                            className="block w-full text-left px-3 py-2 text-sm text-fg-tertiary font-medium rounded-md hover:bg-surface-subtle hover:text-accent-600 cursor-pointer transition-colors"
                             onClick={() => setSelectedSection(section.id)}
                         >
                             {section.title}
-                        </div>
+                        </button>
                     ))}
                 </div>
             </ScrollSection>
@@ -206,14 +213,18 @@ export function SidebarClient(props: SidebarClientProps) {
         setDisplaySidebar("default")
     }, [params])
 
+    const sidebarId = useId()
     const curCategory = props.categories[category]
     const curSelectedSection = selectedSection[category]
 
     return (
         <>
             {/* Toggle Bar - Shown when sidebar is manually hidden or on mobile by default */}
-            <div
-                className={`fixed bg-page shadow-sm w-full z-[999] select-none cursor-pointer border-b 
+            <button
+                type="button"
+                aria-expanded={false}
+                aria-controls={sidebarId}
+                className={`fixed bg-page shadow-sm w-full text-left z-[999] select-none cursor-pointer border-b 
                 ${
                     displaySidebar === true
                         ? "hidden"
@@ -223,22 +234,23 @@ export function SidebarClient(props: SidebarClientProps) {
                 }`}
                 onClick={() => setDisplaySidebar(true)}
             >
-                <div className="flex justify-center w-full">
-                    <div className="xl:flex items-start gap-10 w-full max-w-[100rem]">
-                        <div className="flex-grow">
-                            <div className="w-full max-w-4xl px-4 py-3 text-accent-600 font-bold text-sm flex items-center gap-2">
+                <span className="flex justify-center w-full">
+                    <span className="block xl:flex items-start gap-10 w-full max-w-[100rem]">
+                        <span className="block flex-grow">
+                            <span className="w-full max-w-4xl px-4 py-3 text-accent-600 font-bold text-sm flex items-center gap-2">
                                 <FontAwesomeIcon icon={faAngleDoubleRight} />{" "}
                                 展開目錄
-                            </div>
-                        </div>
+                            </span>
+                        </span>
 
-                        <div className="hidden xl:block w-80 shrink-0" />
-                    </div>
-                </div>
-            </div>
+                        <span className="hidden xl:block w-80 shrink-0" />
+                    </span>
+                </span>
+            </button>
 
             {/* Sidebar Main Container */}
             <aside
+                id={sidebarId}
                 className={`fixed bg-page xl:sticky top-16 w-full sm:max-w-[20rem] xl:max-w-none xl:w-80 shrink-0 z-[999] 
                 ${
                     displaySidebar === true
@@ -257,7 +269,9 @@ export function SidebarClient(props: SidebarClientProps) {
                             { id: CATEGORY_TOPIC, label: "主題" },
                         ].map((tab) => (
                             <button
+                                type="button"
                                 key={tab.id}
+                                aria-pressed={category === tab.id}
                                 onClick={() => setCategory(tab.id)}
                                 className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${
                                     category === tab.id
@@ -272,8 +286,10 @@ export function SidebarClient(props: SidebarClientProps) {
 
                     <div className="flex items-center gap-3 text-fg-subtle">
                         <button
+                            type="button"
                             onClick={() => updateDefaultFolded(false)}
                             title="全部展開"
+                            aria-label="全部展開"
                             className="hover:text-accent-500 transition-colors"
                         >
                             <FontAwesomeIcon
@@ -282,8 +298,10 @@ export function SidebarClient(props: SidebarClientProps) {
                             />
                         </button>
                         <button
+                            type="button"
                             onClick={() => updateDefaultFolded(true)}
                             title="全部收合"
+                            aria-label="全部收合"
                             className="hover:text-accent-500 transition-colors"
                         >
                             <FontAwesomeIcon
@@ -292,8 +310,11 @@ export function SidebarClient(props: SidebarClientProps) {
                             />
                         </button>
                         <button
+                            type="button"
+                            aria-controls={sidebarId}
                             onClick={() => setDisplaySidebar(false)}
                             title="隱藏"
+                            aria-label="隱藏目錄"
                             className="hover:text-rose-500 transition-colors"
                         >
                             <FontAwesomeIcon
@@ -307,8 +328,10 @@ export function SidebarClient(props: SidebarClientProps) {
                 {/* Breadcrumb / Category Title */}
                 <div className="flex items-center gap-2 text-xs font-bold text-fg-subtle mb-2 px-1">
                     {curSelectedSection ? (
-                        <div
-                            className="flex items-center gap-1 cursor-pointer hover:text-accent-600 transition-colors"
+                        <button
+                            type="button"
+                            title={`返回${curCategory.title}`}
+                            className="flex items-center gap-1 text-left cursor-pointer hover:text-accent-600 transition-colors"
                             onClick={() => {
                                 const newSelected = [...selectedSection]
                                 newSelected[category] = null
@@ -327,7 +350,7 @@ export function SidebarClient(props: SidebarClientProps) {
                                     )?.title
                                 }
                             </span>
-                        </div>
+                        </button>
                     ) : (
                         <span className="text-fg">{curCategory.title}</span>
                     )}
