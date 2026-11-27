@@ -123,9 +123,7 @@ export function Problem(
                         >
                             {theme.label}
                         </span>
-                        <h4 className="font-bold text-fg-strong">
-                            {props.name}
-                        </h4>
+                        <p className="font-bold text-fg-strong">{props.name}</p>
                     </div>
                     {difficultyDisplay}
                 </BlockHeader>

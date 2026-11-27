@@ -97,7 +97,7 @@ export function Theorem(props: TheoremProps) {
                 >
                     {name} {props.number}
                 </span>
-                <h4 className={`font-bold ${classes.title}`}>{props.title}</h4>
+                <p className={`font-bold ${classes.title}`}>{props.title}</p>
             </BlockHeader>
             <div className="px-6 py-2 leading-relaxed">{props.children}</div>
         </Block>
