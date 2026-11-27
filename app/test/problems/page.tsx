@@ -10,6 +10,7 @@ import {
     TableBody,
     TableCell,
     TableHead,
+    TableHeadCell,
     TableRow,
 } from "@/components/basic"
 import { ReactNode } from "react"
@@ -41,11 +42,15 @@ export default async function ProblemsTestPage() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>#</TableCell>
-                                <TableCell>Path</TableCell>
-                                <TableCell>Title</TableCell>
-                                <TableCell>Source</TableCell>
-                                <TableCell>出現在哪</TableCell>
+                                <TableHeadCell scope="col">#</TableHeadCell>
+                                <TableHeadCell scope="col">Path</TableHeadCell>
+                                <TableHeadCell scope="col">Title</TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    Source
+                                </TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    出現在哪
+                                </TableHeadCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
