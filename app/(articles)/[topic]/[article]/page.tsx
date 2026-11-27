@@ -8,8 +8,9 @@ import { getChapter } from "@/lib/structure/chapters"
 import { getTopic, getTopics } from "@/lib/structure/topics"
 import { Article } from "@/lib/structure/type"
 import { composeMetadata } from "@/lib/util"
+import { articleDescription, articlePageTitle } from "@/lib/page-info"
 import { ImportanceTag } from "@/components/common"
-import { HyperRefBlank } from "@/components/basic"
+import { HyperRef } from "@/components/basic"
 import { WrappedLink } from "@/components/common"
 import {
     faBook,
@@ -23,6 +24,8 @@ import {
 import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Section } from "@/lib/parser/section"
+import { JsonLd } from "@/components/json-ld"
+import { articleStructuredData } from "@/lib/structured-data"
 
 type ArticleProps = {
     params: Promise<{
@@ -35,7 +38,12 @@ export async function generateMetadata(props: ArticleProps) {
     const params = await props.params
     const code = `${params.topic}/${params.article}`
     const article = getArticle(code)
-    return composeMetadata(article.title)
+    return composeMetadata(articlePageTitle(article), {
+        description: articleDescription(article),
+        path: `/${article.code}`,
+        type: "article",
+        authors: article.authors,
+    })
 }
 
 export async function generateStaticParams() {
@@ -58,13 +66,13 @@ function ArticleHeader({ article }: { article: Article }) {
         .map((prereq, idx) => {
             const prereqArticle = getArticle(prereq)
             return !prereqArticle.coming ? (
-                <HyperRefBlank
+                <HyperRef
                     href={`/${prereq}`}
                     key={idx}
                     className="text-accent-600 hover:text-accent-800 transition-colors"
                 >
                     {prereqArticle.title}
-                </HyperRefBlank>
+                </HyperRef>
             ) : (
                 <span className="text-fg-subtle" key={idx}>
                     {prereqArticle.title}
@@ -86,26 +94,32 @@ function ArticleHeader({ article }: { article: Article }) {
     const topic = getTopic(article.topic)
 
     return (
-        <div className="mb-8 pb-8 border-b border-line">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase mb-6">
-                {chapter && (
-                    <>
+        <header className="mb-8 pb-8 border-b border-line">
+            <nav aria-label="麵包屑" className="mb-6">
+                <ol className="flex flex-wrap items-center gap-2 text-xs font-bold tracking-widest uppercase">
+                    {chapter && (
+                        <li className="flex items-center gap-2">
+                            <WrappedLink
+                                href={`/chapter/${chapter.code}`}
+                                className="text-fg-subtle hover:text-accent-500 transition-colors"
+                            >
+                                CH {chapter.number} {chapter.title}
+                            </WrappedLink>
+                            <span className="text-fg-faint" aria-hidden="true">
+                                /
+                            </span>
+                        </li>
+                    )}
+                    <li>
                         <WrappedLink
-                            href={`/chapter/${chapter.code}`}
+                            href={`/${topic.code}`}
                             className="text-fg-subtle hover:text-accent-500 transition-colors"
                         >
-                            CH {chapter.number} {chapter.title}
+                            {topic.title}
                         </WrappedLink>
-                        <span className="text-fg-faint">/</span>
-                    </>
-                )}
-                <WrappedLink
-                    href={`/${topic.code}`}
-                    className="text-fg-subtle hover:text-accent-500 transition-colors"
-                >
-                    {topic.title}
-                </WrappedLink>
-            </div>
+                    </li>
+                </ol>
+            </nav>
 
             {/* Title Section */}
             <h1 className="text-4xl md:text-5xl font-extrabold text-fg-strong mb-6 leading-tight">
@@ -166,7 +180,6 @@ function ArticleHeader({ article }: { article: Article }) {
                                     href="/Guide/importance"
                                     className="hover:text-accent-500 transition-colors flex gap-1 items-center"
                                     title="文章重要等級"
-                                    target="_blank"
                                 >
                                     重要度
                                     <FontAwesomeIcon
@@ -203,7 +216,7 @@ function ArticleHeader({ article }: { article: Article }) {
                     </div>
                 )}
             </div>
-        </div>
+        </header>
     )
 }
 
@@ -287,7 +300,7 @@ function TableOfContents({ headings }: { headings: Section[] }) {
                 <FontAwesomeIcon icon={faList} />
                 <span>目錄</span>
             </div>
-            <nav>
+            <nav aria-label="文章大綱">
                 <ul className="space-y-1 text-sm">
                     {headings.map((heading, idx) => {
                         const paddingLeft = `${(heading.depth - 1) * 1}rem`
@@ -295,7 +308,7 @@ function TableOfContents({ headings }: { headings: Section[] }) {
                             <li key={idx} style={{ paddingLeft }}>
                                 <a
                                     href={`#${heading.code}`}
-                                    className="block py-1 text-fg-tertiary hover:text-accent-600 hover:bg-surface-subtle rounded px-2 transition-colors overflow-hidden text-ellipsis whitespace-nowrap"
+                                    className="block py-1 focus-visible:outline-offset-[-2px] text-fg-tertiary hover:text-accent-600 hover:bg-surface-subtle rounded px-2 transition-colors overflow-hidden text-ellipsis whitespace-nowrap"
                                 >
                                     {heading.text}
                                 </a>
@@ -317,7 +330,8 @@ export default async function ArticlePage(props: ArticleProps) {
     const { content, headings } = await getArticleContent(mdxSource, 1)
 
     return (
-        <div className="relative">
+        <article className="relative">
+            <JsonLd data={articleStructuredData(article)} />
             <ArticleHeader article={article} />
             <div>{content}</div>
             <ArticleFooter article={article} />
@@ -325,6 +339,6 @@ export default async function ArticlePage(props: ArticleProps) {
             <div className="hidden xl:block absolute top-0 left-[calc(100%+2.5rem)] h-full">
                 <TableOfContents headings={headings} />
             </div>
-        </div>
+        </article>
     )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { WrappedLink } from "@/components/common"
+import { NewTabHint, WrappedLink } from "@/components/common"
 import {
     faBars,
     faXmark,
@@ -8,13 +8,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { MAIN_CONTENT_ID } from "@/components/layout"
 
 type NavbarItemProps = {
     text: string
     url: string
     blank?: boolean
+    onClick?: () => void
 }
 
 export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
@@ -24,8 +26,10 @@ export function NavbarItem({ text, url, blank = false }: NavbarItemProps) {
                 href={url}
                 className="px-4 py-2 h-full text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
                 target={blank ? "_blank" : "_self"}
+                rel={blank ? "noopener noreferrer" : undefined}
             >
                 {text}
+                {blank && <NewTabHint />}
                 {blank && (
                     <FontAwesomeIcon
                         icon={faExternalLinkAlt}
@@ -43,15 +47,19 @@ export function ExpandedNavbarItem({
     text,
     url,
     blank = false,
+    onClick,
 }: NavbarItemProps) {
     return (
         <div className="px-6 py-3 border-b border-slate-800 last:border-none">
             <WrappedLink
                 href={url}
+                onClick={onClick}
                 className="text-slate-300 hover:text-accent-400 font-medium flex justify-between items-center"
                 target={blank ? "_blank" : "_self"}
+                rel={blank ? "noopener noreferrer" : undefined}
             >
                 {text}
+                {blank && <NewTabHint />}
                 {blank && (
                     <FontAwesomeIcon
                         icon={faExternalLinkAlt}
@@ -68,62 +76,87 @@ const NAVBAR_BG = "bg-[#1b2335] dark:bg-slate-900"
 
 export function NavBar() {
     const [showMenu, setShowMenu] = useState(false)
+    const menuId = useId()
+    const closeMenu = () => setShowMenu(false)
+
+    // Close the mobile menu with Escape
+    useEffect(() => {
+        if (!showMenu) return
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setShowMenu(false)
+        }
+        document.addEventListener("keydown", onKeyDown)
+        return () => document.removeEventListener("keydown", onKeyDown)
+    }, [showMenu])
 
     return (
-        <nav
-            className={`${NAVBAR_BG} text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
-        >
-            <div className="mx-auto w-full max-w-[100rem] flex items-center justify-between px-6 h-16">
-                {/* Logo Section */}
-                <div className="flex items-center gap-8 h-full">
-                    <Link
-                        href="/"
-                        className="hover:opacity-80 transition-opacity"
-                    >
-                        <img
-                            className="h-10 w-auto"
-                            src="/guide_banner.png"
-                            alt="NTUCPC logo"
-                        />
-                    </Link>
+        <>
+            <a
+                href={`#${MAIN_CONTENT_ID}`}
+                className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[1001] focus:px-4 focus:py-2 focus:rounded-md focus:bg-surface focus:text-accent-600 focus:font-bold focus:shadow-md"
+            >
+                跳至主要內容
+            </a>
+            <nav
+                aria-label="主導覽列"
+                className={`${NAVBAR_BG} [&_:focus-visible]:outline-indigo-300 text-white sticky top-0 z-[1000] border-b border-slate-800 shadow-sm`}
+            >
+                <div className="mx-auto w-full max-w-[100rem] flex items-center justify-between px-6 h-16">
+                    {/* Logo Section */}
+                    <div className="flex items-center gap-8 h-full">
+                        <Link
+                            href="/"
+                            className="hover:opacity-80 transition-opacity"
+                        >
+                            <img
+                                className="h-10 w-auto"
+                                src="/guide_banner.png"
+                                alt="NTUCPC logo"
+                            />
+                        </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="max-sm:hidden flex h-full">
-                        <NavbarItem text="章節目錄" url="/chapters" />
-                        <NavbarItem text="主題目錄" url="/topics" />
-                        <NavbarItem
-                            text="NCOJ"
-                            url="https://oj.ntucpc.org/"
-                            blank={true}
-                        />
-                        <NavbarItem
-                            text="程式解題社"
-                            url="https://ntucpc.org/"
-                            blank={true}
-                        />
+                        {/* Desktop Menu */}
+                        <div className="max-sm:hidden flex h-full">
+                            <NavbarItem text="章節目錄" url="/chapters" />
+                            <NavbarItem text="主題目錄" url="/topics" />
+                            <NavbarItem
+                                text="NCOJ"
+                                url="https://oj.ntucpc.org/"
+                                blank={true}
+                            />
+                            <NavbarItem
+                                text="程式解題社"
+                                url="https://ntucpc.org/"
+                                blank={true}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Theme Toggle (desktop) */}
+                    <ThemeToggle className="max-sm:hidden" />
+
+                    {/* Mobile Menu Toggle */}
+                    <div className="sm:hidden">
+                        <button
+                            type="button"
+                            className="p-2 text-slate-400 hover:text-white transition-colors"
+                            onClick={() => setShowMenu(!showMenu)}
+                            aria-label={showMenu ? "關閉選單" : "開啟選單"}
+                            aria-expanded={showMenu}
+                            aria-controls={menuId}
+                        >
+                            <FontAwesomeIcon
+                                icon={showMenu ? faXmark : faBars}
+                                className="text-xl"
+                            />
+                        </button>
                     </div>
                 </div>
 
-                {/* Theme Toggle (desktop) */}
-                <ThemeToggle className="max-sm:hidden" />
-
-                {/* Mobile Menu Toggle */}
-                <div className="sm:hidden">
-                    <button
-                        className="p-2 text-slate-400 hover:text-white transition-colors"
-                        onClick={() => setShowMenu(!showMenu)}
-                    >
-                        <FontAwesomeIcon
-                            icon={showMenu ? faXmark : faBars}
-                            className="text-xl"
-                        />
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile Menu Dropdown */}
-            <div
-                className={`
+                {/* Mobile Menu Dropdown */}
+                <div
+                    id={menuId}
+                    className={`
                 absolute top-full left-0 w-full ${NAVBAR_BG} shadow-2xl sm:hidden border-b border-slate-800
                 transition-all duration-300 ease-in-out origin-top
                 ${
@@ -132,27 +165,38 @@ export function NavBar() {
                         : "scale-y-95 opacity-0 invisible"
                 }
             `}
-            >
-                <div className="flex flex-col">
-                    <ExpandedNavbarItem text="章節目錄" url="/chapters" />
-                    <ExpandedNavbarItem text="主題目錄" url="/topics" />
-                    <ExpandedNavbarItem
-                        text="NCOJ"
-                        url="https://oj.ntucpc.org/"
-                        blank={true}
-                    />
-                    <ExpandedNavbarItem
-                        text="程式解題社"
-                        url="https://ntucpc.org/"
-                        blank={true}
-                    />
-                </div>
+                >
+                    <div className="flex flex-col">
+                        <ExpandedNavbarItem
+                            text="章節目錄"
+                            url="/chapters"
+                            onClick={closeMenu}
+                        />
+                        <ExpandedNavbarItem
+                            text="主題目錄"
+                            url="/topics"
+                            onClick={closeMenu}
+                        />
+                        <ExpandedNavbarItem
+                            text="NCOJ"
+                            url="https://oj.ntucpc.org/"
+                            blank={true}
+                            onClick={closeMenu}
+                        />
+                        <ExpandedNavbarItem
+                            text="程式解題社"
+                            url="https://ntucpc.org/"
+                            blank={true}
+                            onClick={closeMenu}
+                        />
+                    </div>
 
-                {/* Theme Toggle (mobile) */}
-                <div className="flex justify-end px-4 py-2 border-t border-slate-800">
-                    <ThemeToggle />
+                    {/* Theme Toggle (mobile) */}
+                    <div className="flex justify-end px-4 py-2 border-t border-slate-800">
+                        <ThemeToggle />
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </>
     )
 }

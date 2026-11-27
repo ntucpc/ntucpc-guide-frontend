@@ -15,7 +15,7 @@ const config: Config = {
     theme: {
         fontFamily: {
             sans: [
-                '"var(--noto-sans-tc)"',
+                "var(--noto-sans-tc)",
                 "ui-sans-serif",
                 "system-ui",
                 "sans-serif",

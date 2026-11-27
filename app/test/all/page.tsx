@@ -5,7 +5,9 @@ import { getStructure } from "@/lib/structure"
 import AllTestPageClient from "./AllTestClient"
 import { composeMetadata } from "@/lib/util"
 
-export const metadata = composeMetadata("全部東西")
+export const metadata = composeMetadata("全部東西", {
+    robots: { index: false, follow: false },
+})
 
 export default async function AllTestPage() {
     const articles = getArticles().map((article) => {

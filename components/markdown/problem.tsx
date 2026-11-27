@@ -7,7 +7,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons"
-import { HyperRefBlank } from "@/components/basic"
+import { AutoHyperRef } from "@/components/basic"
 import { Block, BlockHeader } from "./block"
 
 /**
@@ -38,14 +38,14 @@ const PROBLEM_THEMES = {
     sample: {
         label: "例題",
         header: "bg-indigo-50/30 dark:bg-indigo-950/30",
-        badge: "bg-indigo-500 dark:bg-indigo-600",
+        badge: "bg-indigo-600",
         star: "text-indigo-500 dark:text-indigo-400",
     },
     exercise: {
         label: "習題",
         header: "bg-emerald-50/30 dark:bg-emerald-950/30",
-        badge: "bg-emerald-500 dark:bg-emerald-600",
-        star: "text-emerald-500 dark:text-emerald-400",
+        badge: "bg-emerald-700",
+        star: "text-emerald-600 dark:text-emerald-400",
     },
 }
 
@@ -95,7 +95,12 @@ export function Problem(
             )
         } else if (!isSample) {
             difficultyDisplay = (
-                <div className="flex items-center gap-0.5">
+                <div
+                    className="flex items-center gap-0.5"
+                    role="img"
+                    aria-label={`難度 ${props.difficulty} / 5 顆星`}
+                    title={`難度 ${props.difficulty} / 5`}
+                >
                     {Array.from({ length: 5 }, (_, index) => {
                         const active = index < parseInt(props.difficulty)
                         return (
@@ -123,9 +128,7 @@ export function Problem(
                         >
                             {theme.label}
                         </span>
-                        <h4 className="font-bold text-fg-strong">
-                            {props.name}
-                        </h4>
+                        <p className="font-bold text-fg-strong">{props.name}</p>
                     </div>
                     {difficultyDisplay}
                 </BlockHeader>
@@ -136,16 +139,16 @@ export function Problem(
                     <div className="flex items-center gap-2 mb-4 text-[11px] font-bold text-fg-subtle tracking-wider">
                         <span>Source:</span>
                         {props.url ? (
-                            <HyperRefBlank
+                            <AutoHyperRef
                                 href={props.url}
-                                className="text-accent-500 hover:text-accent-700 transition-colors flex items-center gap-1.5"
+                                className="text-accent-600 hover:text-accent-800 transition-colors flex items-center gap-1.5"
                             >
                                 {props.src}
                                 <FontAwesomeIcon
                                     icon={faArrowUpRightFromSquare}
                                     className="text-[9px]"
                                 />
-                            </HyperRefBlank>
+                            </AutoHyperRef>
                         ) : (
                             <span>{props.src}</span>
                         )}

@@ -58,7 +58,7 @@ function TopicCard({ topic }: { topic: Topic }) {
                                         {!article.coming ? (
                                             <Link
                                                 href={`/${article.code}`}
-                                                className="text-sm text-fg-muted hover:text-accent-600 transition-colors"
+                                                className="text-sm text-fg-secondary hover:text-accent-600 transition-colors"
                                             >
                                                 {article.title}
                                             </Link>
@@ -78,7 +78,11 @@ function TopicCard({ topic }: { topic: Topic }) {
     )
 }
 
-export const metadata = composeMetadata("主題目錄")
+export const metadata = composeMetadata("主題目錄", {
+    description:
+        "NTUCPC Guide 的主題目錄，依照演算法與資料結構的主題分類，方便快速查找文章。",
+    path: "/topics",
+})
 
 export default function TopicsPage() {
     const topics = getTopics()

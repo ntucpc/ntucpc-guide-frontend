@@ -5,17 +5,20 @@ import { getStructure } from "@/lib/structure"
 import { parseStructure } from "@/lib/structure/client"
 import {
     H1Title,
-    HyperRefBlank,
+    AutoHyperRef,
     Table,
     TableBody,
     TableCell,
     TableHead,
+    TableHeadCell,
     TableRow,
 } from "@/components/basic"
 import { ReactNode } from "react"
 import { composeMetadata } from "@/lib/util"
 
-export const metadata = composeMetadata("題目")
+export const metadata = composeMetadata("題目", {
+    robots: { index: false, follow: false },
+})
 
 export default async function ProblemsTestPage() {
     const problemOccurs = await getProblemOccurs()
@@ -39,11 +42,15 @@ export default async function ProblemsTestPage() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>#</TableCell>
-                                <TableCell>Path</TableCell>
-                                <TableCell>Title</TableCell>
-                                <TableCell>Source</TableCell>
-                                <TableCell>出現在哪</TableCell>
+                                <TableHeadCell scope="col">#</TableHeadCell>
+                                <TableHeadCell scope="col">Path</TableHeadCell>
+                                <TableHeadCell scope="col">Title</TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    Source
+                                </TableHeadCell>
+                                <TableHeadCell scope="col">
+                                    出現在哪
+                                </TableHeadCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -53,7 +60,7 @@ export default async function ProblemsTestPage() {
                                 let index = 0
                                 p.occurs.forEach((occur) => {
                                     occurs.push(
-                                        <HyperRefBlank
+                                        <AutoHyperRef
                                             key={index++}
                                             href={`/${occur.article}`}
                                         >
@@ -61,7 +68,7 @@ export default async function ProblemsTestPage() {
                                                 occur.article
                                             )}
                                             ({occur.difficulty})
-                                        </HyperRefBlank>
+                                        </AutoHyperRef>
                                     )
                                     occurs.push(<span key={index++}>、</span>)
                                 })
@@ -74,11 +81,11 @@ export default async function ProblemsTestPage() {
                                         <TableCell>{problem.name}</TableCell>
                                         <TableCell>
                                             {problem.url ? (
-                                                <HyperRefBlank
+                                                <AutoHyperRef
                                                     href={problem.url}
                                                 >
                                                     {problem.source}
-                                                </HyperRefBlank>
+                                                </AutoHyperRef>
                                             ) : (
                                                 <>{problem.source}</>
                                             )}

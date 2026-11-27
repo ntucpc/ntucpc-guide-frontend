@@ -20,8 +20,8 @@
         --color-fg: 31 41 55; /* gray-800 */
         --color-fg-secondary: 55 65 81; /* gray-700 */
         --color-fg-tertiary: 75 85 99; /* gray-600 */
-        --color-fg-muted: 107 114 128; /* gray-500 */
-        --color-fg-subtle: 156 163 175; /* gray-400 */
+        --color-fg-muted: 92 99 112; /* darker than gray-500, >= 4.5:1 on surface-muted */
+        --color-fg-subtle: 104 111 124; /* about gray-500, >= 4.5:1 on surface-muted */
         --color-fg-faint: 209 213 219; /* gray-300 */
         --color-fg-ghost: 229 231 235; /* gray-200 */
 
@@ -63,7 +63,7 @@
         --color-fg-secondary: 209 213 219; /* gray-300 */
         --color-fg-tertiary: 175 182 192;
         --color-fg-muted: 156 163 175; /* gray-400 */
-        --color-fg-subtle: 107 114 128; /* gray-500 */
+        --color-fg-subtle: 139 148 158; /* >= 4.5:1 on surface-muted */
         --color-fg-faint: 75 85 99; /* gray-600 */
         --color-fg-ghost: 55 65 81; /* gray-700 */
 
@@ -87,5 +87,17 @@
 
     body {
         background-color: rgb(var(--color-page));
+    }
+
+    /* Clear keyboard focus ring; the navbar overrides the color for its dark background */
+    :focus-visible {
+        outline: 2px solid rgb(var(--color-accent-600));
+        outline-offset: 2px;
+    }
+    /* Drawn inside, so it is not clipped by overflow-hidden blocks and scroll areas */
+    button:focus-visible,
+    summary:focus-visible,
+    select:focus-visible {
+        outline-offset: -2px;
     }
 }
