@@ -58,7 +58,7 @@ function TopicCard({ topic }: { topic: Topic }) {
                                         {!article.coming ? (
                                             <Link
                                                 href={`/${article.code}`}
-                                                className="text-sm text-fg-muted hover:text-accent-600 transition-colors"
+                                                className="text-sm text-fg-secondary hover:text-accent-600 transition-colors"
                                             >
                                                 {article.title}
                                             </Link>
